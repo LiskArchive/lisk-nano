@@ -9,6 +9,7 @@ app.component('send', {
   bindings: {
     account: '<',
     passphrase: '<',
+    secondsignature: '<'
   },
   controller: class send {
     constructor ($scope, $peers, lsk, success, error) {
@@ -37,6 +38,7 @@ app.component('send', {
     reset () {
       this.recipient.value = ''
       this.amount.value = ''
+      this.secondpassphrase.value = ''
     }
 
     go () {
@@ -44,7 +46,7 @@ app.component('send', {
 
       this.$peers.active.sendTransaction(
         this.passphrase,
-        this.secondPassphrase,
+        this.secondpassphrase.value,
         this.recipient.value,
         this.amount.raw
       )
