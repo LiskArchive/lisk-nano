@@ -8,8 +8,7 @@ app.component('send', {
   template: require('./send.jade')(),
   bindings: {
     account: '<',
-    passphrase: '<',
-    secondsignature: '<'
+    passphrase: '<'
   },
   controller: class send {
     constructor ($scope, $peers, lsk, success, error) {
