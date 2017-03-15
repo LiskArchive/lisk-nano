@@ -6,9 +6,9 @@ import ngAnnotatePlugin from 'ng-annotate-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 
 import path from 'path'
-import ChunkManifestPlugin from 'chunk-manifest-webpack2-plugin'
 import ManifestPlugin from 'webpack-manifest-plugin'
 import WebpackMd5Hash from 'webpack-md5-hash'
+import BundleAnalyzerPlugin from 'webpack-bundle-analyzer'
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -22,8 +22,8 @@ const common = {
   output: {
     path: PATHS.build,
     //filename: `app.js`,
-    filename: '[name].[hash].js',
-    chunkFilename: '[name].[hash].js'
+    filename: 'app.js',
+    publicPath: '../app/',
   },
   node: {
     fs: 'empty'
@@ -87,6 +87,21 @@ const common = {
 
     ]
   },
+	plugins: [
+		new ngAnnotatePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false,
+			},
+			sourceMap: true,
+		}),
+		new webpack.ProvidePlugin({
+			app: 'exports-loader?exports.default!' + path.join(PATHS.app, 'app'),
+		}),
+		new BundleAnalyzerPlugin.BundleAnalyzerPlugin({
+			analyzerMode: 'static'
+		}),
+	]
 
 }
 
@@ -99,14 +114,14 @@ let chunks = () => {
 		plugins: [
 			new webpack.optimize.CommonsChunkPlugin({
 				name: "vendor",
-				minChunks: Infinity,
+				filename: 'distApp.js',
+				minChunks(module, count) {
+					var context = module.context;
+					return context && (context.indexOf('node_modules') >= 0 || context.indexOf('fonts') >= 0);
+				},
 			}),
 			new WebpackMd5Hash(),
 			new ManifestPlugin(),
-			new ChunkManifestPlugin({
-				filename: "chunk-manifest.json",
-				manifestVariable: "webpackManifest"
-			}),
 		]
 	}
 }
@@ -115,7 +130,9 @@ let clean = (path) => {
   return {
     plugins: [
       new CleanWebpackPlugin([path], {
-        root: process.cwd()
+        root: process.cwd(),
+        verbose: true,
+        dry: false
       })
     ]
   }
@@ -150,15 +167,6 @@ let minify = () => {
   }
 }
 
-let provide = () => {
-	return {
-		plugins: [
-			new webpack.ProvidePlugin({
-				app: 'exports-loader?exports.default!' + path.join(PATHS.app, 'app'),
-			}),
-		]
-	}
-}
 
 /*
 DEVSERVER
@@ -189,8 +197,6 @@ switch(process.env.npm_lifecycle_event) {
       clean(path.join(PATHS.build, '*')),
       minify(),
 
-      html(),
-      provide(),
     )
     break
   default:
@@ -199,8 +205,6 @@ switch(process.env.npm_lifecycle_event) {
       devServer(),
       { devtool: 'eval-source-map' },
 
-      html(),
-      provide(),
     )
     break
 }
