@@ -1,9 +1,7 @@
-var should = require('should');
 
-describe('Example Test', function () {
+require('angular-mocks/angular-mocks');
+require('chai');
 
-	it('should show an example', function () {
-		var x = 5;
-		(x).should.be.equal(5);
-	});
-});
+require('./components/login/login.spec');
+require('./components/top/top.spec');
+

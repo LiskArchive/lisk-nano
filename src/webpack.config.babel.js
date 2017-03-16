@@ -1,14 +1,17 @@
-import webpack from 'webpack'
-import merge from 'webpack-merge'
-import validate from 'webpack-validator'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import ngAnnotatePlugin from 'ng-annotate-webpack-plugin'
-import CleanWebpackPlugin from 'clean-webpack-plugin'
 
-import path from 'path'
-import ManifestPlugin from 'webpack-manifest-plugin'
-import WebpackMd5Hash from 'webpack-md5-hash'
-import BundleAnalyzerPlugin from 'webpack-bundle-analyzer'
+var path = require('path');
+
+var webpack = require('webpack');
+var merge = require('webpack-merge');
+var validate = require('webpack-validator');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var ManifestPlugin = require('webpack-manifest-plugin');
+var WebpackMd5Hash = require('webpack-md5-hash');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
+
+var nodeEnvironment = process.env.NODE_ENV;
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -16,7 +19,7 @@ const PATHS = {
 }
 
 const common = {
-  entry: {
+  entry: nodeEnvironment == 'test' ? { } : {
     app: PATHS.app,
   },
   output: {
@@ -206,4 +209,5 @@ switch(process.env.npm_lifecycle_event) {
     break
 }
 
-export default validate(config)
+//export default validate(config)
+module.exports = validate(config);
