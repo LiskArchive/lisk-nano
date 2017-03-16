@@ -59,19 +59,16 @@ const common = {
         },
         {
             test: /\.less$/,
-            //loader: 'style!css!less',
             loader: 'style-loader',
             include: PATHS.app,
         },
 	    {
 		    test: /\.less$/,
-		    //loader: 'style!css!less',
 		    loader: 'css-loader',
 		    include: PATHS.app,
 	    },
 	    {
 		    test: /\.less$/,
-		    //loader: 'style!css!less',
 		    loader: 'less-loader',
 		    include: PATHS.app,
 	    },
