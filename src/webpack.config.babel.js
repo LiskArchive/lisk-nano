@@ -7,6 +7,9 @@ var validate = require('webpack-validator');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var CleanWebpackPlugin = require('clean-webpack-plugin');
+var ManifestPlugin = require('webpack-manifest-plugin');
+var WebpackMd5Hash = require('webpack-md5-hash');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer');
 
 var nodeEnvironment = process.env.NODE_ENV;
 
@@ -21,7 +24,9 @@ const common = {
   },
   output: {
     path: PATHS.build,
+    //filename: `app.js`,
     filename: 'app.js',
+    publicPath: '../app/',
   },
   node: {
     fs: 'empty'
@@ -31,13 +36,103 @@ const common = {
       jquery: 'jquery/src/jquery'
     }
   },
+  module: {
+    loaders: [
+        {
+            test: /\.css$/,
+            loader: 'style-loader'
+        },
+	    {
+		    test: /\.css$/,
+		    loader: 'css-loader'
+	    },
+	    {
+		    test: /\.css$/,
+		    loader: 'less-loader'
+	    },
+        {
+            test: /\.js$/,
+            loader: 'babel-loader',
+            include: PATHS.app,
+        },
+        {
+            test: /\.pug$/,
+            loader: 'pug-loader',
+            include: PATHS.app,
+        },
+        {
+            test: /\.less$/,
+            loader: 'style-loader',
+            include: PATHS.app,
+        },
+	    {
+		    test: /\.less$/,
+		    loader: 'css-loader',
+		    include: PATHS.app,
+	    },
+	    {
+		    test: /\.less$/,
+		    loader: 'less-loader',
+		    include: PATHS.app,
+	    },
+        {
+            test: /\.png$/,
+            loader: 'url-loader',
+        },
+        {
+            test: /\.(eot|svg|ttf|woff|woff2)$/,
+            loader: 'url-loader',
+            include: path.resolve(__dirname, PATHS.app, 'assets')
+        },
+
+    ]
+  },
+	plugins: [
+		new ngAnnotatePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false,
+			},
+			sourceMap: true,
+		}),
+		new webpack.ProvidePlugin({
+			app: 'exports-loader?exports.default!' + path.join(PATHS.app, 'app'),
+		}),
+		new BundleAnalyzerPlugin.BundleAnalyzerPlugin({
+			analyzerMode: 'static'
+		}),
+	]
+
+}
+
+/*
+PLUGINS
+*/
+
+let chunks = () => {
+	return {
+		plugins: [
+			new webpack.optimize.CommonsChunkPlugin({
+				name: "vendor",
+				filename: 'distApp.js',
+				minChunks(module, count) {
+					var context = module.context;
+					return context && (context.indexOf('node_modules') >= 0 || context.indexOf('fonts') >= 0);
+				},
+			}),
+			new WebpackMd5Hash(),
+			new ManifestPlugin(),
+		]
+	}
 }
 
 let clean = (path) => {
   return {
     plugins: [
       new CleanWebpackPlugin([path], {
-        root: process.cwd()
+        root: process.cwd(),
+        verbose: true,
+        dry: false
       })
     ]
   }
@@ -65,128 +160,30 @@ let minify = () => {
       new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false,
-        }
+        },
+        sourceMap: true,
       })
     ]
   }
 }
 
+
+/*
+DEVSERVER
+*/
+
+
 let devServer = () => {
-  return {
-    devServer: {
-      hot: true,
-      inline: true,
-      stats: 'errors-only',
-    },
-    plugins: [
-      new webpack.HotModuleReplacementPlugin({ multiStep: true })
-    ]
-  }
-}
-
-let babel = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.js$/,
-          loader: 'babel',
-          include: PATHS.app,
-        }
-      ]
-    }
-  }
-}
-
-let pug = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.pug$/,
-          loader: 'pug-loader',
-          include: PATHS.app,
-        }
-      ]
-    }
-  }
-}
-
-let less = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.less$/,
-          loader: 'style!css!less',
-          include: PATHS.app,
-        }
-      ]
-    }
-  }
-}
-
-let css = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.css$/,
-          loader: 'style!css',
-        }
-      ]
-    }
-  }
-}
-
-let json = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.json$/,
-          loader: 'json',
-        }
-      ]
-    }
-  }
-}
-
-let png = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.png$/,
-          loader: 'url',
-        }
-      ]
-    }
-  }
-}
-
-let fonts = () => {
-  return {
-    module: {
-      loaders: [
-        {
-          test: /\.(eot|svg|ttf|woff|woff2)$/,
-          loader: 'url',
-          include: path.join(PATHS.app, 'assets')
-        }
-      ]
-    }
-  }
-}
-
-let provide = () => {
-  return {
-    plugins: [
-      new webpack.ProvidePlugin({
-        app: 'exports?exports.default!' + path.join(PATHS.app, 'app'),
-      }),
-    ]
-  }
+	return {
+		devServer: {
+			hot: true,
+			inline: true,
+			stats: 'errors-only',
+		},
+		plugins: [
+			new webpack.HotModuleReplacementPlugin({ multiStep: true })
+		]
+	}
 }
 
 let config
@@ -196,36 +193,18 @@ switch(process.env.npm_lifecycle_event) {
     config = merge(
       common,
 
+      chunks(),
       clean(path.join(PATHS.build, '*')),
       minify(),
 
-      html(),
-      provide(),
-      babel(),
-      pug(),
-      less(),
-      css(),
-      json(),
-      png(),
-      fonts()
     )
     break
   default:
     config = merge(
       common,
-
       devServer(),
       { devtool: 'eval-source-map' },
 
-      html(),
-      provide(),
-      babel(),
-      pug(),
-      less(),
-      css(),
-      json(),
-      png(),
-      fonts()
     )
     break
 }
