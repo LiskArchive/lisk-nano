@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const masterAccount = {
   passphrase: 'wagon stock borrow episode laundry kitten salute link globe zero feed marble',
   address: '16313739661670634666L',
@@ -52,6 +54,9 @@ function send(fromAccount, toAddress, amount) {
   browser.wait(EC.presenceOf(sendModalButton), waitTime);
   sendModalButton.click();
   browser.wait(EC.presenceOf(sendElem), waitTime);
+
+  // wait for modal animation to finish
+  browser.sleep(1000);
   element(by.css('send input[name="recipient"]')).sendKeys(toAddress);
   element(by.css('send input[name="amount"]')).sendKeys(`${amount}`);
   element(by.css('send input[name="recipient"]')).click();
@@ -129,19 +134,22 @@ function testAddress() {
 }
 
 function testPeer() {
-  expect(element.all(by.css('login form md-input-container:first-child > label')).get(0).getText()).toEqual('Choose a peer');
+  launchApp();
+  expect(element.all(by.css('form md-input-container:first-child label')).get(0).getText()).toEqual('Choose a peer');
 }
 
 function testChangePeer() {
+  launchApp();
+
   const peerElem = element(by.css('form md-select'));
-  // browser.wait(EC.presenceOf(peerElem), waitTime);
+  browser.wait(EC.presenceOf(peerElem), waitTime);
   peerElem.click();
 
-  const optionElem = element.all(by.css('md-select-menu md-optgroup md-option')).get(0);
+  const optionElem = element.all(by.css('md-select-menu md-optgroup md-option')).get(3);
   browser.wait(EC.presenceOf(optionElem), waitTime);
   optionElem.click();
 
-  waitForElemAndCheckItsText('form md-select-value .md-text', 'node01.lisk.io');
+  waitForElemAndCheckItsText('form md-select-value .md-text', 'node04.lisk.io');
 }
 
 function testShowBalance() {
@@ -149,12 +157,13 @@ function testShowBalance() {
 
   const balanceElem = element(by.css('lsk.balance'));
   browser.wait(EC.presenceOf(balanceElem), waitTime);
-  expect(balanceElem.getText()).toMatch(/\d+(\.\d+)* LSK/);
+  expect(balanceElem.getText()).toMatch(/\d+(\.\d+)? LSK/);
 }
 
 function testSend() {
   send(masterAccount, delegateAccount.address, 1.1);
   checkSendConfirmation(delegateAccount.address, 1.1);
+  browser.sleep(1000);
   logout();
 
   send(delegateAccount, masterAccount.address, 1);
@@ -177,7 +186,37 @@ function testShowTransactions() {
   expect(element.all(by.css('transactions table tbody tr')).count()).toEqual(10);
 }
 
+function writeScreenShot(data, filename) {
+  const stream = fs.createWriteStream(filename);
+  stream.write(new Buffer(data, 'base64'));
+  stream.end();
+}
+
+function slugify(text) {
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w-]+/g, '')       // Remove all non-word chars
+    .replace(/--+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '');            // Trim - from end of text
+}
+
+
 describe('Lisk Nano functionality', () => {
+  afterEach(() => {
+    const currentSpec = jasmine.getEnv().currentSpec;
+    const specSlug = slugify([currentSpec.id, currentSpec.description].join(' '));
+    if (currentSpec.failedExpectations.length) {
+      browser.takeScreenshot().then((png) => {
+        const dirName = 'e2e-test-screenshots';
+        if (!fs.existsSync(dirName)) {
+          fs.mkdirSync(dirName);
+        }
+        writeScreenShot(png, `${dirName}/${specSlug}.png`);
+      });
+    }
+  });
+
   it('should allow to login', testLogin);
   it('should allow to logout', testLogout);
   it('should show peer', testPeer);
