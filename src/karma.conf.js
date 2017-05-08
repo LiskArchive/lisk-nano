@@ -44,7 +44,7 @@ module.exports = function (config) {
     // Rest results reporter to use
     // Possible values: 'dots', 'progress'
     // Available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['coverage', 'mocha'].concat(opts.onTravis ? ['coveralls'] : []).concat(opts.onJenkins ? ['coveralls'] " []),
+    reporters: ['coverage', 'mocha'].concat(opts.onTravis ? ['coveralls'] : []).concat(opts.onJenkins ? ['coveralls'] : []),
 
     preprocessors,
 
@@ -88,7 +88,7 @@ module.exports = function (config) {
       }, {
         type: opts.onJenkins ? 'lcov' : 'html',
         dir: 'coverage/',
-      }]
+      }],
     },
 
     // Start these browsers
