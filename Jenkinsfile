@@ -10,7 +10,7 @@ pipeline {
 				"Build Components for Nano" : {
 					node('master'){
 					sh '''#!/bin/bash
-								cd /home/lisk/jenkins/workspace/
+								cd /var/lib/jenkins/workspace/
 								pkill -f app.js || true
 								rm -rf lisk
 								git clone https://github.com/LiskHQ/lisk.git
@@ -19,7 +19,7 @@ pipeline {
 								dropdb lisk_test || true
 								createdb lisk_test
 								psql -d lisk_test -c "alter user "$USER" with password 'password';"
-								cp ~/lisk-node-Linux-x86_64.tar.gz .
+								cp /var/lib/jenkins/workspace/lisk-node-Linux-x86_64.tar.gz .
 								tar -zxvf lisk-node-Linux-x86_64.tar.gz
 								npm install
 								git submodule init
@@ -37,7 +37,7 @@ pipeline {
 					}
 					node('master'){
 					sh '''#!/bin/bash
-								cd /home/lisk/jenkins/workspace/
+								cd /var/lib/jenkins/workspace/
 								rm -rf lisk-nano
 								git clone https://github.com/LiskHQ/lisk-nano.git
 								cd lisk-nano
@@ -56,7 +56,7 @@ pipeline {
 			  "ESLint" : {
 					node('master'){
 					sh '''#!/bin/bash
-								cd /home/lisk/jenkins/workspace/lisk-nano/src
+								cd /var/lib/jenkins/workspace/lisk-nano/src
 								npm run dev &> .lisk-nano.log &
 								npm run test
 								./node_modules/protractor/bin/webdriver-manager update
@@ -76,7 +76,7 @@ pipeline {
 			  "Output Logs from Testing" : {
 				  node('master'){
 				  sh '''#!/bin/bash
-								cd /home/lisk/jenkins/workspace/lisk-nano/src
+								cd /var/lib/jenkins/workspace/lisk-nano/src
 								cat .protractor.log
 								cat .lisk-core.log
 								cat .lisk-nano.log
