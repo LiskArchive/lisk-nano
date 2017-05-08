@@ -50,19 +50,21 @@ pipeline {
 				})
 			}
 		}
-		stage ('Parallel Tests') { 
+		stage ('Run Tests') { 
 			steps {
 			parallel(
-			  "ESLint" : {
+			  "e2e tests" : {
 					node('master'){
 					sh '''#!/bin/bash
 								cd /var/lib/jenkins/workspace/lisk-nano/src
+								npm run build
 								npm run dev &> .lisk-nano.log &
+								bash ~/tx.sh
 								npm run test
-								./node_modules/protractor/bin/webdriver-manager update
-								./node_modules/protractor/bin/webdriver-manager start &
 								export CHROME_BIN=chromium-browser
 								export DISPLAY=:0.0
+								./node_modules/protractor/bin/webdriver-manager update
+								./node_modules/protractor/bin/webdriver-manager start &
 								Xvfb :0 -ac -screen 0 1280x1024x24 &
 								npm run e2e-test
 						 '''
