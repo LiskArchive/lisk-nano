@@ -75,7 +75,7 @@ pipeline {
          stage ('Output logging') {     
            steps {
              parallel(
-               "Output Logs from Testing : {
+               "Output Logs from Testing" : {
                  node('master'){
                    sh '''#!/bin/bash
                      cd /home/lisk/jenkins/workspace/lisk-nano/src
