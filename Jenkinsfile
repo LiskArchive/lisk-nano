@@ -93,6 +93,7 @@ pipeline {
 				 "Cleanup Lisk-Core for Nano" : {
 				   node('master'){
 					 sh '''#!/bin/bash
+					 # adding space to trigger commit change
 								 pkill -f app.js -9 
 							'''
 					 }
