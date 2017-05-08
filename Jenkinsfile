@@ -55,25 +55,21 @@ pipeline {
 		}
 		stage ('Run Tests') { 
 			steps {
-			parallel(
-			  "e2e tests" : {
-					node('master'){
-					sh '''#!/bin/bash
-								env
-								cd /var/lib/jenkins/workspace/lisk-nano/src
-								cp ~/.coveralls.yml-nano .coveralls.yml
-								npm run build
-								npm run dev &> .lisk-nano.log &
-								bash ~/tx.sh
-								npm run test
-								export CHROME_BIN=chromium-browser
-								export DISPLAY=:0.0
-								Xvfb :0 -ac -screen 0 1280x1024x24 &
-								./node_modules/protractor/bin/webdriver-manager update
-								/* npm run e2e-test */
-						 '''
-					 }
-				 })
+				node('master'){
+				sh '''#!/bin/bash
+							cd /var/lib/jenkins/workspace/lisk-nano/src
+							cp ~/.coveralls.yml-nano .coveralls.yml
+							npm run build
+							npm run dev &> .lisk-nano.log &
+							bash ~/tx.sh
+							npm run test
+							# export CHROME_BIN=chromium-browser
+							# export DISPLAY=:0.0
+							# Xvfb :0 -ac -screen 0 1280x1024x24 &
+							# ./node_modules/protractor/bin/webdriver-manager update
+							# npm run e2e-test 
+					 '''
+				 }
 			}
 		}
 		stage ('Output logging') {     
