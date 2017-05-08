@@ -2,7 +2,7 @@ pipeline {
 	agent { label 'master' }
 	environment {
 		ON_JENKINS = 'TRUE'
-		COVERALLS_REPO_TOKEN = ${LISK_NANO_COVERALLS}
+		COVERALLS_REPO_TOKEN = ${env.LISK_NANO_COVERALLS}
 	}
 	stages { 
 	  stage ('Lisk Provisioning') { 
