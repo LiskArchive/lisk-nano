@@ -2,7 +2,6 @@ pipeline {
 	agent { label 'master' }
 	environment {
 		ON_JENKINS = 'TRUE'
-		COVERALLS_REPO_TOKEN = $ENV.LISK_NANO_COVERALLS
 	}
 	stages { 
 	  stage ('Lisk Provisioning') { 
@@ -60,6 +59,7 @@ pipeline {
 			  "e2e tests" : {
 					node('master'){
 					sh '''#!/bin/bash
+							  export COVERALLS_REPO_TOKEN = $LISK_NANO_COVERALLS
 								cd /var/lib/jenkins/workspace/lisk-nano/src
 								npm run build
 								npm run dev &> .lisk-nano.log &
