@@ -37,6 +37,8 @@ pipeline {
 					}
 					node('master'){
 					sh '''#!/bin/bash
+								pkill -f selenium -9 || true
+								rm -rf /tmp/.X0-lock || true
 								cd /var/lib/jenkins/workspace/
 								rm -rf lisk-nano
 								git clone https://github.com/LiskHQ/lisk-nano.git
