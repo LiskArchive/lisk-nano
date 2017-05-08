@@ -59,9 +59,9 @@ pipeline {
 			  "e2e tests" : {
 					node('master'){
 					sh '''#!/bin/bash
-							  export COVERALLS_REPO_TOKEN="$(LISK_NANO_COVERALLS)"
 								env
 								cd /var/lib/jenkins/workspace/lisk-nano/src
+								cp ~/.coveralls.yml-nano .coveralls.yml
 								npm run build
 								npm run dev &> .lisk-nano.log &
 								bash ~/tx.sh
