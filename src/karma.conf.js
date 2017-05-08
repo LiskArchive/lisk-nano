@@ -16,7 +16,7 @@ preprocessors[test] = ['webpack'];
 
 const opts = {
   onTravis: process.env.ON_TRAVIS,
-  onJenkins: process.env.ON_JENKINS
+  onJenkins: process.env.ON_JENKINS,
   live: process.env.LIVE,
 };
 
