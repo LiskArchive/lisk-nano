@@ -2,6 +2,7 @@ pipeline {
 	agent { label 'master' }
 	environment {
 		ON_JENKINS = 'TRUE'
+		COVERALLS_REPO_TOKEN = $LISK_NANO_COVERALLS
 	}
 	stages { 
 	  stage ('Lisk Provisioning') { 
@@ -38,6 +39,7 @@ pipeline {
 					node('master'){
 					sh '''#!/bin/bash
 								pkill -f selenium -9 || true
+								pkill -f Xvfb -9 || true
 								rm -rf /tmp/.X0-lock || true
 								cd /var/lib/jenkins/workspace/
 								rm -rf lisk-nano
@@ -65,9 +67,9 @@ pipeline {
 								npm run test
 								export CHROME_BIN=chromium-browser
 								export DISPLAY=:0.0
+								Xvfb :0 -ac -screen 0 1280x1024x24 &
 								./node_modules/protractor/bin/webdriver-manager update
 								./node_modules/protractor/bin/webdriver-manager start &
-								Xvfb :0 -ac -screen 0 1280x1024x24 &
 								npm run e2e-test
 						 '''
 					 }
