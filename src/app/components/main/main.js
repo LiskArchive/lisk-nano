@@ -31,7 +31,7 @@ app.component('main', {
 
       this.$rootScope.prelogged = true;
 
-      this.$peers.setActive();
+      this.$peers.setActive(this.account.get());
 
       this.update()
         .then(() => {
@@ -49,7 +49,7 @@ app.component('main', {
         });
 
       // Return to landing page if there's any
-      this.$scope.activeTab = this.$rootScope.landingUrl || 'main.transactions';
+      this.activeTab = this.$rootScope.landingUrl || 'main.transactions';
       this.$state.go(this.$rootScope.landingUrl || 'main.transactions');
       delete this.$rootScope.landingUrl;
     }
@@ -59,14 +59,19 @@ app.component('main', {
         this.$peers.active.sendRequest('delegates/get', {
           publicKey: this.account.get().publicKey,
         }, (data) => {
-          this.account.set({ isDelegate: data.success });
+          if (data.success && data.delegate) {
+            this.account.set({
+              isDelegate: true,
+              username: data.delegate.username,
+            });
+          }
         });
       }
     }
 
     update() {
       this.$rootScope.reset();
-      return this.$peers.active.getAccountPromise(this.account.get().address)
+      return this.account.getAccountPromise(this.account.get().address)
         .then((res) => {
           this.account.set({ balance: res.balance });
         })
