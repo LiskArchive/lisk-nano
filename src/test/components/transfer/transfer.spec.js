@@ -35,7 +35,7 @@ describe.skip('Transfer component', () => {
     $scope.$digest();
   });
 
-  const HEADER_TEXT = 'Transfer';
+  const HEADER_TEXT = 'Send';
   it(`should contain header saying "${HEADER_TEXT}"`, () => {
     expect(element.find('.md-title').text()).to.equal(HEADER_TEXT);
   });
@@ -50,7 +50,7 @@ describe.skip('Transfer component', () => {
     expect(element.find('form label:last').text()).to.equal(AMOUT_LABEL_TEXT);
   });
 
-  const TRANSFER_BUTTON_TEXT = 'Transfer';
+  const TRANSFER_BUTTON_TEXT = 'Send';
   it(`should contain a button saying "${TRANSFER_BUTTON_TEXT}"`, () => {
     expect(element.find('button.md-raised.md-primary').text()).to.equal(TRANSFER_BUTTON_TEXT);
   });
