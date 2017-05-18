@@ -25,7 +25,7 @@ describe('Header component', () => {
     $scope.$digest();
   });
 
-  const TRANSFER_BUTTON_TEXT = 'Transfer';
+  const TRANSFER_BUTTON_TEXT = 'Send';
   it(`should contain "${TRANSFER_BUTTON_TEXT}" button if $root.logged`, () => {
     $rootScope.logged = true;
     $scope.$digest();
