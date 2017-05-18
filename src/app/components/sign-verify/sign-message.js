@@ -1,7 +1,7 @@
 import lisk from 'lisk-js';
 
 app.component('signMessage', {
-  template: require('./signMessage.pug')(),
+  template: require('./sign-message.pug')(),
   controller: class signMessage {
     constructor($mdDialog, Account) {
       this.$mdDialog = $mdDialog;
