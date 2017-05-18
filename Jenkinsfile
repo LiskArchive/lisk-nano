@@ -43,7 +43,7 @@ pipeline {
               BUILD_ID=dontKillMe ~/start_lisk.sh
 
               # Build nano
-              cd $WORKSPACE
+              cd $WORKSPACE/src
               npm install
 
               # Add coveralls config file
