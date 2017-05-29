@@ -80,16 +80,15 @@ app.component('delegates', {
      * @method setVirtualRepeatContainerHeight
      */
     setVirtualRepeatContainerHeight() {
-      this.$timeout(() => {
+      const setHeight = () => {
         const element = angular.element('delegates md-virtual-repeat-container');
         const repeatSizerHeight = angular.element('.md-virtual-repeat-sizer').height();
         const newHeight = Math.round(Math.min(
           repeatSizerHeight + 30,
           this.$window.innerHeight * 0.7));
-        if (newHeight !== angular.element(element).height()) {
-          angular.element(element).css('height', `${newHeight}px`);
-        }
-      }, 100);
+        angular.element(element).css('height', `${newHeight}px`);
+      };
+      this.$timeout(setHeight, 200);
     }
 
     /**
