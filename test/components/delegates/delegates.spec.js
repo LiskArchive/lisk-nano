@@ -116,24 +116,17 @@ describe('delegates component controller', () => {
     });
   });
 
-  describe('showMore()', () => {
-    it('increases this.delegatesDisplayedCount by 20 if this.delegatesDisplayedCount < this.delegates.length', () => {
-      const initialCount = controller.delegatesDisplayedCount;
-      controller.showMore();
-      expect(controller.delegatesDisplayedCount).to.equal(initialCount + 20);
-    });
-
-    it('fetches more delegates if this.delegatesDisplayedCount - this.delegates.length <= 20', () => {
+  describe('loadMore()', () => {
+    it('fetches more delegates', () => {
       activePeerMock.expects('sendRequest').withArgs('delegates/').callsArgWith(2, {
         success: true,
         delegates,
       });
 
-      controller.delegatesDisplayedCount = 100;
+      controller.delegates = delegates;
       controller.loading = false;
-      const initialCount = controller.delegatesDisplayedCount;
-      controller.showMore();
-      expect(controller.delegatesDisplayedCount).to.equal(initialCount);
+      controller.loadMore();
+      expect(controller.delegates.length).to.equal(delegates.length);
     });
   });
 

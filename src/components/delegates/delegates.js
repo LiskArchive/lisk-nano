@@ -22,7 +22,7 @@ app.component('delegates', {
    */
   controller: class delegates {
     constructor($scope, $rootScope, Peers, $mdDialog, $mdMedia,
-      dialog, $timeout, delegateApi, Account) {
+      dialog, $timeout, delegateApi, Account, $window) {
       this.$scope = $scope;
       this.$rootScope = $rootScope;
       this.peers = Peers;
@@ -32,6 +32,7 @@ app.component('delegates', {
       this.dialog = dialog;
       this.$timeout = $timeout;
       this.account = Account;
+      this.$window = $window;
 
       this.$scope.search = '';
       this.voteList = [];
@@ -41,11 +42,12 @@ app.component('delegates', {
       this.loading = true;
       this.usernameInput = '';
       this.usernameSeparator = '\n';
+      this.delegates = [];
 
       this.updateAll();
 
       this.$scope.$watch('search', (search, oldValue) => {
-        this.delegatesDisplayedCount = 20;
+        this.delegates = [];
         if (search || oldValue) {
           this.loadDelegates(0, search, true);
         }
@@ -54,6 +56,40 @@ app.component('delegates', {
       this.$scope.$on('peerUpdate', () => {
         this.updateAll();
       });
+
+      const $ctrl = this;
+
+      this.infiniteDelegates = {
+        getItemAtIndex(index) {
+          if (index > $ctrl.delegates.length) {
+            $ctrl.loadMore();
+            return null;
+          }
+          return $ctrl.delegates[index];
+        },
+        getLength() {
+          return $ctrl.delegatesTotalCount;
+        },
+      };
+    }
+
+    /**
+     * Sets height of the virtual repeat container based on window height and
+     * virtual repeat sizer height (depends on this.delegates.length)
+     *
+     * @method setVirtualRepeatContainerHeight
+     */
+    setVirtualRepeatContainerHeight() {
+      this.$timeout(() => {
+        const element = angular.element('delegates md-virtual-repeat-container');
+        const repeatSizerHeight = angular.element('.md-virtual-repeat-sizer').height();
+        const newHeight = Math.round(Math.min(
+          repeatSizerHeight + 30,
+          this.$window.innerHeight * 0.7));
+        if (newHeight !== angular.element(element).height()) {
+          angular.element(element).css('height', `${newHeight}px`);
+        }
+      }, 100);
     }
 
     /**
@@ -63,7 +99,6 @@ app.component('delegates', {
      */
     updateAll() {
       this.delegates = [];
-      this.delegatesDisplayedCount = 20;
       if (this.peers.active) {
         this.delegateApi.listAccountDelegates({
           address: this.account.get().address,
@@ -126,7 +161,9 @@ app.component('delegates', {
           };
         });
 
-        this.delegatesTotalCount = data.totalCount;
+        this.setVirtualRepeatContainerHeight();
+
+        this.delegatesTotalCount = data.totalCount || data.delegates.length;
         this.loading = false;
       }
     }
@@ -134,15 +171,10 @@ app.component('delegates', {
     /**
      * Needs summary
      *
-     * @method showMore
+     * @method loadMore
      */
-    showMore() {
-      if (this.delegatesDisplayedCount < this.delegates.length) {
-        this.delegatesDisplayedCount += 20;
-      }
-      if (this.delegates.length - this.delegatesDisplayedCount <= 20 &&
-          this.delegates.length < this.delegatesTotalCount &&
-          !this.loading) {
+    loadMore() {
+      if (this.delegates.length < this.delegatesTotalCount && !this.loading) {
         this.loadDelegates(this.delegates.length, this.$scope.search);
       }
     }

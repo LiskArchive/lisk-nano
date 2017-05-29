@@ -48,27 +48,27 @@ div.offline-hide
             span.red-link(ng-if='$ctrl.unvoteList.length') -{{$ctrl.unvoteList.length}}
             span )
     md-content(layout='column')
-      md-table-container
-        table(md-table)
-          thead(md-head)
-            tr(md-row)
-              th(md-column) Vote
-              th(md-column) Rank  
-              th(md-column) Name 
-              th(md-column) Lisk Address
-              th(md-column) Uptime 
-              th(md-column) Approval 
-          tbody(md-body, infinite-scroll='$ctrl.showMore()', infinite-scroll-distance='1')
-            tr(md-row, ng-if='!$ctrl.filteredDelegates.length && !$ctrl.loading')
-              td(md-cell, colspan='6') No delegates found
-            tr(md-row, ng-repeat="delegate in ($ctrl.filteredDelegates = ($ctrl.delegates | filter : {username: search} )) | limitTo : $ctrl.delegatesDisplayedCount", ng-class='{"downvote": delegate.status.voted && !delegate.status.selected, "upvote": !delegate.status.voted && delegate.status.selected, "pending": delegate.status.pending}')
-              td(md-cell)
-                md-checkbox(ng-model='delegate.status.selected', ng-change='$ctrl.selectionChange(delegate)', ng-disabled='delegate.status.pending', aria-label='delegate selected for voting')
-              td(md-cell, ng-bind='delegate.rank')
-              td(md-cell, ng-bind='delegate.username')
-              td(md-cell, ng-bind='delegate.address')
-              td(md-cell, ng-bind='delegate.productivity')
-              td(md-cell, ng-bind='delegate.approval')
-      md-button.more(ng-show='$ctrl.delegatesDisplayedCount < $ctrl.filteredDelegates.length', ng-click='$ctrl.showMore()') Show More
+      md-list.table-fixed-width.md-whiteframe-z1
+        md-list.delegates-header(layout='row')
+          md-subheader(flex='10', flex-xs='15') Vote
+          md-subheader(flex='10', flex-xs='15') Rank  
+          md-subheader(flex='25', flex-xs='40') Name 
+          md-subheader(flex='35', hide-xs) Lisk Address
+          md-subheader(flex='10', flex-xs='15') Uptime 
+          md-subheader(flex='10', flex-xs='15') Approval 
+        md-list(ng-if='!$ctrl.delegates.length && !$ctrl.loading', layout-padding, layout-align='center center')
+          span No delegates found
+        md-virtual-repeat-container(ng-if='$ctrl.delegates.length', ng-show='$ctrl.delegates.length')
+          div(md-virtual-repeat='delegate in $ctrl.infiniteDelegates', md-on-demand, flex='')
+            md-list-item(ng-class='{"downvote": delegate.status.voted && !delegate.status.selected, "upvote": !delegate.status.voted && delegate.status.selected, "pending": delegate.status.pending}')
+              md-list(flex, layout='row')
+                md-list-item(flex='10', flex-xs='15')
+                  md-checkbox(ng-if='delegate', ng-model='delegate.status.selected', ng-change='$ctrl.selectionChange(delegate)', ng-disabled='delegate.status.pending', aria-label='delegate selected for voting')
+                md-list-item(flex='10', flex-xs='15', ng-bind='delegate.rank')
+                md-list-item(flex='25', flex-xs='40', ng-bind='delegate.username')
+                md-list-item(flex='35', hide-xs, ng-bind='delegate.address')
+                md-list-item(flex='10', flex-xs='15', ng-bind='delegate.productivity')
+                md-list-item(flex='10', flex-xs='15', ng-bind='delegate.approval')
+              md-divider(ng-if='!$last', flex='')
       .loading
         md-progress-linear(md-mode='indeterminate', ng-show='$ctrl.loading')
