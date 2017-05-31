@@ -7,8 +7,9 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 defineSupportCode(({ When, Then }) => {
-  When('I click checkbox on table row no. {index}', (index, callback) => {
-    waitForElemAndClickIt(`delegates tr:nth-child(${index}) md-checkbox`, callback);
+  When('I click checkbox on list item no. {index}', (index, callback) => {
+    browser.sleep(3500);
+    waitForElemAndClickIt(`delegates md-virtual-repeat-container md-list-item:nth-child(${index}) md-checkbox`, callback);
   });
 
   When('Search twice for "{searchTerm}" in vote dialog', (searchTerm, callback) => {
@@ -21,6 +22,18 @@ defineSupportCode(({ When, Then }) => {
   Then('I should see delegates list with {count} lines', (count, callback) => {
     expect(element.all(by.css('md-menu-item.vote-list-item')).count())
       .to.eventually.equal(parseInt(count, 10))
+      .and.notify(callback);
+  });
+
+  Then('I should see virtual repeat with at least {lineCount} delegate rows', (lineCount, callback) => {
+    browser.sleep(3500);
+    expect(element.all(by.css('md-virtual-repeat-container md-list-item.delegate-row')).count()).to.eventually.be.at.least(parseInt(lineCount, 10))
+      .and.notify(callback);
+  });
+
+  Then('I should see virtual repeat with exactly {lineCount} delegate rows', (lineCount, callback) => {
+    browser.sleep(3500);
+    expect(element.all(by.css('md-virtual-repeat-container md-list-item.delegate-row')).count()).to.eventually.equal(parseInt(lineCount, 10))
       .and.notify(callback);
   });
 });
