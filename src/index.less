@@ -5,6 +5,8 @@
 
 body {
   min-width: 320px;
+  -webkit-app-region: drag;
+  padding-top: 22px;
   & > main, & > main > md-content {
     height: 100%;
   }
@@ -22,6 +24,10 @@ md-card {
 login, login md-card {
   display: block;
   height: auto;
+}
+
+button {
+  -webkit-app-region: no-drag;
 }
 
 body {
