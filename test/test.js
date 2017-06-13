@@ -16,6 +16,7 @@ require('./components/timestamp/timestamp.spec');
 require('./components/top/top.spec');
 require('./components/transactions/transactions.spec');
 require('./components/openDialog/openDialog.spec.js');
+require('./components/openExplorer/openExplorer.spec.js');
 
 require('./services/account.spec');
 require('./services/api/accountApi.spec');

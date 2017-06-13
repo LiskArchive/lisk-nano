@@ -12,6 +12,7 @@ import './components/lsk/lsk';
 import './components/main/main';
 import './components/main/secondPass';
 import './components/openDialog/openDialog';
+import './components/openExplorer/openExplorer';
 import './components/passphrase/passphrase';
 import './components/passphrase/passphraseService';
 import './components/passphrase/savePassphrase';
