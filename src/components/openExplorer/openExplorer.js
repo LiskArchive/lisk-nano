@@ -23,13 +23,12 @@ app.directive('openExplorer', (Account, $window) => {
 
   const linkFunc = ($scope, $element) => {
     $element.bind('click', () => {
-      openExplorer(`${getHost()}${$scope.url}${$scope.openExplorer}`);
+      openExplorer(`${getHost()}${$scope.openExplorer}`);
     });
   };
 
   return {
     scope: {
-      url: '=',
       openExplorer: '@',
     },
     link: linkFunc,

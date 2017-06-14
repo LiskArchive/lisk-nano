@@ -10,7 +10,7 @@ describe('Open explorer directive', () => {
   let $window;
   let compiled;
   let account;
-  const template = '<div><button type="button" data-open-explorer="1" data-url="\'/block/\'"></button></div>';
+  const template = '<div><button type="button" data-open-explorer="/block/1"></button></div>';
   const LINK = {
     testnet: 'https://testnet-explorer.lisk.io',
     main: 'https://explorer.lisk.io',

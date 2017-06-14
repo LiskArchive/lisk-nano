@@ -15,7 +15,7 @@ md-card.offline-hide
               th(md-column) Amount
               th(md-column) Fee
           tbody(md-body, infinite-scroll='$ctrl.showMore()')
-            tr(md-row, ng-repeat="transaction in $ctrl.transactions track by transaction.id | orderBy:'-timestamp'", data-open-explorer="{{transaction.id}}", data-url="'/tx/'")
+            tr(md-row, ng-repeat="transaction in $ctrl.transactions track by transaction.id | orderBy:'-timestamp'", data-open-explorer="/tx/{{transaction.id}}")
               td(md-cell)
                 timestamp(data='transaction.timestamp', ng-show='transaction.confirmations')
                 span(ng-bind='transaction.confirmations ? "" : "PENDING"')
