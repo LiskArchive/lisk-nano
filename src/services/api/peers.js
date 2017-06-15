@@ -1,5 +1,5 @@
 import lisk from 'lisk-js';
-
+import urlParser from '../../util/urlParser';
 /**
  * This factory provides methods for communicating with peers. It exposes
  * sendRequestPromise method for requesting to available endpoint to the active peer,
@@ -54,9 +54,10 @@ app.factory('Peers', ($timeout, $cookies, $location, $q, $rootScope, dialog) => 
       if (network) {
         conf = network;
         if (network.address) {
-          conf.node = network.address.split(':')[1].replace('//', '');
-          conf.port = network.address.match(/:([0-9]{1,5})\/?$/) && network.address.match(/:([0-9]{1,5})\/?$/)[1];
-          conf.ssl = network.address.split(':')[0] === 'https';
+          const { hostname, port, protocol } = urlParser(network.address);
+          conf.node = hostname;
+          conf.port = port;
+          conf.ssl = protocol === 'https:';
         }
         if (conf.testnet === undefined && conf.port !== undefined) {
           conf.testnet = conf.port === '7000';
