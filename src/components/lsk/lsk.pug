@@ -1,2 +1,4 @@
-span(ng-bind='$ctrl.amount | lsk | liskNumber')
-span(ng-show='$ctrl.append')= ' LSK'
+span {{$ctrl.amount | lsk | currency: $root.tickers: $root.symbol}}
+span(ng-show='$ctrl.append')
+    |
+    | {{$root.symbol}}
