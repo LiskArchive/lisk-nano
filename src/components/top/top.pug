@@ -29,3 +29,15 @@ md-content(layout='column', layout-gt-xs='row')
         div(class='balance-wrapper', data-open-dialog='send', data-options='{"send-amount": $ctrl.totalSendable}', data-ng-class='{"has-send-modal": $ctrl.totalSendable > 0}')
           lsk.balance.value.primary.full(amount='$ctrl.account.get().balance', nocolor, append)
           span.tooltip.secondary(data-ng-if='$ctrl.account.get().balance > 0') Click to send all funds
+        md-menu(md-position-mode='target-right target')
+          md-button.md-icon-button(ng-click='$mdOpenMenu()' ng-disabled='!$root.tickers')
+            i.material-icons more_vert
+          md-menu-content(width='2')
+            md-menu-item
+              md-button(ng-click='$ctrl.setCurrency("LSK")')
+                div(layout='row', flex='')
+                  p LSK
+            md-menu-item(data-ng-repeat="(key, value) in $root.tickers")
+              md-button(ng-click='$ctrl.setCurrency(key)')
+                div(layout='row', flex='')
+                  p {{key}}
