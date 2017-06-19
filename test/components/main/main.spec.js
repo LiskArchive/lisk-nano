@@ -23,9 +23,10 @@ describe('main component controller', () => {
   let peers;
   let accountApi;
   let delegateApi;
+  let httpBackend;
 
   beforeEach(inject((_$componentController_, _$rootScope_, _Peers_,
-    _$q_, _Account_, _AccountApi_, _delegateApi_) => {
+    _$q_, _Account_, _AccountApi_, _delegateApi_, _$httpBackend_) => {
     $componentController = _$componentController_;
     $rootScope = _$rootScope_;
     $q = _$q_;
@@ -33,6 +34,10 @@ describe('main component controller', () => {
     accountApi = _AccountApi_;
     delegateApi = _delegateApi_;
     peers = _Peers_;
+
+    // Can't mock the Price servive with sinon @alepop
+    httpBackend = _$httpBackend_;
+    httpBackend.when('GET', 'https://explorer.lisk.io/api/getPriceTicker').respond({});
   }));
 
   beforeEach(() => {

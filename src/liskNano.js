@@ -30,7 +30,9 @@ import './services/account';
 import './services/api/accountApi';
 import './services/api/delegateApi';
 import './services/api/forgingApi';
+import './services/api/priceApi';
 import './services/api/peers';
+import './services/price';
 import './services/dialog';
 import './services/lsk';
 import './services/sync';
@@ -39,6 +41,7 @@ import './services/notification';
 import './filters/lsk';
 import './filters/liskNumber';
 import './filters/fundsInsufficiency';
+import './filters/currency';
 
 import './run';
 import './states';

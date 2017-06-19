@@ -11,24 +11,29 @@ md-card.offline-hide
             md-card-title-text
               span.md-title.delegate-name {{$ctrl.delegate.username}}
             span(md-position-mode='target-right target')
-              span {{$ctrl.statistics.total  | lsk | number:2 }} LSK Earned
+              span
+                lsk(amount='$ctrl.statistics.total', append) Earned
       md-content(layout='column', layout-gt-xs='row')
         md-card(flex-50, flex-gt-xs=25, layout-padding)
           .info-panel.info-panel-grey
             span.title Last 24 hours
-            span.pull-right {{$ctrl.statistics.last24h  | lsk | number:2 }} LSK
+            span.pull-right
+              lsk(amount='$ctrl.statistics.last24h', append)
         md-card(flex-50, flex-gt-xs=25, layout-padding)
           .info-panel.info-panel-grey
             span.title {{'Last 7 days'}}
-            span.pull-right {{$ctrl.statistics.last7d  | lsk | number:2 }} LSK
+            span.pull-right
+              lsk(amount='$ctrl.statistics.last7d', append)
         md-card(flex-50, flex-gt-xs=25, layout-padding)
           .info-panel.info-panel-grey
             span.title {{'Last 30 days'}}
-            span.pull-right {{$ctrl.statistics.last30d  | lsk | number:2 }} LSK
+            span.pull-right
+              lsk(amount='$ctrl.statistics.last30d', append)
         md-card(flex-50, flex-gt-xs=25, layout-padding)
           .info-panel.info-panel-grey
             span.title {{'Last 365 days'}}
-            span.pull-right {{$ctrl.statistics.last365d  | lsk | number:2 }} LSK
+            span.pull-right
+              lsk(amount='$ctrl.statistics.last365d', append)
       div(layout='column', layout-gt-xs='row')
         md-card(flex-gt-xs=33, layout-align='center center', layout-padding)
           div Rank
@@ -74,7 +79,9 @@ md-card.offline-hide
                       span(ng-show='block.timestamp > 0')
                         timestamp(data='block.timestamp')
                       span(ng-show='block.timestamp == 0') -
-                    td(md-cell data-title='tableBlocks.cols.totalFee', sortable="'totalFee'") {{block.totalFee | lsk}}
-                    td(md-cell data-title='tableBlocks.cols.reward', sortable="'reward'") {{block.reward | lsk}}
+                    td(md-cell data-title='tableBlocks.cols.totalFee', sortable="'totalFee'")
+                      lsk(amount='block.totalFee')
+                    td(md-cell data-title='tableBlocks.cols.reward', sortable="'reward'")
+                      lsk(amount='block.reward')
                     td.width-80(md-cell data-title="''")
         md-button.more(ng-show='$ctrl.moreBlocksExist && $ctrl.blocksLoaded', ng-click='$ctrl.loadMoreBlocks()') Load More

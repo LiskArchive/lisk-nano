@@ -21,10 +21,12 @@ require('./services/account.spec');
 require('./services/api/accountApi.spec');
 require('./services/api/delegateApi.spec');
 require('./services/api/forgingApi.spec');
+require('./services/api/priceApi.spec');
 require('./services/api/peers.spec');
 require('./services/lsk.spec');
 require('./services/passphrase.spec');
 require('./services/notification.spec');
+require('./services/price.spec');
 
 require('./run.spec');
 

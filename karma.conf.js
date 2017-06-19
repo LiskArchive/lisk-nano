@@ -9,6 +9,7 @@ const libs = path.join(__dirname, 'src', 'libs.js');
 const app = path.join(__dirname, 'src', 'liskNano.js');
 const testLibs = path.join(__dirname, 'test', 'libs.js');
 const test = path.join(__dirname, 'test', 'test.js');
+const locale = './node_modules/intl/locale-data/jsonp/en-US.js';
 preprocessors[libs] = ['webpack'];
 preprocessors[app] = ['webpack'];
 preprocessors[testLibs] = ['webpack'];
@@ -27,10 +28,10 @@ module.exports = function (config) {
 
     // Frameworks to use
     // Available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'intl-shim'],
 
     // List of files / patterns to load in the browser
-    files: [libs, app, testLibs, test],
+    files: [libs, app, testLibs, test, locale],
     webpack: webpackConfig,
 
     webpackMiddleware: {
@@ -103,6 +104,7 @@ module.exports = function (config) {
 
     plugins: [
       require('karma-webpack'), // eslint-disable-line import/no-extraneous-dependencies
+      require('karma-intl-shim'),
       'karma-chai',
       'karma-mocha',
       'karma-chrome-launcher',
