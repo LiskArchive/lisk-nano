@@ -3,6 +3,7 @@ import './index.less';
 import './components/delegateRegistration/delegateRegistration';
 import './components/delegates/delegates';
 import './components/delegates/vote';
+import './components/fee/fee';
 import './components/forging/forging';
 import './components/header/header';
 import './components/loadingBar/loadingBar';
@@ -11,6 +12,7 @@ import './components/login/newAccount';
 import './components/lsk/lsk';
 import './components/main/main';
 import './components/main/secondPass';
+import './components/spinner/spinner';
 import './components/openDialog/openDialog';
 import './components/openExplorer/openExplorer';
 import './components/passphrase/passphrase';
@@ -37,6 +39,7 @@ import './services/notification';
 
 import './filters/lsk';
 import './filters/liskNumber';
+import './filters/fundsInsufficiency';
 
 import './run';
 import './states';
