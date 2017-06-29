@@ -42,6 +42,7 @@ app.component('delegates', {
       this.$scope.$emit('showLoadingBar');
       this.usernameInput = '';
       this.usernameSeparator = '\n';
+      this.voteMaxCount = 33;
 
       this.updateAll();
 
@@ -153,6 +154,9 @@ app.component('delegates', {
       const list = delegate.status.voted ? this.unvoteList : this.voteList;
       if (delegate.status.changed) {
         list.push(delegate);
+        if (this.unvoteList.length + this.voteList.length > this.voteMaxCount) {
+          this.dialog.errorToast(`Maximum of ${this.voteMaxCount} votes in one transaction exceeded.`);
+        }
       } else {
         list.splice(list.indexOf(delegate), 1);
       }

@@ -63,8 +63,8 @@ div.offline-hide
           strong {{$ctrl.unvoteList.length}}
         span
           span Total new votes:&nbsp;
-          strong(ng-class='{"red-link": $ctrl.voteList.length + $ctrl.unvoteList.length > 33}') {{$ctrl.voteList.length + $ctrl.unvoteList.length}}
-          span &nbsp;/ 33
+          strong(ng-class='{"red-link": $ctrl.voteList.length + $ctrl.unvoteList.length > $ctrl.voteMaxCount}') {{$ctrl.voteList.length + $ctrl.unvoteList.length}}
+          span &nbsp;/ {{$ctrl.voteMaxCount}}
         span
           span Total votes:&nbsp;
           strong(ng-class='{"red-link": ($ctrl.votedList.length - $ctrl.unvoteList.length) + $ctrl.voteList.length > 101}') {{($ctrl.votedList.length - $ctrl.unvoteList.length) + $ctrl.voteList.length}}
