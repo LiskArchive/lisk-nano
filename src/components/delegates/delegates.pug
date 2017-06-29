@@ -54,3 +54,18 @@ div.offline-hide
               td(md-cell, ng-bind='delegate.productivity + "%"')
               td(md-cell, ng-bind='delegate.approval + "%"')
       md-button.more(ng-show='$ctrl.delegatesDisplayedCount < $ctrl.filteredDelegates.length', ng-click='$ctrl.showMore()') Show More
+  md-card.fixed-at-bottom(ng-if='$ctrl.voteList.length + $ctrl.unvoteList.length', layout-padding, layout-gt-xs='row', layout-align='center center')
+        span
+          span Upvotes:&nbsp;
+          strong {{$ctrl.voteList.length}}
+        span
+          span Downvotes:&nbsp;
+          strong {{$ctrl.unvoteList.length}}
+        span
+          span Total new votes:&nbsp;
+          strong(ng-class='{"red-link": $ctrl.voteList.length + $ctrl.unvoteList.length > 33}') {{$ctrl.voteList.length + $ctrl.unvoteList.length}}
+          span &nbsp;/ 33
+        span
+          span Total votes:&nbsp;
+          strong(ng-class='{"red-link": ($ctrl.votedList.length - $ctrl.unvoteList.length) + $ctrl.voteList.length > 101}') {{($ctrl.votedList.length - $ctrl.unvoteList.length) + $ctrl.voteList.length}}
+          span &nbsp;/ 101
