@@ -35,6 +35,7 @@ import './services/dialog';
 import './services/lsk';
 import './services/sync';
 import './services/notification';
+import './services/logout';
 
 import './filters/lsk';
 import './filters/liskNumber';

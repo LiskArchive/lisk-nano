@@ -16,7 +16,7 @@ app.component('main', {
    */
   controller: class main {
     constructor($scope, $rootScope, $timeout, $q, $state, Peers,
-      dialog, Account, AccountApi, Notification) {
+      dialog, Account, AccountApi, Notification, Logout) {
       this.$scope = $scope;
       this.$rootScope = $rootScope;
       this.$timeout = $timeout;
@@ -27,6 +27,7 @@ app.component('main', {
       this.account = Account;
       this.accountApi = AccountApi;
       this.notify = Notification.init();
+      this.logout = Logout.init();
 
       this.activeTab = this.init();
     }
