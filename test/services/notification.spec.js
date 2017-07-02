@@ -29,7 +29,7 @@ describe('Factory: Notification', () => {
       expect(spy).to.have.been.calledWith(amount);
     });
 
-    it('should call $window.Notification', () => {
+    it('should call $window.Notification for deposit event', () => {
       $window.Notification = mockNotification;
       const msg = `You've received ${lsk.normalize(amount)} LSK.`;
 
@@ -41,8 +41,28 @@ describe('Factory: Notification', () => {
       mockNotification.reset();
     });
 
+    it('should call this._logout', () => {
+      const spy = sinon.spy(notify, '_logout');
+      notify.isFocused = false;
+      notify.about('logout', {});
+      expect(spy).to.have.been.calledWith();
+    });
+
+    it('should call $window.Notification for logout event', () => {
+      $window.Notification = mockNotification;
+      const msg = 'You\'ve automatically logged out';
+
+      notify.isFocused = false;
+      notify.about('logout');
+      expect(mockNotification).to.have.been.calledWith(
+         'Lisk Nano', { body: msg },
+      );
+      mockNotification.reset();
+    });
+
     it('should not call $window.Notification if app is focused', () => {
       notify.about('deposit', amount);
+      notify.about('logout', amount);
       expect(mockNotification).to.have.been.not.calledWith();
       mockNotification.reset();
     });

@@ -6,7 +6,7 @@ const TEN_MINUTES = 600000;
  * @module app
  * @submodule Logout
  */
-app.factory('Logout', ($window, $rootScope, $timeout) => {
+app.factory('Logout', ($window, $rootScope, $timeout, Notification) => {
   /**
    *The Logout factory constructor class
    * @class Logout
@@ -16,6 +16,7 @@ app.factory('Logout', ($window, $rootScope, $timeout) => {
     constructor() {
       this.timerId = null;
       this.$rootScope = $rootScope;
+      this.notify = Notification;
     }
 
     /**
@@ -38,6 +39,7 @@ app.factory('Logout', ($window, $rootScope, $timeout) => {
      */
     _initTimer() {
       this.timerId = $timeout(() => {
+        this.notify.about('logout');
         this.$rootScope.logout();
       }, TEN_MINUTES);
     }

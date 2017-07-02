@@ -9,21 +9,30 @@ describe('Factory: Logout', () => {
   let $timeout;
   let $rootScope;
   let logout;
+  let notify;
 
   beforeEach(angular.mock.module('app'));
 
-  beforeEach(inject((_Logout_, _$timeout_, _$rootScope_) => {
+  beforeEach(inject((_Logout_, _$timeout_, _$rootScope_, _Notification_) => {
     $timeout = _$timeout_;
     $rootScope = _$rootScope_;
     logout = _Logout_;
+    notify = _Notification_;
   }));
 
   describe('init()', () => {
-    it('should call $rootScope.logout after $timeout', () => {
+    it('should call $rootScope.logout and notify.about after $timeout', () => {
       const spy = sinon.spy($rootScope, 'logout');
       logout._initTimer(); //eslint-disable-line
       $timeout.flush();
       expect(spy).to.have.been.calledWith();
+    });
+
+    it('should call Notification service', () => {
+      const spy = sinon.spy(notify, 'about');
+      logout._initTimer(); //eslint-disable-line
+      $timeout.flush();
+      expect(spy).to.have.been.calledWith('logout');
     });
 
     it('should call $timeout.cancel on _cleraTimer', () => {
