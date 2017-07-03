@@ -1,10 +1,12 @@
 const electron = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
+const path = require('path');
 
 const { app } = electron;
 const { BrowserWindow } = electron;
 const { Menu } = electron;
 
 let win;
+const copyright = `Copyright © 2016 - ${new Date().getFullYear()} Lisk Foundation`;
 
 function createWindow() {
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -12,7 +14,15 @@ function createWindow() {
     width: width > 2000 ? Math.floor(width * 0.5) : width - 250,
     height: height > 1000 ? Math.floor(height * 0.7) : height - 150,
     center: true,
+    webPreferences: {
+      // Avoid app throttling when Electron is in background
+      backgroundThrottling: false,
+      // Specifies a script that will be loaded before other scripts run in the page.
+      preload: path.resolve(__dirname, 'ipc.js'),
+    },
   });
+  win.on('blur', () => win.webContents.send('blur'));
+  win.on('focus', () => win.webContents.send('focus'));
 
   const template = [
     {
@@ -76,6 +86,12 @@ function createWindow() {
           },
         },
         {
+          label: 'Lisk Explorer',
+          click() {
+            electron.shell.openExternal('https://explorer.lisk.io');
+          },
+        },
+        {
           label: 'Lisk Forum',
           click() {
             electron.shell.openExternal('https://forum.lisk.io');
@@ -124,7 +140,7 @@ function createWindow() {
           const options = {
             buttons: ['OK'],
             icon: `${__dirname}/assets/lisk.png`,
-            message: `Lisk Nano\nVersion ${app.getVersion()}\nCopyright © 2017 Lisk Foundation`,
+            message: `Lisk Nano\nVersion ${app.getVersion()}\n${copyright}`,
           };
           electron.dialog.showMessageBox(focusedWindow, options, () => {});
         }
@@ -173,6 +189,14 @@ app.on('window-all-closed', () => {
     app.quit();
   }
 });
+
+// This will override the values defined in the app’s .plist file (macOS)
+if (process.platform === 'darwin') {
+  app.setAboutPanelOptions({
+    applicationName: 'Lisk Nano',
+    copyright,
+  });
+}
 
 app.on('activate', () => {
   if (win === null) {
