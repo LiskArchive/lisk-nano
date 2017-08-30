@@ -1,6 +1,5 @@
 import React from 'react';
 import { TableRow, TableCell } from 'react-toolbox/lib/table';
-import omit from 'lodash/omit';
 import Checkbox from './voteCheckbox';
 import styles from './voting.css';
 
@@ -21,8 +20,8 @@ class VotingRow extends React.Component {
 
   render() {
     const props = this.props;
-    const { data } = props;
-    return (<TableRow {...omit(props, ['data'])} className={`${styles.row} ${setRowClass(data)}`}>
+    const { data, ...otherProps } = props;
+    return (<TableRow {...otherProps} className={`${styles.row} ${setRowClass(data)}`}>
       <TableCell>
         <Checkbox styles={styles}
           value={data.selected}
