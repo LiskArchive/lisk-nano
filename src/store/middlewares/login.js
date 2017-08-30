@@ -1,4 +1,3 @@
-import { normalizePassphrase } from '../../utils/passphrase';
 import { getAccount, extractAddress, extractPublicKey } from '../../utils/api/account';
 import { getDelegate } from '../../utils/api/delegate';
 import { accountLoggedIn } from '../../actions/account';
@@ -13,11 +12,10 @@ const loginMiddleware = store => next => (action) => {
   next(Object.assign({}, action, { data: action.data.activePeer }));
 
   const { passphrase } = action.data;
-  const normalizedPassphrase = normalizePassphrase(passphrase);
-  const publicKey = extractPublicKey(normalizedPassphrase);
-  const address = extractAddress(normalizedPassphrase);
+  const publicKey = extractPublicKey(passphrase);
+  const address = extractAddress(passphrase);
   const accountBasics = {
-    normalizedPassphrase,
+    passphrase,
     publicKey,
     address,
   };

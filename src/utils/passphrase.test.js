@@ -125,16 +125,6 @@ describe('Passphrase', () => {
       expect(isValidPassphrase(passphrase)).to.be.equal(true);
     });
 
-    it('recognises a valid passphrase with 4 letter abbreviations', () => {
-      const passphrase = 'wago stoc borrow epis laun kitt salu link glob zero feed marble';
-      expect(isValidPassphrase(passphrase)).to.be.equal(true);
-    });
-
-    it('recognises an invalid passphrase with 4 letter abbreviations', () => {
-      const passphrase = 'wage stoc borrow epis laun kitt salu link glob zero feed marble';
-      expect(isValidPassphrase(passphrase)).to.be.equal(false);
-    });
-
     it('recognises an invalid passphrase', () => {
       const passphrase = 'stock borrow episode laundry kitten salute link globe zero feed marble';
       expect(isValidPassphrase(passphrase)).to.be.equal(false);
