@@ -81,7 +81,7 @@ export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.jo
  * Expands any abbreviations that uniquely match a word in the BIP39 english word list
  *
  * @param {string} passphrase
- * @returns {string} normalizedValue
+ * @returns {string} The passphrase with abbreviated words expanded
  */
 export const expandPassphrase = passphrase => passphrase.replace(/[a-z]+/ig, (input) => {
   // the first 4 letters of any word in the list is unique, anything below is not guaranteed to be
