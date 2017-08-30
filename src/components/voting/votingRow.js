@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableRow, TableCell } from 'react-toolbox/lib/table';
-import styles from './voting.css';
 import Checkbox from './voteCheckbox';
+import styles from './voting.css';
 
 const setRowClass = ({ pending, selected, voted }) => {
   if (pending) {
@@ -20,8 +20,8 @@ class VotingRow extends React.Component {
 
   render() {
     const props = this.props;
-    const { data } = props;
-    return (<TableRow {...props} className={`${styles.row} ${setRowClass(data)}`}>
+    const { data, ...otherProps } = props;
+    return (<TableRow {...otherProps} className={`${styles.row} ${setRowClass(data)}`}>
       <TableCell>
         <Checkbox styles={styles}
           value={data.selected}
