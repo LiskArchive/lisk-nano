@@ -17,12 +17,12 @@ Open http://localhost:8080
 
 For ease of development, you can set a cookie to prefill a passphrase, e.g.:
 ```
-document.cookie = 'passphrase=wagon stock borrow episode laundry kitten salute link globe zero feed marble'
+localStorage.setItem('passphrase', 'wagon stock borrow episode laundry kitten salute link globe zero feed marble')
 ```
 
 And then you can set a cookie to login automatically
 ```
-document.cookie = 'autologin=true'
+localStorage.setItem('autologin', true)
 ```
 
 ## Build

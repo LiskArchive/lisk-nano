@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import { spy } from 'sinon';
 import { mount, shallow } from 'enzyme';
 import Lisk from 'lisk-js';
-import Cookies from 'js-cookie';
 import LoginForm from './loginForm';
 
 describe('LoginForm', () => {
@@ -81,15 +80,15 @@ describe('LoginForm', () => {
       expect(props.history.replace).to.have.been.calledWith('/main/transactions');
     });
 
-    it('calls Cookies.set(\'address\', address) if this.state.address', () => {
-      const spyFn = spy(Cookies, 'set');
+    it('calls localStorage.setItem(\'address\', address) if this.state.address', () => {
+      const spyFn = spy(localStorage, 'setItem');
       wrapper = mount(<LoginForm {...props} />);
       wrapper.setState({ address });
       wrapper.setProps(props);
       expect(spyFn).to.have.been.calledWith('address', address);
 
       spyFn.restore();
-      Cookies.remove('address');
+      localStorage.removeItem('address');
     });
   });
 
@@ -195,8 +194,8 @@ describe('LoginForm', () => {
     it('should set state with correct network index and passphrase', () => {
       const spyFn = spy(LoginForm.prototype, 'validateUrl');
       const passphrase = 'Test Passphrase';
-      document.cookie = 'address=http:localhost:4000';
-      document.cookie = `passphrase=${passphrase}`;
+      localStorage.setItem('address', 'http:localhost:4000');
+      localStorage.setItem('passphrase', passphrase);
 
       // for invalid address, it should set network to 0
       mount(<LoginForm {...props} />);
@@ -212,8 +211,8 @@ describe('LoginForm', () => {
       const spyFn = spy(LoginForm.prototype, 'validateUrl');
       // for valid address should set network to 2
       const passphrase = 'Test Passphrase';
-      document.cookie = `passphrase=${passphrase}`;
-      document.cookie = 'address=http://localhost:4000';
+      localStorage.setItem('passphrase', passphrase);
+      localStorage.setItem('address', 'http:localhost:4000');
       mount(<LoginForm {...props} />);
       expect(spyFn).to.have.been.calledWith({
         passphrase,
