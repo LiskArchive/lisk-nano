@@ -75,7 +75,7 @@ export const generateSeed = ({ byte, seed, percentage, step } = init(), rand = M
  * @param {string[]} seed - An array of 16 hex numbers in string format
  * @returns {string} The generated passphrase
  */
-export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.join(''), 'hex'))).toString();
+export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.join('aaaaaa'), 'hex'))).toString();
 
 /**
  * Normalizes a passphrase by removing multiple spaces, lowercasing it and completing any 4
@@ -88,9 +88,10 @@ export const normalizePassphrase = passphrase => passphrase
     .trim()
     .replace(/ +/g, ' ')
     .toLowerCase()
-    .replace(/[a-z]+/g, (inputWord) => {
-      if (inputWord.length !== 4) return inputWord;
-      return mnemonic.Words.ENGLISH.find(validWord => validWord.slice(0, 4) === inputWord) || inputWord;
+    .replace(/[a-z]+/g, (input) => {
+      if (input.length !== 4) return input;
+      const match = mnemonic.Words.ENGLISH.find(validWord => validWord.slice(0, 4) === input);
+      return match || input;
     });
 
 /**
