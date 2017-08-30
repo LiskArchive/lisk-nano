@@ -75,7 +75,7 @@ export const generateSeed = ({ byte, seed, percentage, step } = init(), rand = M
  * @param {string[]} seed - An array of 16 hex numbers in string format
  * @returns {string} The generated passphrase
  */
-export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.join('aaaaaa'), 'hex'))).toString();
+export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.join(''), 'hex'))).toString();
 
 /**
  * Normalizes a passphrase by removing multiple spaces, lowercasing it and completing any 4
