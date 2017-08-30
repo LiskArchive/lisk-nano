@@ -69,21 +69,39 @@ export const generateSeed = ({ byte, seed, percentage, step } = init(), rand = M
   };
 };
 
-  /**
-   * Generates a passphrase from a given seed array using mnemonic
-   *
-   * @param {string[]} seed - An array of 16 hex numbers in string format
-   * @returns {string} The generated passphrase
-   */
+/**
+ * Generates a passphrase from a given seed array using mnemonic
+ *
+ * @param {string[]} seed - An array of 16 hex numbers in string format
+ * @returns {string} The generated passphrase
+ */
 export const generatePassphrase = ({ seed }) => (new mnemonic(new Buffer(seed.join(''), 'hex'))).toString();
 
-  /**
-   * Checks if passphrase is valid using mnemonic
-   *
-   * @param {string} passphrase
-   * @returns {bool} isValidPassphrase
-   */
+/**
+ * Normalizes a passphrase by removing multiple spaces, lowercasing it and completing any 4
+ * letter phrases that uniquely match a word in the BIP39 english word list
+ *
+ * @param {string} passphrase
+ * @returns {string} normalizedValue
+ */
+export const normalizePassphrase = passphrase => passphrase
+    .trim()
+    .replace(/ +/g, ' ')
+    .toLowerCase()
+    .replace(/[a-z]+/g, (inputWord) => {
+      if (inputWord.length !== 4) return inputWord;
+      return mnemonic.Words.ENGLISH.find(validWord => validWord.slice(0, 4) === inputWord) || inputWord;
+    });
+
+/**
+ * Checks if passphrase is valid using mnemonic
+ *
+ * @param {string} passphrase
+ * @returns {bool} isValidPassphrase
+ */
 export const isValidPassphrase = (passphrase) => {
-  const normalizedValue = passphrase.replace(/ +/g, ' ').trim().toLowerCase();
-  return normalizedValue.split(' ').length >= 12 && mnemonic.isValid(normalizedValue);
+  const wordCount = passphrase.match(/[a-z]+/ig).length;
+  if (wordCount < 12) return false;
+  const normalizedValue = normalizePassphrase(passphrase);
+  return mnemonic.isValid(normalizedValue);
 };
