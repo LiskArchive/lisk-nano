@@ -21,6 +21,13 @@ Feature: Login page
     Then I should be logged in
     And I should see text "Testnet" in "peer network" element
 
+  Scenario: should allow to login with abbreviated password
+    Given I'm on login page
+    When I fill in "wago stoc borr epis laun kitt salu link glob zero feed marb" to "passphrase" field
+    And I click "login button"
+    Then I should be logged in
+    And I should see text "16313739661670634666L" in "address" element
+
   Scenario: should remember the selected network
     Given I'm on login page
     When I fill in "wagon stock borrow episode laundry kitten salute link globe zero feed marble" to "passphrase" field

@@ -1,0 +1,7 @@
+# http://EditorConfig.org
+root = true
+
+[*.{js,feature}]
+charset = utf-8
+indent_style = space
+indent_size = 2
