@@ -42,14 +42,23 @@ class Login extends React.Component {
 
   componentDidUpdate() {
     if (this.props.account && this.props.account.address) {
-      const search = this.props.history.location.search;
-      this.props.history.replace(
-        search.indexOf('?referrer') === 0 ? search.replace('?referrer=', '') : '/main/transactions');
+      this.props.history.replace(this.getReferrerRoute());
       if (this.state.address) {
         localStorage.setItem('address', this.state.address);
       }
       localStorage.setItem('network', this.state.network);
     }
+  }
+
+  getReferrerRoute() {
+    const { isDelegate } = this.props.account;
+    const { search } = this.props.history.location;
+    const transactionRoute = '/main/transactions';
+    const referrerRoute = search.indexOf('?referrer') === 0 ? search.replace('?referrer=', '') : transactionRoute;
+    if (!isDelegate && referrerRoute === '/main/forging') {
+      return transactionRoute;
+    }
+    return referrerRoute;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -59,15 +68,17 @@ class Login extends React.Component {
       return reg.test(url) ? url : `http://${url}`;
     };
 
-    const isDefaultPort = url => (url.indexOf(':80') || url.indexOf(':443')) !== -1;
+    const errorMessage = 'URL is invalid';
+
+    const isValidLocalhost = url => url.hostname === 'localhost' && url.port.length > 1;
+    const isValidRemote = url => /(([a-z\d]([a-z\d-]*[a-z\d])*)\.)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3})/.test(url.hostname);
 
     let addressValidity = '';
     try {
       const url = new URL(addHttp(value));
-      const port = isDefaultPort(value) || url.port !== '';
-      addressValidity = url && port ? '' : 'URL is invalid';
+      addressValidity = url && (isValidRemote(url) || isValidLocalhost(url)) ? '' : errorMessage;
     } catch (e) {
-      addressValidity = 'URL is invalid';
+      addressValidity = errorMessage;
     }
 
     const data = { address: value, addressValidity };
