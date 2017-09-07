@@ -1,6 +1,6 @@
 import React from 'react';
 import chai, { expect } from 'chai';
-import { spy } from 'sinon';
+import sinon, { spy } from 'sinon';
 import sinonChai from 'sinon-chai';
 import { mount, shallow } from 'enzyme';
 import Lisk from 'lisk-js';
@@ -16,6 +16,7 @@ describe('Login', () => {
     address: '16313739661670634666L',
     username: 'lisk-nano',
   };
+  const sandbox = sinon.sandbox.create();
 
   const props = {
     peers: {},
@@ -27,7 +28,10 @@ describe('Login', () => {
       props.peers.data = Lisk.api(network);
     },
   };
-  props.spyActivePeerSet = spy(props.activePeerSet);
+
+  afterEach(() => {
+    sandbox.restore();
+  });
 
   describe('Generals', () => {
     beforeEach(() => {
@@ -61,7 +65,7 @@ describe('Login', () => {
 
   describe('componentDidMount', () => {
     it('calls devPreFill', () => {
-      const spyFn = spy(Login.prototype, 'devPreFill');
+      const spyFn = sandbox.spy(Login.prototype, 'devPreFill');
       mount(<Login {...props} />);
       expect(spyFn).to.have.been.calledWith();
     });
@@ -169,6 +173,18 @@ describe('Login', () => {
       expect(data).to.deep.equal(expectedData);
     });
 
+    it('should not show invalid passphrase error for a valid passphrase with abbreviations', () => {
+      const passphrase = 'wago stoc borrow episod laun kitte salu link glob zero feed marble';
+      wrapper.find('[name="passphrase"]').simulate('change', passphrase);
+      expect(wrapper.find('[name="passphrase"]').prop('error')).to.equal('');
+    });
+
+    it('should show invalid passphrase error for an invalid passphrase with abbreviations', () => {
+      const passphrase = 'wage stoc borrow episod laun kitte salu link glob zero feed marble';
+      wrapper.find('[name="passphrase"]').simulate('change', passphrase);
+      expect(wrapper.find('[name="passphrase"]').prop('error')).to.equal('Invalid passphrase');
+    });
+
     it.skip('should set passphraseValidity="Invalid passphrase" for a non-empty invalid passphrase', () => {
       const passphrase = 'invalid passphrase';
       const data = wrapper.instance().validatePassphrase(passphrase);
@@ -185,7 +201,7 @@ describe('Login', () => {
       wrapper = shallow(<Login {...props} />);
       const key = 'network';
       const value = 0;
-      const spyFn = spy(Login.prototype, 'setState');
+      const spyFn = sandbox.spy(Login.prototype, 'setState');
       wrapper.instance().changeHandler(key, value);
       expect(spyFn).to.have.been.calledWith({ [key]: value });
     });
@@ -196,6 +212,18 @@ describe('Login', () => {
       wrapper = shallow(<Login {...props} />);
       wrapper.instance().onLoginSubmission();
       expect(wrapper.props().spyActivePeerSet).to.have.been.calledWith();
+    });
+
+    it('it should call activePeerSet with an expanded passphrase', () => {
+      const spyActivePeerSet = sandbox.spy(props, 'activePeerSet');
+      wrapper = shallow(<Login {...props} />);
+      const passphraseInput = wrapper.find('[name="passphrase"]');
+      passphraseInput.simulate('change', 'wago stoc borrow episod laun kitte salu link glob zero feed marble');
+      const loginButton = wrapper.find('[name="login"]');
+      loginButton.simulate('click');
+      expect(spyActivePeerSet).to.have.been.calledWithMatch(sinon.match({
+        passphrase: 'wagon stock borrow episode laundry kitten salute link globe zero feed marble',
+      }));
     });
   });
 

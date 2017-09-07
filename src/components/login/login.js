@@ -4,7 +4,7 @@ import Input from 'react-toolbox/lib/input';
 import Dropdown from 'react-toolbox/lib/dropdown';
 import Button from 'react-toolbox/lib/button';
 import Checkbox from 'react-toolbox/lib/checkbox';
-import { isValidPassphrase } from '../../utils/passphrase';
+import { expandPassphrase, isValidPassphrase } from '../../utils/passphrase';
 import networksRaw from './networks';
 import Passphrase from '../passphrase';
 import styles from './login.css';
@@ -91,7 +91,8 @@ class Login extends React.Component {
     if (!value || value === '') {
       data.passphraseValidity = 'Empty passphrase';
     } else {
-      data.passphraseValidity = isValidPassphrase(value) ? '' : 'Invalid passphrase';
+      const expandedPassphrase = expandPassphrase(value);
+      data.passphraseValidity = isValidPassphrase(expandedPassphrase) ? '' : 'Invalid passphrase';
     }
     return data;
   }
@@ -112,7 +113,7 @@ class Login extends React.Component {
 
     // set active peer
     this.props.activePeerSet({
-      passphrase,
+      passphrase: expandPassphrase(passphrase),
       network,
     });
   }
@@ -188,6 +189,7 @@ class Login extends React.Component {
                       },
                     })} />
                   <Button label='LOGIN' primary raised
+                    name='login'
                     onClick={this.onLoginSubmission.bind(this, this.state.passphrase)}
                     className='login-button'
                     disabled={(this.state.network === 2 && this.state.addressValidity !== '') ||
