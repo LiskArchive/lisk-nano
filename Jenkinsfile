@@ -44,7 +44,10 @@ node('lisk-nano') {
 
     stage ('Install npm dependencies') {
       try {
-        sh 'npm install'
+        sh '''
+        npm install npm-cache
+        ./node_modules/npm-cache/index.js install npm
+        '''
       } catch (err) {
         echo "Error: ${err}"
         fail('Stopping build: npm install failed')
