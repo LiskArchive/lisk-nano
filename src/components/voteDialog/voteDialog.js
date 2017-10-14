@@ -49,6 +49,7 @@ export default class VoteDialog extends React.Component {
       if (votes[item].confirmed || votes[item].unconfirmed) totalVotes++;
       if (votes[item].confirmed !== votes[item].unconfirmed) votesList.push(item);
     });
+    const transactionCount = 1 + Math.floor((votesList.length - 1) / maxCountOfVotesInOneTurn);
     return (
       <article>
         <form id='voteform'>
@@ -65,7 +66,7 @@ export default class VoteDialog extends React.Component {
           <article className={styles.info}>
             <InfoParagraph>
               <p >
-                {this.props.t('You can select up to {{count}} delegates in one voting turn.', { count: maxCountOfVotesInOneTurn })}
+                {this.props.t('You can select up to {{count}} delegates in one transaction.', { count: maxCountOfVotesInOneTurn })}
               </p>
               <p >
                 {this.props.t('You can vote for up to {{count}} delegates in total.', { count: maxCountOfVotes })}
@@ -80,12 +81,11 @@ export default class VoteDialog extends React.Component {
             primaryButton={{
               label: this.props.t('Confirm'),
               onClick: this.confirm.bind(this),
-              fee: Fees.vote,
+              fee: Math.max(Fees.vote, Fees.vote * transactionCount),
               type: 'button',
               disabled: (
                 totalVotes > maxCountOfVotes ||
                 votesList.length === 0 ||
-                votesList.length > maxCountOfVotesInOneTurn ||
                 !authStateIsValid(this.state)
               ),
             }} />

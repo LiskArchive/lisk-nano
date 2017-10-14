@@ -91,20 +91,22 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       votedList,
       unvotedList,
       secondSecret,
-    ).then((response) => {
+    ).then((responses) => {
       // Ad to list
       dispatch(pendingVotesAdded());
 
       // Add the new transaction
       // @todo Handle alerts either in transactionAdded action or middleware
-      dispatch(transactionAdded({
-        id: response.transactionId,
-        senderPublicKey: account.publicKey,
-        senderId: account.address,
-        amount: 0,
-        fee: Fees.vote,
-        type: transactionTypes.vote,
-      }));
+      responses.forEach((response) => {
+        dispatch(transactionAdded({
+          id: response.transactionId,
+          senderPublicKey: account.publicKey,
+          senderId: account.address,
+          amount: 0,
+          fee: Fees.vote,
+          type: transactionTypes.vote,
+        }));
+      });
     }).catch((error) => {
       const text = error && error.message ? `${error.message}.` : 'An error occurred while placing your vote.';
       dispatch(errorAlertDialogDisplayed({ text }));

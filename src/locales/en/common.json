@@ -53,7 +53,7 @@
   "Losing access to this passphrase will mean no funds can be sent from this account.": "Losing access to this passphrase will mean no funds can be sent from this account.",
   "Mainnet": "Mainnet",
   "Maximum of {{n}} votes exceeded.": "Maximum of {{n}} votes exceeded.",
-  "Maximum of {{n}} votes in one transaction exceeded.": "Maximum of {{n}} votes in one transaction exceeded.",
+  "Maximum of {{n}} votes in one transaction exceeded, you will be charged additional fees.": "Maximum of {{n}} votes in one transaction exceeded, you will be charged additional fees.",
   "Message": "Message",
   "Move your mouse to generate random bytes": "Move your mouse to generate random bytes",
   "Multisignature Creation": "Multisignature Creation",

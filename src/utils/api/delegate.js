@@ -10,15 +10,25 @@ export const listDelegates = (activePeer, options) =>
 export const getDelegate = (activePeer, options) =>
   requestToActivePeer(activePeer, 'delegates/get', options);
 
-export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) =>
-  requestToActivePeer(activePeer, 'accounts/delegates', {
-    secret,
-    publicKey,
-    delegates: voteList.map(delegate => `+${delegate}`).concat(
-      unvoteList.map(delegate => `-${delegate}`),
-    ),
-    secondSecret,
-  });
+export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) => {
+  const votingList = voteList.map(delegate => `+${delegate}`).concat(unvoteList.map(delegate => `-${delegate}`));
+  const chunk = (arr, chunkSize) => {
+    const R = [];
+    for (let i = 0, len = arr.length; i < len; i += chunkSize) {
+      R.push(arr.slice(i, i + chunkSize));
+    }
+    return R;
+  };
+  const votingLists = chunk(votingList, 33);
+  return Promise.all(votingLists.map(delegates =>
+    requestToActivePeer(activePeer, 'accounts/delegates', {
+      secret,
+      publicKey,
+      delegates,
+      secondSecret,
+    }),
+  ));
+};
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
   const options = { q: username };
