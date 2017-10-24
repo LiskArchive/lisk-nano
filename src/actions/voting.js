@@ -13,8 +13,9 @@ import transactionTypes from '../constants/transactionTypes';
 /**
  * Add pending variable to the list of voted delegates and list of unvoted delegates
  */
-export const pendingVotesAdded = () => ({
+export const pendingVotesAdded = data => ({
   type: actionTypes.pendingVotesAdded,
+  data,
 });
 
 /**
@@ -78,11 +79,26 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
     Object.keys(votes).forEach((username) => {
       /* istanbul ignore else */
       if (!votes[username].confirmed && votes[username].unconfirmed) {
-        votedList.push(votes[username].publicKey);
+        votedList.push({ username, publicKey: votes[username].publicKey });
       } else if (votes[username].confirmed && !votes[username].unconfirmed) {
-        unvotedList.push(votes[username].publicKey);
+        unvotedList.push({ username, publicKey: votes[username].publicKey });
       }
     });
+
+    const handleResponses = (response) => {
+      // Ad to list
+      dispatch(pendingVotesAdded({ votes: response.ele.map(dg => dg.username) }));
+      // Add the new transaction
+      // @todo Handle alerts either in transactionAdded action or middleware
+      dispatch(transactionAdded({
+        id: response.data.transactionId,
+        senderPublicKey: account.publicKey,
+        senderId: account.address,
+        amount: 0,
+        fee: Fees.vote,
+        type: transactionTypes.vote,
+      }));
+    };
 
     vote(
       activePeer,
@@ -92,23 +108,10 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       unvotedList,
       secondSecret,
     ).then((responses) => {
-      // Ad to list
-      dispatch(pendingVotesAdded());
-
-      // Add the new transaction
-      // @todo Handle alerts either in transactionAdded action or middleware
-      responses.forEach((response) => {
-        dispatch(transactionAdded({
-          id: response.transactionId,
-          senderPublicKey: account.publicKey,
-          senderId: account.address,
-          amount: 0,
-          fee: Fees.vote,
-          type: transactionTypes.vote,
-        }));
-      });
+      responses.forEach(handleResponses);
     }).catch((error) => {
-      const text = error && error.message ? `${error.message}.` : 'An error occurred while placing your vote.';
+      error.responses.forEach(handleResponses);
+      const text = error.error && error.error.message ? `${error.error.message}.` : 'An error occurred while placing your vote.';
       dispatch(errorAlertDialogDisplayed({ text }));
     });
     dispatch(passphraseUsed(account.passphrase));

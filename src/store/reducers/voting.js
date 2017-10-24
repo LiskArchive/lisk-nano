@@ -114,11 +114,11 @@ const voting = (state = {
         votes: Object.keys(state.votes).reduce((votesDict, username) => {
           const { confirmed, unconfirmed, publicKey, pending } = state.votes[username];
           const nextPendingStatus = pending || (confirmed !== unconfirmed);
-
+          const found = action.data.votes.find(un => un === username);
           votesDict[username] = {
-            confirmed: nextPendingStatus ? !confirmed : confirmed,
+            confirmed: nextPendingStatus && found ? !confirmed : confirmed,
             unconfirmed,
-            pending: nextPendingStatus,
+            pending: found ? nextPendingStatus : pending,
             publicKey,
           };
           return votesDict;
