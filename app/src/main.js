@@ -71,7 +71,7 @@ function createWindow() {
   win.on('focus', () => win.webContents.send('focus'));
 
   if (process.platform === 'win32') {
-    sendUrlToRouter(process.argv.slice(1));
+    sendUrlToRouter(process.argv[1] || '/');
   }
 
   Menu.setApplicationMenu(buildMenu(app, copyright, i18n));
@@ -143,7 +143,7 @@ app.setAsDefaultProtocolClient(protocolName);
 // Force single instance application
 const isSecondInstance = app.makeSingleInstance((argv) => {
   if (process.platform === 'win32') {
-    sendUrlToRouter(argv.slice(1));
+    sendUrlToRouter(argv[1] || '/');
   }
   if (win) {
     if (win.isMinimized()) win.restore();
