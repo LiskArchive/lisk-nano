@@ -8,6 +8,7 @@ import InfoParagraph from '../infoParagraph';
 import VoteUrlProcessor from '../voteUrlProcessor';
 import styles from './voteDialog.css';
 import votingConst from '../../constants/voting';
+import { getTotalVotesCount, getNewVotesCount } from '../../utils/voting';
 
 const { maxCountOfVotes, maxCountOfVotesInOneTurn } = votingConst;
 
@@ -43,14 +44,8 @@ export default class VoteDialog extends React.Component {
 
   render() {
     const { votes } = this.props;
-    let totalVotes = 0;
-    const votesList = [];
-    Object.keys(votes).forEach((item) => {
-      if ((!votes[item].confirmed && votes[item].unconfirmed)
-      || (votes[item].confirmed && votes[item].unconfirmed)) totalVotes++;
-      if (votes[item].confirmed !== votes[item].unconfirmed) votesList.push(item);
-    });
-    const transactionCount = 1 + Math.floor((votesList.length - 1) / maxCountOfVotesInOneTurn);
+    const countOfVotesInOneTurn = getNewVotesCount(votes);
+    const transactionCount = 1 + Math.floor((countOfVotesInOneTurn - 1) / maxCountOfVotesInOneTurn);
     return (
       <article>
         <form id='voteform'>
@@ -85,8 +80,8 @@ export default class VoteDialog extends React.Component {
               fee: Math.max(Fees.vote, Fees.vote * transactionCount),
               type: 'button',
               disabled: (
-                totalVotes > maxCountOfVotes ||
-                votesList.length === 0 ||
+                getTotalVotesCount(votes) > maxCountOfVotes ||
+                countOfVotesInOneTurn === 0 ||
                 !authStateIsValid(this.state)
               ),
             }} />
