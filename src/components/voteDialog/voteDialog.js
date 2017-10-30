@@ -46,7 +46,8 @@ export default class VoteDialog extends React.Component {
     let totalVotes = 0;
     const votesList = [];
     Object.keys(votes).forEach((item) => {
-      if (votes[item].confirmed || votes[item].unconfirmed) totalVotes++;
+      if ((!votes[item].confirmed && votes[item].unconfirmed)
+      || (votes[item].confirmed && votes[item].unconfirmed)) totalVotes++;
       if (votes[item].confirmed !== votes[item].unconfirmed) votesList.push(item);
     });
     const transactionCount = 1 + Math.floor((votesList.length - 1) / maxCountOfVotesInOneTurn);

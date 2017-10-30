@@ -69,9 +69,10 @@ const checkVoteLimits = (store, action) => {
   }
 
   const voteCount = Object.keys(votes).filter(
-    key => (votes[key].confirmed && !votes[key].unconfirmed) || votes[key].unconfirmed).length;
+    key => (!votes[key].confirmed && votes[key].unconfirmed)
+    || (votes[key].confirmed && votes[key].unconfirmed)).length;
   if (voteCount === votingConst.maxCountOfVotes + 1 &&
-        currentVote.unconfirmed !== currentVote.confirmed) {
+        currentVote.unconfirmed === true) {
     const label = i18next.t('Maximum of {{n}} votes exceeded.', { n: votingConst.maxCountOfVotes });
     const newAction = errorToastDisplayed({ label });
     store.dispatch(newAction);
