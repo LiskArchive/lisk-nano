@@ -35,7 +35,7 @@ const VotingBar = ({ votes, t }) => {
         </span>
         <span className={`${grid['col-sm-3']} ${grid['col-xs-12']} total-votes`}>
           <span>{t('Total votes:')} </span>
-          <strong className={totalVotesCount > 101 && style.red}>
+          <strong className={totalVotesCount > maxCountOfVotes && style.red}>
             {totalVotesCount}
           </strong>
           <span> / {maxCountOfVotes}</span>
