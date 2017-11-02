@@ -64,14 +64,14 @@ const checkVoteLimits = (store, action) => {
     key => votes[key].confirmed !== votes[key].unconfirmed).length;
   if (newVoteCount === votingConst.maxCountOfVotesInOneTurn + 1 &&
         currentVote.unconfirmed !== currentVote.confirmed) {
-    const label = i18next.t('Maximum of {{n}} votes in one transaction exceeded.', { n: votingConst.maxCountOfVotesInOneTurn });
+    const label = i18next.t('Maximum of {{n}} votes in one transaction exceeded, you will be charged additional fees.', { n: votingConst.maxCountOfVotesInOneTurn });
     const newAction = errorToastDisplayed({ label });
     store.dispatch(newAction);
   }
 
   const voteCount = getTotalVotesCount(votes);
   if (voteCount === votingConst.maxCountOfVotes + 1 &&
-        currentVote.unconfirmed !== currentVote.confirmed) {
+        currentVote.unconfirmed === true) {
     const label = i18next.t('Maximum of {{n}} votes exceeded.', { n: votingConst.maxCountOfVotes });
     const newAction = errorToastDisplayed({ label });
     store.dispatch(newAction);

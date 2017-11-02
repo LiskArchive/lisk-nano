@@ -12,17 +12,17 @@ const VotingBar = ({ votes, t }) => {
   const unvoteList = getUnvoteList(votes);
   const totalVotesCount = getTotalVotesCount(votes);
   const totalNewVotesCount = voteList.length + unvoteList.length;
-
+  const transactionCount = 1 + Math.floor((totalNewVotesCount - 1) / maxCountOfVotesInOneTurn);
   return (voteList.length + unvoteList.length ?
     <div className={`${grid.row} ${style.fixedAtBottom} box voting-bar`}>
       <div className={
         `${grid['col-sm-12']} ${grid['col-md-10']} ${grid['col-md-offset-1']}
           ${grid.row} ${grid['center-xs']} ${grid['middle-xs']}`}>
-        <span className={`${grid['col-sm-3']} ${grid['col-xs-12']} upvotes`}>
+        <span className={`${grid['col-sm-2']} ${grid['col-xs-12']} upvotes`}>
           <span>{t('Upvotes:')} </span>
           <strong>{voteList.length}</strong>
         </span>
-        <span className={`${grid['col-sm-3']} ${grid['col-xs-12']} unvotes`}>
+        <span className={`${grid['col-sm-2']} ${grid['col-xs-12']} unvotes`}>
           <span>{t('Downvotes:')} </span>
           <strong>{unvoteList.length}</strong>
         </span>
@@ -35,10 +35,16 @@ const VotingBar = ({ votes, t }) => {
         </span>
         <span className={`${grid['col-sm-3']} ${grid['col-xs-12']} total-votes`}>
           <span>{t('Total votes:')} </span>
-          <strong className={totalVotesCount > 101 && style.red}>
+          <strong className={totalVotesCount > maxCountOfVotes && style.red}>
             {totalVotesCount}
           </strong>
           <span> / {maxCountOfVotes}</span>
+        </span>
+        <span className={`${grid['col-sm-2']} ${grid['col-xs-12']} total-new-votes`}>
+          <span>{t('Transactions:')} </span>
+          <strong>
+            {transactionCount}
+          </strong>
         </span>
       </div>
     </div> :

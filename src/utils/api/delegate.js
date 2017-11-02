@@ -10,15 +10,40 @@ export const listDelegates = (activePeer, options) =>
 export const getDelegate = (activePeer, options) =>
   requestToActivePeer(activePeer, 'delegates/get', options);
 
-export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) =>
-  requestToActivePeer(activePeer, 'accounts/delegates', {
-    secret,
-    publicKey,
-    delegates: voteList.map(delegate => `+${delegate}`).concat(
-      unvoteList.map(delegate => `-${delegate}`),
-    ),
-    secondSecret,
-  });
+export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) => {
+  const votingList = unvoteList.map(delegate => ({ username: delegate.username, publicKey: `-${delegate.publicKey}` }))
+    .concat(voteList.map(delegate => ({ username: delegate.username, publicKey: `+${delegate.publicKey}` })));
+  const chunk = (arr, chunkSize) => {
+    const R = [];
+    for (let i = 0, len = arr.length; i < len; i += chunkSize) {
+      R.push(arr.slice(i, i + chunkSize));
+    }
+    return R;
+  };
+  const votingLists = chunk(votingList, 33);
+
+  const mapSeries = (responses, arr, func) => (
+    arr.reduce((p, ele, i) => p.then((response) => {
+      if (response) {
+        responses.push({ data: response, ele: arr[i - 1] });
+      }
+      return func(ele);
+    }), Promise.resolve()).then((response) => {
+      responses.push(response);
+      return responses;
+    })
+  );
+
+  const responses = [];
+  return mapSeries(responses, votingLists, delegates =>
+    requestToActivePeer(activePeer, 'accounts/delegates', {
+      secret,
+      publicKey,
+      delegates: delegates.map(dg => dg.publicKey),
+      secondSecret,
+    }),
+  ).catch(error => Promise.reject({ error, responses }));
+};
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
   const options = { q: username };
