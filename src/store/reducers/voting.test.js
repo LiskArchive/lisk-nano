@@ -150,6 +150,25 @@ describe('Reducer: voting(state, action)', () => {
     expect(changedState).to.be.deep.equal(expectedState);
   });
 
+  it('should remove from votes dictionary if unconfirmed state, with action: voteToggled', () => {
+    const action = {
+      type: actionTypes.voteToggled,
+      data: delegates1[0],
+    };
+    const state = {
+      votes: {
+        [delegates1[0].username]: { confirmed: false, unconfirmed: true },
+      },
+    };
+    const expectedState = {
+      votes: {},
+      refresh: false,
+    };
+    const changedState = voting(state, action);
+
+    expect(changedState).to.be.deep.equal(expectedState);
+  });
+
   it('should mark the toggles votes as pending, with action: pendingVotesAdded ', () => {
     const action = {
       type: actionTypes.pendingVotesAdded,
