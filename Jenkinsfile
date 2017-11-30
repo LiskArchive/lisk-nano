@@ -206,6 +206,7 @@ node('lisk-nano') {
         build_info = get_build_info()
         slack_send('good', "Recovery: build ${build_info} was successful.")
       }
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'dist/'
     } else {
       archiveArtifacts allowEmptyArchive: true, artifacts: 'e2e-test-screenshots/'
     }
