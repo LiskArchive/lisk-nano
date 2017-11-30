@@ -165,6 +165,19 @@ node('lisk-nano') {
         fail('Stopping build: end-to-end test suite failed')
       }
     }
+    
+    stage ('Build desktop app package') {
+      try {
+        ansiColor('xterm') {
+          sh '''
+          npm run dist
+          '''
+        }
+      } catch (err) {
+        echo "Error: ${err}"
+        fail('Stopping build: building desktop app package failed')
+      }
+    }
   } catch(err) {
     echo "Error: ${err}"
   } finally {
