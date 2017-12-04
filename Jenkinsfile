@@ -170,6 +170,7 @@ node('lisk-nano') {
       try {
         ansiColor('xterm') {
           sh '''
+          npm run dist:win
           npm run dist
           '''
         }
