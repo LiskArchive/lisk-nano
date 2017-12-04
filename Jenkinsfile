@@ -171,7 +171,7 @@ node('lisk-nano') {
         ansiColor('xterm') {
           sh '''
           npm run dist:win
-          npm run dist
+          USE_SYSTEM_XORRISO=true npm run dist
           '''
         }
       } catch (err) {
