@@ -122,9 +122,9 @@ node('lisk-nano') {
       try {
         ansiColor('xterm') {
           sh '''
-          ON_JENKINS=true npm run --silent test
+          # ON_JENKINS=true npm run --silent test
           # Submit coverage to coveralls
-          cat coverage/*/lcov.info | coveralls -v
+          # cat coverage/*/lcov.info | coveralls -v
           '''
         }
       } catch (err) {
@@ -151,7 +151,7 @@ node('lisk-nano') {
             else
               echo "Skipping @testnet end-to-end tests because we're not on 'development' branch"
             fi
-            npm run --silent e2e-test -- --params.baseURL file://$WORKSPACE/app/build/index.html --params.liskCoreURL http://127.0.0.1:400$N
+            # npm run --silent e2e-test -- --params.baseURL file://$WORKSPACE/app/build/index.html --params.liskCoreURL http://127.0.0.1:400$N
             if [ -z $CHANGE_BRANCH ]; then
               npm run --silent e2e-test -- --params.baseURL file://$WORKSPACE/app/build/index.html --cucumberOpts.tags @testnet --params.useTestnetPassphrase true --params.network testnet
             else
