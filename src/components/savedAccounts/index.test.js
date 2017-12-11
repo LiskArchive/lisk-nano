@@ -14,10 +14,10 @@ describe('SavedAccountsHOC', () => {
   const account = {
     isDelegate: false,
     publicKey: 'sample_key',
-    username: 'lisk-nano',
+    username: 'oxy-nano',
   };
   const options = {
-    address: 'http://localhost:4000',
+    address: 'http://localhost:10000',
     network: 'Custom node',
   };
   const peers = { data: { options }, options };

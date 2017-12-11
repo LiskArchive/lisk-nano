@@ -32,9 +32,9 @@ def fail(reason) {
 
 /* comment out the next line to allow concurrent builds on the same branch */
 properties([disableConcurrentBuilds(), pipelineTriggers([])])
-node('lisk-nano') {
+node('oxy-nano') {
   try {
-    stage ('Checkout and Start Lisk Core') {
+    stage ('Checkout and Start Oxycoin Core') {
       try {
         deleteDir()
         checkout scm
@@ -68,7 +68,7 @@ node('lisk-nano') {
         '''
       } catch (err) {
         echo "Error: ${err}"
-        fail('Stopping build: Lisk Core failed to start')
+        fail('Stopping build: Oxycoin Core failed to start')
       }
     }
 
@@ -136,7 +136,7 @@ node('lisk-nano') {
     stage ('Run E2E Tests') {
       try {
         ansiColor('xterm') {
-          withCredentials([string(credentialsId: 'lisk-nano-testnet-passphrase', variable: 'TESTNET_PASSPHRASE')]) {
+          withCredentials([string(credentialsId: 'oxy-nano-testnet-passphrase', variable: 'TESTNET_PASSPHRASE')]) {
             sh '''
             N=${EXECUTOR_NUMBER:-0}; N=$((N+1))
 

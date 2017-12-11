@@ -26,14 +26,14 @@ describe('SignMessage', () => {
     passphrase: 'wagon stock borrow episode laundry kitten salute link globe zero feed marble',
     publicKey,
   };
-  const getResult = (message, signature) => (`-----BEGIN LISK SIGNED MESSAGE-----
+  const getResult = (message, signature) => (`-----BEGIN OXY SIGNED MESSAGE-----
 -----MESSAGE-----
 ${message}
 -----PUBLIC KEY-----
 ${publicKey}
 -----SIGNATURE-----
 ${signature}
------END LISK SIGNED MESSAGE-----`);
+-----END OXY SIGNED MESSAGE-----`);
 
   beforeEach(() => {
     successToastSpy = sinon.spy();

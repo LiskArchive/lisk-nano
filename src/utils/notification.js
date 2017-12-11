@@ -53,8 +53,8 @@ class Notification {
    * @memberof Notify
    */
   _deposit(amount) { // eslint-disable-line
-    const body = i18next.t('You\'ve received {{value}} LSK.', { value: fromRawLsk(amount) });
-    new window.Notification(i18next.t('LSK received'), { body }); // eslint-disable-line
+    const body = i18next.t('You\'ve received {{value}} OXY.', { value: fromRawLsk(amount) });
+    new window.Notification(i18next.t('OXY received'), { body }); // eslint-disable-line
   }
 }
 

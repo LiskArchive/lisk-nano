@@ -20,8 +20,8 @@ describe('TransactionRow', () => {
     type: 0,
     timestamp: 35929631,
     senderPublicKey: 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f',
-    senderId: '16313739661670634666L',
-    recipientId: '537318935439898807L',
+    senderId: '16313739661670634666X',
+    recipientId: '537318935439898807X',
     recipientPublicKey: '86499879448d1b0215d59cbf078836e3d7d9d2782d56a2274a568761bff36f19',
     amount: 464000000000,
     fee: 10000000,
@@ -30,7 +30,7 @@ describe('TransactionRow', () => {
     confirmations: 892,
     asset: {},
   };
-  const address = '16313739661670634666L';
+  const address = '16313739661670634666X';
 
   const options = {
     context: { store, history },

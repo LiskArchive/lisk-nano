@@ -19,8 +19,8 @@ import { errorAlertDialogDisplayed } from './dialog';
 import * as delegateApi from '../utils/api/delegate';
 
 const delegateList = [
-  { username: 'username1', publicKey: '123HG3452245L' },
-  { username: 'username2', publicKey: '123HG3522345L' },
+  { username: 'username1', publicKey: '123HG3452245X' },
+  { username: 'username2', publicKey: '123HG3522345X' },
 ];
 
 describe('actions: voting', () => {
@@ -151,7 +151,7 @@ describe('actions: voting', () => {
     let delegateApiMock;
     const data = {
       activePeer: {},
-      address: '8096217735672704724L',
+      address: '8096217735672704724X',
     };
     const delegates = delegateList;
 
@@ -221,7 +221,7 @@ describe('actions: voting', () => {
     let delegateApiMock;
     const data = {
       activePeer: {},
-      address: '8096217735672704724L',
+      address: '8096217735672704724X',
       upvotes: [],
       unvotes: [],
     };

@@ -23,12 +23,12 @@ describe('Notification', () => {
 
     it('should call window.Notification', () => {
       window.Notification = mockNotification;
-      const msg = `You've received ${fromRawLsk(amount)} LSK.`;
+      const msg = `You've received ${fromRawLsk(amount)} OXY.`;
 
       notify.isFocused = false;
       notify.about('deposit', amount);
       expect(mockNotification).to.have.been.calledWith(
-        'LSK received', { body: msg },
+        'OXY received', { body: msg },
       );
       mockNotification.reset();
     });

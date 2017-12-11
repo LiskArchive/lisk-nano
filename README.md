@@ -32,7 +32,7 @@ npm run build
 ### Start
 
 
-Start the Electron client. Before staring you need to make sure the application is built. If you need to built the entire application, run
+Start the Electron client. Before starting you need to make sure the application is built. If you need to built the entire application, run
 
 ```
 npm run build
@@ -94,7 +94,7 @@ This program is free software: you can redistribute it and/or modify it under th
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the [GNU General Public License](https://github.com/LiskHQ/lisk-nano/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License](https://github.com/oxycoin/oxy-nano/tree/master/LICENSE) along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***
 

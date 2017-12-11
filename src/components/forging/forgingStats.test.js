@@ -38,18 +38,18 @@ describe('ForgingStats', () => {
   });
 
   it('should render Card component for Last 24 hours', () => {
-    expect(wrapper.find('Card').at(0).text().trim()).to.equal('Last 24 hours 0 LSK');
+    expect(wrapper.find('Card').at(0).text().trim()).to.equal('Last 24 hours 0 OXY');
   });
 
   it('should render Card component for Last 7 days', () => {
-    expect(wrapper.find('Card').at(1).text().trim()).to.equal('Last 7 days 32.13 LSK');
+    expect(wrapper.find('Card').at(1).text().trim()).to.equal('Last 7 days 32.13 OXY');
   });
 
   it('should render Card component for Last 30 days', () => {
-    expect(wrapper.find('Card').at(2).text().trim()).to.equal('Last 30 days 3,213.18 LSK');
+    expect(wrapper.find('Card').at(2).text().trim()).to.equal('Last 30 days 3,213.18 OXY');
   });
 
   it('should render Card component for Last 365 days', () => {
-    expect(wrapper.find('Card').at(3).text().trim()).to.equal('Last 365 days 321,317.91 LSK');
+    expect(wrapper.find('Card').at(3).text().trim()).to.equal('Last 365 days 321,317.91 OXY');
   });
 });

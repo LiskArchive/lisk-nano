@@ -8,7 +8,7 @@ import sinon from 'sinon';
 import styles from './header.css';
 import Header from './header';
 import RelativeLink from '../relativeLink';
-import logo from '../../assets/images/LISK-nano.png';
+import logo from '../../assets/images/OXY-nano.png';
 import i18n from '../../i18n';
 
 describe('Header', () => {

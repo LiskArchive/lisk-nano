@@ -6,12 +6,12 @@ describe('Reducer: savedAccounts(state, action)', () => {
   const account = {
     publicKey: 'sample_key_1',
     network: 'Custom node',
-    address: 'http://localhost:4000',
+    address: 'http://localhost:10000',
   };
   const account2 = {
     publicKey: 'sample_key_2',
     network: 'Custom node',
-    address: 'http://localhost:4000',
+    address: 'http://localhost:10000',
   };
 
   it('should return action.data if action.type = actionTypes.accountsRetrieved', () => {

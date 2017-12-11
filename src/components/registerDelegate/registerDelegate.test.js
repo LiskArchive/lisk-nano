@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../i18n'; // initialized i18next instance
@@ -14,26 +14,26 @@ import * as delegateApi from '../../utils/api/delegate';
 const normalAccount = {
   passphrase: 'pass',
   isDelegate: false,
-  address: '16313739661670634666L',
+  address: '16313739661670634666X',
   balance: 1000e8,
 };
 
 const delegateAccount = {
   passphrase: 'pass',
   isDelegate: true,
-  address: '16313739661670634666L',
+  address: '16313739661670634666X',
   balance: 1000e8,
   delegate: {
-    username: 'lisk-nano',
+    username: 'oxy-nano',
   },
 };
 
 const withSecondSecretAccount = {
   passphrase: 'pass',
-  address: '16313739661670634666L',
+  address: '16313739661670634666X',
   balance: 1000e8,
   delegate: {
-    username: 'lisk-nano',
+    username: 'oxy-nano',
   },
   secondSignature: 1,
 };
@@ -43,9 +43,9 @@ const props = {
     data: Lisk.api({
       name: 'Custom Node',
       custom: true,
-      address: 'http://localhost:4000',
+      address: 'http://localhost:10000',
       testnet: true,
-      nethash: '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
+      nethash: '4c1170a3edb03f961e5e3f7cedcd25563f0a46ec4aa3342715d09c47b398ea19',
     }),
   },
   closeDialog: () => {},

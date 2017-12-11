@@ -12,16 +12,16 @@ Feature: Saved Accounts
     And I click "send button"
     And I should see empty "passphrase" field
     And I fill in "1" to "amount" field
-    And I fill in "537318935439898807L" to "recipient" field
+    And I fill in "537318935439898807X" to "recipient" field
     And I fill in passphrase of "genesis" to "passphrase" field
     And I click "submit button"
     And I click "ok button"
     And I wait 1 seconds
     And I click "send button"
     And I fill in "2" to "amount" field
-    And I fill in "537318935439898807L" to "recipient" field
+    And I fill in "537318935439898807X" to "recipient" field
     And I click "submit button"
-    And I should see alert dialog with title "Success" and text "Your transaction of 2 LSK to 537318935439898807L was accepted and will be processed in a few seconds."
+    And I should see alert dialog with title "Success" and text "Your transaction of 2 OXY to 537318935439898807X was accepted and will be processed in a few seconds."
 
   Scenario: should allow to save second account
     Given I'm logged in as "genesis"

@@ -10,7 +10,7 @@ import ReceiveDialog from './receiveDialog';
 describe('ReceiveDialog', () => {
   let props;
   let store;
-  const address = '544792633152563672L';
+  const address = '544792633152563672X';
 
   beforeEach(() => {
     store = configureStore()({

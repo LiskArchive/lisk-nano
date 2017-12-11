@@ -10,7 +10,7 @@ import middleware from './savedAccounts';
 describe('SavedAccounts middleware', () => {
   let store;
   let next;
-  const address = 'https://testnet.lisk.io';
+  const address = 'https://wallet.oxycoin.io';
   const publicKey = 'fab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88';
 
   beforeEach(() => {

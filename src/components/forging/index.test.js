@@ -12,7 +12,7 @@ describe('Forging HOC', () => {
 
   beforeEach(() => {
     store = configureMockStore([])({
-      account: { address: '10171906415056299071L' },
+      account: { address: '10171906415056299071X' },
       peers: { data: {} },
       forging: {
         statistics: {},

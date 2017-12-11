@@ -8,7 +8,7 @@ import * as nethashApi from './../utils/api/nethash';
 
 describe('actions: peers', () => {
   const passphrase = 'wagon stock borrow episode laundry kitten salute link globe zero feed marble';
-  const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
+  const nethash = '0daee950841005a3f56f6588b4b084695f0d74aaa38b21edab73446064638552';
 
   describe('activePeerUpdate', () => {
     it('should create an action to update the active peer', () => {
@@ -44,7 +44,7 @@ describe('actions: peers', () => {
         network: {
           name: 'Custom Node',
           custom: true,
-          address: 'http://localhost:4000',
+          address: 'http://localhost:10000',
           testnet: true,
           nethash,
         },
@@ -67,7 +67,7 @@ describe('actions: peers', () => {
     it('dispatch activePeerSet with testnet config set to true when the network is a custom node and nethash is testnet', () => {
       getNetHash.returnsPromise();
       const network = {
-        address: 'http://localhost:4000',
+        address: 'http://localhost:10000',
         custom: true,
       };
 
@@ -80,7 +80,7 @@ describe('actions: peers', () => {
     it('dispatch activePeerSet with testnet config set to false when the network is a custom node and nethash is testnet', () => {
       getNetHash.returnsPromise();
       const network = {
-        address: 'http://localhost:4000',
+        address: 'http://localhost:10000',
         custom: true,
       };
 
@@ -103,8 +103,8 @@ describe('actions: peers', () => {
     });
 
     it('should set to testnet if not defined in config but port is 7000', () => {
-      const network7000 = { address: 'http://127.0.0.1:7000', nethash };
-      const network4000 = { address: 'http://127.0.0.1:4000', nethash };
+      const network7000 = { address: 'http://127.0.0.1:9998', nethash };
+      const network4000 = { address: 'http://127.0.0.1:10000', nethash };
 
       activePeerSet({ passphrase, network: network7000 })(dispatch);
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.options.testnet', true));

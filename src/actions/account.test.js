@@ -158,7 +158,7 @@ describe('actions: account', () => {
     let accountApiMock;
     const data = {
       activePeer: {},
-      recipientId: '15833198055097037957L',
+      recipientId: '15833198055097037957X',
       amount: 100,
       passphrase: 'sample passphrase',
       secondPassphrase: null,

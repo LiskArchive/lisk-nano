@@ -33,7 +33,7 @@ describe('Voting', () => {
     totalDelegates: 10,
     votes,
     activePeer: {},
-    address: '16313739661670634666L',
+    address: '16313739661670634666X',
     setActiveDialog: sinon.spy(),
     voteToggled: sinon.spy(),
     addTransaction: sinon.spy(),

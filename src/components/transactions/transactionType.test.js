@@ -57,7 +57,7 @@ const createTest = (type) => {
   it(`show TransactionType equal to "${expectedValue}" for transaction type ${type}`, () => {
     const inputValue = {
       type,
-      senderId: '1085993630748340485L',
+      senderId: '1085993630748340485X',
     };
     const wrapper = mount(<Router><TransactionType {...inputValue} /></Router>, options);
     expect(wrapper.find('span').text()).to.be.equal(expectedValue);
@@ -72,7 +72,7 @@ describe('TransactionType', () => {
   it('sets TransactionType equal the values of "props.senderId"', () => {
     const inputValue = {
       type: 0,
-      senderId: '1085993630748340485L',
+      senderId: '1085993630748340485X',
     };
     const wrapper = mount(<Router><TransactionType {...inputValue} /></Router>, options);
     expect(wrapper.find(TooltipWrapper)).to.have.lengthOf(1);

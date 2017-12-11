@@ -12,12 +12,12 @@ const votes = {
   username2: { publicKey: 'sample_key_2', confirmed: false, unconfirmed: true },
 };
 const delegates = [
-  { username: 'username1', publicKey: '123HG3452245L' },
-  { username: 'username2', publicKey: '123HG3522345L' },
+  { username: 'username1', publicKey: '123HG3452245X' },
+  { username: 'username2', publicKey: '123HG3522345X' },
 ];
 const unvotedDelegate = [
-  { username: 'username3', publicKey: '123HG3522445L' },
-  { username: 'username4', publicKey: '123HG3522545L' },
+  { username: 'username3', publicKey: '123HG3522445X' },
+  { username: 'username4', publicKey: '123HG3522545X' },
 ];
 const props = {
   activePeer: {},

@@ -13,7 +13,7 @@ Feature: Transactions tab
     And I click "from-to" element on table row no. 1
     And I fill in "1" to "amount" field
     And I click "submit button"
-    Then I should see alert dialog with title "Success" and text "Your transaction of 1 LSK to 537318935439898807L was accepted and will be processed in a few seconds."
+    Then I should see alert dialog with title "Success" and text "Your transaction of 1 OXY to 537318935439898807X was accepted and will be processed in a few seconds."
 
   @integration
   @pending
@@ -23,13 +23,13 @@ Feature: Transactions tab
     And I click "amount" element on table row no. 1
     And I wait 1 seconds
     And I click "submit button"
-    Then I should see alert dialog with title "Success" and text "Your transaction of 1 LSK to 537318935439898807L was accepted and will be processed in a few seconds."
+    Then I should see alert dialog with title "Success" and text "Your transaction of 1 OXY to 537318935439898807X was accepted and will be processed in a few seconds."
 
-  Scenario: should provide "Receive LSK" modal if there are "No transactions" 
+  Scenario: should provide "Receive OXY" modal if there are "No transactions" 
     Given I'm logged in as "empty account"
     When I click tab number 1
     And I should see table with 0 lines
-    And I should see text "There are no transactions, yet.  RECEIVE LSK" in "empty message" element
+    And I should see text "There are no transactions, yet.  RECEIVE OXY" in "empty message" element
     And I click "receive lsk button"
     And I wait 1 seconds
-    Then I should see text "5932438298200837883L" in "receive modal address" element
+    Then I should see text "5932438298200837883X" in "receive modal address" element

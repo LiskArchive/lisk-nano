@@ -34,7 +34,7 @@ Feature: Voting tab
     When I click tab number 2
     And I click checkbox on table row no. 3
     And I click "vote button"
-    Then I should see "Insufficient funds for 1 LSK fee" error message
+    Then I should see "Insufficient funds for 1 OXY fee" error message
     And "submit button" should be disabled
 
   @integration

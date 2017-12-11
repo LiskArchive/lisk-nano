@@ -9,8 +9,8 @@ describe('Status', () => {
     const inputValue = {
       value: {
         type: 0,
-        recipientId: '1085993630748340485L',
-        senderId: '1085993630748340485L',
+        recipientId: '1085993630748340485X',
+        senderId: '1085993630748340485X',
       },
       address: 'address',
     };
@@ -24,8 +24,8 @@ describe('Status', () => {
     const inputValue = {
       value: {
         type: 1,
-        recipientId: '1085993630748340485L',
-        senderId: '1085993630748340485L',
+        recipientId: '1085993630748340485X',
+        senderId: '1085993630748340485X',
       },
       address: 'address',
     };
@@ -39,7 +39,7 @@ describe('Status', () => {
     const inputValue = {
       value: {
         type: 1,
-        recipientId: '1085993630748340485L',
+        recipientId: '1085993630748340485X',
         senderId: 'address',
       },
       address: 'address',

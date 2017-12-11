@@ -19,7 +19,7 @@ describe('TransactionsHOC', () => {
     confirmed,
     count: confirmed.length,
   };
-  const account = { address: '16313739661670634666L' };
+  const account = { address: '16313739661670634666X' };
   const peers = { data: {} };
 
   beforeEach(() => {

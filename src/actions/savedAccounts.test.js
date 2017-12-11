@@ -14,7 +14,7 @@ describe('actions: savedAccount', () => {
   const data = {
     publicKey: 'sample_key',
     network: 1,
-    address: 'http://localhost:400',
+    address: 'http://localhost:10000',
   };
 
   describe('accountsRetrieved', () => {

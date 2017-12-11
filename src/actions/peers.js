@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 import actionTypes from '../constants/actions';
 import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';
@@ -35,10 +35,10 @@ export const activePeerSet = data =>
 
       config.node = hostname;
       config.ssl = protocol === 'https:';
-      config.port = port || (config.ssl ? 443 : 80);
+      config.port = port || (config.ssl ? 10001 : 10000);
     }
     if (config.testnet === undefined && config.port !== undefined) {
-      config.testnet = config.port === '7000';
+      config.testnet = config.port === '9998';
     }
     if (config.custom) {
       getNethash(Lisk.api(config)).then((response) => {

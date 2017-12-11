@@ -1,4 +1,4 @@
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 import { expect } from 'chai';
 import { spy, stub } from 'sinon';
 import middleware from './login';
@@ -13,7 +13,7 @@ describe('Login middleware', () => {
   const activePeer = Lisk.api({
     name: 'Custom Node',
     custom: true,
-    address: 'http://localhost:4000',
+    address: 'http://localhost:10000',
     testnet: true,
     nethash: '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
   });

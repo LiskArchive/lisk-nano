@@ -29,8 +29,8 @@ const votes = {
   username2: { publicKey: 'sample_key', confirmed: false, unconfirmed: true },
 };
 const delegates = [
-  { username: 'username1', publicKey: '123HG3452245L' },
-  { username: 'username2', publicKey: '123HG3522345L' },
+  { username: 'username1', publicKey: '123HG3452245X' },
+  { username: 'username2', publicKey: '123HG3522345X' },
 ];
 
 const state = {

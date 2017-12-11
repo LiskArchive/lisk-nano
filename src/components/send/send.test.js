@@ -74,7 +74,7 @@ describe('Send', () => {
   });
 
   it('accepts valid recipient', () => {
-    wrapper.find('.recipient input').simulate('change', { target: { value: '11004588490103196952L' } });
+    wrapper.find('.recipient input').simulate('change', { target: { value: '11004588490103196952X' } });
     expect(wrapper.find('Input.recipient').text()).to.not.contain('Invalid');
   });
 
@@ -91,14 +91,14 @@ describe('Send', () => {
 
   it('allows to send a transaction', () => {
     wrapper.find('.amount input').simulate('change', { target: { value: '120.25' } });
-    wrapper.find('.recipient input').simulate('change', { target: { value: '11004588490103196952L' } });
+    wrapper.find('.recipient input').simulate('change', { target: { value: '11004588490103196952X' } });
     wrapper.find('.primary-button button').simulate('submit');
     expect(props.sent).to.have.been.calledWith({
       account: props.account,
       activePeer: {},
       amount: '120.25',
       passphrase: props.account.passphrase,
-      recipientId: '11004588490103196952L',
+      recipientId: '11004588490103196952X',
       secondPassphrase: null,
     });
   });

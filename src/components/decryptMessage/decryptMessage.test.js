@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import sinon from 'sinon';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 import i18n from '../../i18n';
 import store from '../../store';
 import DecryptMessage from './decryptMessage';

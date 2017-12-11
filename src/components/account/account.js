@@ -60,7 +60,7 @@ const Account = ({
                 rawAmount={Math.max(0, account.balance - toRawLsk(0.1))} >
                 <div className={styles['value-wrapper']}>
                   <p className="inner primary full hasTip balance-value">
-                    <LiskAmount val={account.balance} /> LSK
+                    <LiskAmount val={account.balance} /> OXY
                   </p>
                   <p className="inner secondary tooltip">
                     {t('Click to send all funds')}

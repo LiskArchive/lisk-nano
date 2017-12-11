@@ -32,7 +32,7 @@ describe('Socket middleware', () => {
 
     store = {
       getState: () => ({
-        peers: { data: { options: { address: 'localhost:4000' } } },
+        peers: { data: { options: { address: 'localhost:10000' } } },
         account: { address: '1234' },
       }),
       dispatch: spy(),

@@ -23,8 +23,8 @@ app.on('window-all-closed', () => {
 
 // This will override the values defined in the app’s .plist file (macOS)
 if (process.platform === 'darwin') {
-  const copyright = `Copyright © 2016 - ${new Date().getFullYear()} Lisk Foundation`;
-  app.setAboutPanelOptions({ applicationName: 'Lisk Nano', copyright });
+  const copyright = `Copyright © 2017 - ${new Date().getFullYear()} Oxycoin`;
+  app.setAboutPanelOptions({ applicationName: 'Oxy Nano', copyright });
 }
 
 app.on('activate', () => {

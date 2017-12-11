@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 import { translate } from 'react-i18next';
 import ActionBar from '../actionBar';
 import Authenticate from '../authenticate';
@@ -44,14 +44,14 @@ class EncryptMessage extends React.Component {
     }
     if (cryptoResult) {
       const result = [
-        '-----BEGIN LISK ENCRYPTED MESSAGE-----',
+        '-----BEGIN OXY ENCRYPTED MESSAGE-----',
         '-----SENDER PUBLIC KEY-----',
         this.props.account.publicKey,
         '-----ENCRYPTED MESSAGE-----',
         cryptoResult.encryptedMessage,
         '-----NONCE-----',
         cryptoResult.nonce,
-        '-----END LISK ENCRYPTED MESSAGE-----',
+        '-----END OXY ENCRYPTED MESSAGE-----',
       ].join('\n');
       this.setState({ result });
       this.showResult(result);

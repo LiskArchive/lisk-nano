@@ -13,12 +13,12 @@ import * as delegateApi from '../../../src/utils/api/delegate';
 import VoteDialog from '../../../src/components/voteDialog';
 
 const delegates = [
-  { username: 'username1', publicKey: '123HG3452245L' },
-  { username: 'username2', publicKey: '123HG3522345L' },
+  { username: 'username1', publicKey: '123HG3452245X' },
+  { username: 'username2', publicKey: '123HG3522345X' },
 ];
 const unvotedDelegate = [
-  { username: 'username3', publicKey: '123HG3522445L' },
-  { username: 'username4', publicKey: '123HG3522545L' },
+  { username: 'username3', publicKey: '123HG3522445X' },
+  { username: 'username4', publicKey: '123HG3522545X' },
 ];
 
 const keyCodes = {
@@ -29,7 +29,7 @@ const keyCodes = {
 };
 
 const realAccount = {
-  address: '16313739661670634666L',
+  address: '16313739661670634666X',
   balance: '346215336704',
   delegate: {},
   multisignatures: [],
@@ -41,15 +41,15 @@ const realAccount = {
 
 const peers = {
   defaultPeers: [
-    'node01.lisk.io',
-    'node02.lisk.io',
+    'corenode1.oxycoin.io',
+    'corenode2.oxycoin.io',
   ],
   defaultSSLPeers: [
-    'node01.lisk.io',
-    'node02.lisk.io',
+    'corenode1.oxycoin.io',
+    'corenode2.oxycoin.io',
   ],
   defaultTestnetPeers: [
-    'testnet.lisk.io',
+    'testnode1.oxycoin.io',
   ],
   options: {
     name: 'Testnet',
@@ -62,16 +62,16 @@ const peers = {
   randomPeer: true,
   testnet: true,
   bannedPeers: [],
-  currentPeer: 'testnet.lisk.io',
-  port: 443,
+  currentPeer: 'testnode1.oxycoin.io',
+  port: 9999,
   nethash: {
     'Content-Type': 'application/json',
-    nethash: 'da3ed6a45429278bac2666961289ca17ad86595d33b31037615d4b8e8f158bba',
-    broadhash: 'da3ed6a45429278bac2666961289ca17ad86595d33b31037615d4b8e8f158bba',
+    nethash: '0daee950841005a3f56f6588b4b084695f0d74aaa38b21edab73446064638552',
+    broadhash: '0daee950841005a3f56f6588b4b084695f0d74aaa38b21edab73446064638552',
     os: 'lisk-js-api',
     version: '1.0.0',
     minVersion: '>=0.5.0',
-    port: 443,
+    port: 9999,
   },
 };
 

@@ -4,7 +4,7 @@ import React from 'react';
 import grid from 'flexboxgrid/dist/flexboxgrid.css';
 
 import PrivateWrapper from '../privateWrapper';
-import logo from '../../assets/images/LISK-nano.png';
+import logo from '../../assets/images/OXY-nano.png';
 import offlineStyle from '../offlineWrapper/offlineWrapper.css';
 import styles from './header.css';
 import RelativeLink from '../relativeLink';
@@ -63,7 +63,7 @@ const Header = props => (
 
       <Button className={`${styles.button} logout-button`} raised onClick={props.logOut}>{props.t('logout')}</Button>
       <RelativeLink neutral raised className={`${styles.button} receive-button`}
-        to='receive'>{props.t('Receive LSK')}</RelativeLink>
+        to='receive'>{props.t('Receive OXY')}</RelativeLink>
       <RelativeLink primary raised disableWhenOffline className={`${styles.button} send-button`}
         to='send'>{props.t('send')}</RelativeLink>
     </PrivateWrapper>

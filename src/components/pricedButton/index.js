@@ -14,8 +14,8 @@ export const PricedButtonComponent = ({
         fee &&
           (<span className={`${styles.fee} ${hasFunds ? '' : `${styles.error} error-message`} `}>
             {
-              hasFunds ? t('Fee: {{amount}} LSK', { amount: fromRawLsk(fee) }) :
-                t('Insufficient funds for {{amount}} LSK fee', { amount: fromRawLsk(fee) })
+              hasFunds ? t('Fee: {{amount}} OXY', { amount: fromRawLsk(fee) }) :
+                t('Insufficient funds for {{amount}} OXY fee', { amount: fromRawLsk(fee) })
             }
           </span>)
       }

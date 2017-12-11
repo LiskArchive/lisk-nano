@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
-import Lisk from 'lisk-js';
+import Lisk from 'oxy-nano-js';
 
 import InfoParagraph from '../infoParagraph';
 import SignVerifyResult from '../signVerifyResult';

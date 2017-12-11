@@ -9,7 +9,7 @@ import store from '../../store';
 
 const account = {
   passphrase: 'wagon stock borrow episode laundry kitten salute link globe zero feed marble',
-  address: '16313739661670634666L',
+  address: '16313739661670634666X',
   balance: 1000e8,
 };
 
@@ -20,7 +20,7 @@ storiesOf('Send', module)
     </Provider>
   ))
   .add('pre-filled recipient and amount', () => (
-    <Send recipient='11004588490103196952L' amount='100' account={account} activePeer={{}} />
+    <Send recipient='11004588490103196952X' amount='100' account={account} activePeer={{}} />
   ))
   .add('without pre-filles', () => (
     <Send account={account} activePeer={{}} />

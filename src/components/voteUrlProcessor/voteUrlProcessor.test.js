@@ -11,7 +11,7 @@ describe('VoteUrlProcessor', () => {
   beforeEach(() => {
     const account = {
       balance: 1000e8,
-      address: '16313739661670634666L',
+      address: '16313739661670634666X',
       passphrase: 'recipe bomb asset salon coil symbol tiger engine assist pact pumpkin visit',
     };
 

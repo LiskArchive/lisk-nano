@@ -22,14 +22,14 @@ Feature: Register second passphrase
     When I click "register second passphrase" in main menu
     And I fill in passphrase of "empty account" to "passphrase" field
     And I click "authenticate button"
-    Then I should see "Insufficient funds for 5 LSK fee" error message
+    Then I should see "Insufficient funds for 5 OXY fee" error message
     And "next button" should be disabled
 
   @integration
   Scenario: should not allow to set 2nd passphrase if not enough funds for the fee
     Given I'm logged in as "empty account"
     When I click "register second passphrase" in main menu
-    Then I should see "Insufficient funds for 5 LSK fee" error message
+    Then I should see "Insufficient funds for 5 OXY fee" error message
     And "next button" should be disabled
 
   @integration

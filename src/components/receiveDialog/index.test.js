@@ -15,7 +15,7 @@ const fakeStore = configureStore();
 
 describe('ReceiveDialogHOC', () => {
   let wrapper;
-  const address = '544792633152563672L';
+  const address = '544792633152563672X';
 
   beforeEach(() => {
     const store = fakeStore({
@@ -52,7 +52,7 @@ describe('ReceiveDialogHOC', () => {
   });
 
   // TODO: this doesn't work for some reason
-  it.skip('should bind copy to AccountComponent props.copyToClipboard', () => {
+    it.skip('should bind copy to AccountComponent props.copyToClipboard', () => {
     const actionsSpy = sinon.spy(copy);
     wrapper.find('ReceiveDialog').props().copyToClipboard({});
     expect(actionsSpy).to.be.calledWith();

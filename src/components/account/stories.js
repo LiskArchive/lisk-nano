@@ -24,7 +24,7 @@ storiesOf('Account', module)
         }}
         account={{
           isDelegate: true,
-          address: '9396639332432599292L',
+          address: '9396639332432599292X',
           delegate: {
             username: 'testy',
           },
@@ -39,12 +39,12 @@ storiesOf('Address', module)
     <Address
       isDelegate={true}
       delegate= {{ username: 'testy' }}
-      address="9396639332432599292L"
+      address="9396639332432599292X"
     />
   ))
   .add('non-delegate', () => (
     <Address
       isDelegate={false}
-      address="9396639332432599292L"
+      address="9396639332432599292X"
     />
   ));

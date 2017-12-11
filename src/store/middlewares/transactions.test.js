@@ -15,7 +15,7 @@ describe('transaction middleware', () => {
   const mockTransaction = {
     username: 'test',
     amount: 1e8,
-    recipientId: '16313739661670634666L',
+    recipientId: '16313739661670634666X',
   };
 
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('transaction middleware', () => {
         data: {},
       },
       account: {
-        address: '8096217735672704724L',
+        address: '8096217735672704724X',
       },
       transactions: {
         pending: [],
@@ -57,7 +57,7 @@ describe('transaction middleware', () => {
     };
 
     const expectedMessages = [
-      'Your transaction of 1 LSK to 16313739661670634666L was accepted and will be processed in a few seconds.',
+      'Your transaction of 1 OXY to 16313739661670634666X was accepted and will be processed in a few seconds.',
       'Second passphrase registration was successfully submitted. It can take several seconds before it is processed.',
       'Delegate registration was successfully submitted with username: "test". It can take several seconds before it is processed.',
       'Your votes were successfully submitted. It can take several seconds before they are processed.',

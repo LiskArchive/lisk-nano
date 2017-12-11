@@ -23,7 +23,7 @@ describe('ClickToSend', () => {
 
   it('should render a RelativeLink component', () => {
     const wrapper = shallow(
-      <ClickToSend address='16313739661670634666L'
+      <ClickToSend address='16313739661670634666X'
         setActiveDialog={setActiveDialog}><Dummy /></ClickToSend>, options);
     expect(wrapper.find(RelativeLink)).to.have.length(1);
   });
