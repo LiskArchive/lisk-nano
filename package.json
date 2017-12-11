@@ -44,7 +44,7 @@
     "i18next": "=10.0.3",
     "i18next-localstorage-cache": "=1.1.1",
     "i18next-xhr-backend": "=1.4.2",
-    "oxy-nano-js": "0.5.2",
+    "oxy-nano-js": "0.5.3",
     "moment": "2.18.1",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
