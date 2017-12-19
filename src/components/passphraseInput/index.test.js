@@ -59,6 +59,13 @@ describe('PassphraseInput', () => {
     expect(wrapper.props().onChange).to.have.been.calledWith(passphrase, SIMILAR_WORD_ERROR);
   });
 
+  const UPPER_CASE_ERROR = 'Word "WAGON" contains upper case letters. All words must be lower case';
+  it(`should call props.onChange with error='${UPPER_CASE_ERROR}' if an passphrase with a typo is entered`, () => {
+    const passphrase = 'WAGON stock borrow episode laundry kitten salute link globe zero feed marble';
+    wrapper.find('input').simulate('change', { target: { value: passphrase } });
+    expect(wrapper.props().onChange).to.have.been.calledWith(passphrase, UPPER_CASE_ERROR);
+  });
+
   const NOT_VALID_ERROR = 'Passphrase is not valid';
   it(`should call props.onChange with error="${NOT_VALID_ERROR}" if an otherwise invalid passphrase is entered`, () => {
     const passphrase = 'stock wagon borrow episode laundry kitten salute link globe zero feed marble';
