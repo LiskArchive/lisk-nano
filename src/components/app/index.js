@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import grid from 'flexboxgrid/dist/flexboxgrid.css';
 import PrivateRoutes from '../privateRoute';
 import Account from '../account';
+import NoticeBox from '../noticeBox';
 import Header from '../header';
 import Login from '../login';
 import Transactions from '../transactions';
@@ -24,6 +25,7 @@ const App = () => (
         <main>
           <PrivateRoutes path='/main' render={ ({ match }) => (
             <main className={offlineStyle.disableWhenOffline}>
+              <NoticeBox />
               <Account />
               <Tabs />
               <Route path={`${match.url}/transactions/:dialog?`} component={Transactions} />
