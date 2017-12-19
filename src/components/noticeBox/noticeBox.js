@@ -4,14 +4,8 @@ import grid from 'flexboxgrid/dist/flexboxgrid.css';
 import RelativeLink from '../relativeLink';
 import styles from './noticeBox.css';
 
-const isUninitialized = (account, transactions) => (
-  transactions.confirmed &&
-  transactions.confirmed.length > 0 &&
-  transactions.confirmed.filter(tx => tx.senderId === account.address).length === 0
-);
-
-const NoticeBox = ({ t, account, transactions }) => (
-  isUninitialized(account, transactions) ?
+const NoticeBox = ({ t, account }) => (
+  account.isUninitialized ?
     <div className={`box ${styles.wrapper}`}>
       <p>
         {t('This account has not been initialized. It is recommended that you initialize your account by sending an outgoing transaction.')}

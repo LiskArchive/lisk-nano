@@ -3,11 +3,8 @@ import { translate } from 'react-i18next';
 import NoticeBox from './noticeBox';
 
 const mapStateToProps = state => ({
-  transactions: state.transactions,
   account: state.account,
 });
 
-export default connect(
-  mapStateToProps,
-)(translate()(NoticeBox));
+export default connect(mapStateToProps)(translate()(NoticeBox));
 
