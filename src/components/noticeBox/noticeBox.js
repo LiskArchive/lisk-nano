@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'react-toolbox/lib/button';
 import grid from 'flexboxgrid/dist/flexboxgrid.css';
 import RelativeLink from '../relativeLink';
 import styles from './noticeBox.css';
@@ -19,12 +18,6 @@ const NoticeBox = ({ t, account }) => (
             className='initialize-account-button' primary raised>
             {t('Initialize account')}
           </RelativeLink>
-          &nbsp;&nbsp;
-          <a href='https://docs.lisk.io/' target='_blank' rel='noopener noreferrer'>
-            <Button primary flat>
-              {t('Learn more')}
-            </Button>
-          </a>
         </div>
       </footer>
     </div> :
