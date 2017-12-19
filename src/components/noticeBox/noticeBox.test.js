@@ -6,6 +6,7 @@ import NoticeBox from './noticeBox';
 describe('NoticeBoxHOC', () => {
   const account = {
     isUninitialized: true,
+    balance: 10e8,
   };
 
   const props = {
@@ -13,7 +14,7 @@ describe('NoticeBoxHOC', () => {
     t: key => key,
   };
 
-  it('should render "Initialize account" button if account.isUninitialized', () => {
+  it('should render "Initialize account" button if account.isUninitialized and account.balace > 0', () => {
     const wrapper = shallow(<NoticeBox {...props} />);
     expect(wrapper.find('.initialize-account-button')).to.have.lengthOf(1);
   });
