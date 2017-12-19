@@ -38,11 +38,13 @@ class PassphraseInput extends React.Component {
       return this.props.t('Passphrase should have 12 words, entered passphrase has {{length}}', { length: mnemonic.length });
     }
 
-    const invalidWord = mnemonic.find(word => !inDictionary(word.toLowerCase()));
+    const invalidWord = mnemonic.find(word => !inDictionary(word));
     if (invalidWord) {
       if (invalidWord.length >= 2 && invalidWord.length <= 8) {
         const validWord = findSimilarWord(invalidWord);
-        if (validWord) {
+        if (invalidWord.toLowerCase() !== invalidWord) {
+          return this.props.t('Word "{{invalidWord}}" contains upper case letters. All words must be lower case', { invalidWord });
+        } else if (validWord) {
           return this.props.t('Word "{{invalidWord}}" is not on the passphrase Word List. Most similar word on the list is "{{similarWord}}"', { invalidWord, similarWord: findSimilarWord(invalidWord) });
         }
       }
