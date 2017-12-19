@@ -77,7 +77,11 @@ function createWindow() {
   }
 
   Menu.setApplicationMenu(buildMenu(app, copyright, i18n));
-  win.loadURL(`file://${__dirname}/index.html`);
+  if ('-l' in process.argv) {
+    win.loadURL('http://localhost:8080/');
+  } else {
+    win.loadURL(`file://${__dirname}/index.html`);
+  }
 
   // Enables DevTools
   win.devtools = true;
