@@ -15,7 +15,8 @@ const NoticeBox = ({ t, account }) => (
       </p>
       <footer className={ `${grid.row} ${grid['center-xs']}` }>
         <div className={grid['col-xs-12']}>
-          <RelativeLink to={`send?amount=1&recipient=${account.address}`} primary raised>
+          <RelativeLink to={`send?amount=1&recipient=${account.address}`}
+            className='initialize-account-button' primary raised>
             {t('Initialize account')}
           </RelativeLink>
           &nbsp;&nbsp;
