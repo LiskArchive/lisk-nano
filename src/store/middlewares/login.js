@@ -29,13 +29,11 @@ const loginMiddleware = store => next => (action) => {
         store.dispatch(accountLoggedIn(Object.assign(
           {}, accountData, accountBasics,
           { delegate: delegateData.delegate, isDelegate: true },
-          { isUninitialized: accountData.publicKey === null },
         )));
       }).catch(() => {
         store.dispatch(accountLoggedIn(Object.assign(
           {}, accountData, accountBasics,
           { delegate: {}, isDelegate: false },
-          { isUninitialized: accountData.publicKey === null },
         )));
       }),
   ).catch(() => store.dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node') })));

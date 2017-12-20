@@ -5,7 +5,7 @@ import NoticeBox from './noticeBox';
 
 describe('NoticeBoxHOC', () => {
   const account = {
-    isUninitialized: true,
+    serverPublicKey: null,
     balance: 10e8,
   };
 
@@ -14,13 +14,13 @@ describe('NoticeBoxHOC', () => {
     t: key => key,
   };
 
-  it('should render "Initialize account" button if account.isUninitialized and account.balace > 0', () => {
+  it('should render "Initialize account" button if !account.serverPublicKey and account.balace > 0', () => {
     const wrapper = shallow(<NoticeBox {...props} />);
     expect(wrapper.find('.initialize-account-button')).to.have.lengthOf(1);
   });
 
-  it('should render null if !account.isUninitialized', () => {
-    account.isUninitialized = false;
+  it('should render null if account.serverPublicKey', () => {
+    account.serverPublicKey = 'a valid publicKey';
     const wrapper = shallow(<NoticeBox {...props} />);
     expect(wrapper.html()).to.equal(null);
   });
