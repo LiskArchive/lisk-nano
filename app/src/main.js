@@ -77,7 +77,7 @@ function createWindow() {
   }
 
   Menu.setApplicationMenu(buildMenu(app, copyright, i18n));
-  if ('-l' in process.argv) {
+  if (process.argv.includes('-l')) {
     win.loadURL('http://localhost:8080/');
   } else {
     win.loadURL(`file://${__dirname}/index.html`);
