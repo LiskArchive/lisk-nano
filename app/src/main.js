@@ -1,12 +1,15 @@
 import electron from 'electron'; // eslint-disable-line import/no-extraneous-dependencies
 import electronLocalshortcut from 'electron-localshortcut'; // eslint-disable-line import/no-extraneous-dependencies
+import { autoUpdater } from 'electron-updater'; // eslint-disable-line import/no-extraneous-dependencies
 import path from 'path';
 import storage from 'electron-json-storage'; // eslint-disable-line import/no-extraneous-dependencies
-import i18n from './i18n';
-import buildMenu from './menu';
+import win from './modules/win';
+import localeHandler from './modules/localeHandler';
+import updateChecker from './modules/autoUpdater';
 
+const checkForUpdates = updateChecker({ autoUpdater, dialog: electron.dialog, win, process });
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const { app, ipcMain } = electron;
 
 let win;
 let isUILoaded = false;
@@ -127,8 +130,6 @@ function createWindow() {
   });
 }
 
-app.on('ready', createWindow);
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -137,41 +138,39 @@ app.on('window-all-closed', () => {
 
 // This will override the values defined in the app’s .plist file (macOS)
 if (process.platform === 'darwin') {
-  app.setAboutPanelOptions({
-    applicationName: 'Lisk Nano',
-    copyright,
-  });
+  const copyright = `Copyright © 2016 - ${new Date().getFullYear()} Lisk Foundation`;
+  app.setAboutPanelOptions({ applicationName: 'Lisk Nano', copyright });
 }
 
 app.on('activate', () => {
-  if (win === null) {
-    createWindow();
+  if (win.browser === null) {
+    win.create({ electron, path, electronLocalshortcut, storage, checkForUpdates });
   }
 });
 
 // Set app protocol
-app.setAsDefaultProtocolClient(protocolName);
+app.setAsDefaultProtocolClient('lisk');
 
 // Force single instance application
 const isSecondInstance = app.makeSingleInstance((argv) => {
   if (process.platform !== 'darwin') {
-    sendUrlToRouter(argv[1] || '/');
+    win.send({ event: 'openUrl', value: argv[1] || '/' });
   }
-  if (win) {
-    if (win.isMinimized()) win.restore();
-    win.focus();
+  if (win.browser) {
+    if (win.browser.isMinimized()) win.browser.restore();
+    win.browser.focus();
   }
 });
 
 if (isSecondInstance) {
-  app.quit();
+  app.exit();
 }
 
 app.on('will-finish-launching', () => {
   // Protocol handler for MacOS
   app.on('open-url', (event, url) => {
     event.preventDefault();
-    sendUrlToRouter(url);
+    win.send({ event: 'openUrl', value: url });
   });
 });
 
@@ -188,17 +187,10 @@ ipcMain.on('proxyCredentialsEntered', (event, username, password) => {
 ipcMain.on('set-locale', (event, locale) => {
   const langCode = locale.substr(0, 2);
   if (langCode) {
-    lang = langCode;
-    i18n.changeLanguage(langCode);
-    // write selected lang on JSON file
-    storage.set('config', { lang: langCode }, (error) => {
-      if (error) throw error;
-    });
-    Menu.setApplicationMenu(buildMenu(app, copyright, i18n));
-    event.returnValue = 'Rebuilt electron menu.';
+    localeHandler.update({ langCode, electron, storage, event, checkForUpdates });
   }
 });
 
 ipcMain.on('request-locale', () => {
-  getConfig();
+  localeHandler.send({ storage });
 });

@@ -2,7 +2,6 @@ import { expect } from 'chai';
 import { mock } from 'sinon';
 import { getAccount, setSecondPassphrase, send, transactions, unconfirmedTransactions,
   extractPublicKey, extractAddress } from './account';
-import { activePeerSet } from '../../actions/peers';
 
 describe('Utils: Account', () => {
   const address = '1449310910991872227L';
@@ -23,41 +22,32 @@ describe('Utils: Account', () => {
     });
 
     it('should return a promise that is resolved when activePeer.getAccount() calls its callback with data.success == true', () => {
-      const response = {
-        success: true,
-        balance: 0,
-      };
+      const account = { address, balance: 0, publicKey: null };
+      const response = { success: true, account };
+
       activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
       const requestPromise = getAccount(activePeer, address);
-      expect(requestPromise).to.eventually.deep.equal(response);
-    });
-
-    it('should return a promise that is resolved even when activePeer.getAccount() calls its callback with data.success == false', () => {
-      const response = {
-        success: false,
-        message: 'account doesn\'t exist',
-      };
-      const account = {
-        address,
-        balance: 0,
-      };
-      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
-      const requestPromise = getAccount(activePeer, address);
-      expect(requestPromise).to.eventually.deep.equal(account);
-    });
-
-    it('it should resolve account info if available', () => {
-      const network = {
-        address: 'http://localhost:8000',
-        testnet: true,
-        name: 'Testnet',
-        nethash: '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
-      };
-
-      const { data } = activePeerSet(network);
-      getAccount(data, address).then((result) => {
-        expect(result.balance).to.be.equal(0);
+      return expect(requestPromise).to.eventually.eql({
+        ...account,
+        serverPublicKey: null,
       });
+    });
+
+    it('should return a promise that is resolved even when activePeer.getAccount() calls its callback with data.success == false and "Account not found"', () => {
+      const response = { success: false, error: 'Account not found' };
+      const account = { address, balance: 0 };
+
+      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
+      const requestPromise = getAccount(activePeer, address);
+      return expect(requestPromise).to.eventually.eql(account);
+    });
+
+    it('should otherwise return a promise that is rejected', () => {
+      const response = { success: false };
+
+      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
+      const requestPromise = getAccount(activePeer, address);
+      return expect(requestPromise).to.eventually.be.rejectedWith(response);
     });
   });
 

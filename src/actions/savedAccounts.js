@@ -1,30 +1,44 @@
 import actionTypes from '../constants/actions';
-import { getSavedAccount, setSavedAccount, removeSavedAccount } from '../utils/saveAccount';
+import {
+  getSavedAccounts,
+  setSavedAccount,
+  removeSavedAccount,
+  setLastActiveAccount,
+  getLastActiveAccount,
+} from '../utils/savedAccounts';
 
 /**
  * An action to dispatch accountSaved
  *
  */
-export const accountSaved = (data) => {
-  setSavedAccount(data);
+export const accountSaved = (account) => {
+  setSavedAccount(account);
+  setLastActiveAccount(account);
   return {
-    data,
+    data: account,
     type: actionTypes.accountSaved,
   };
 };
 
 /**
  * An action to dispatch accountRemoved
- *
- * @todo Currently the utility removed the entire array from localStorage.
- *   it should remove only one item
- *
  */
-export const accountRemoved = (publicKey) => {
-  removeSavedAccount(publicKey);
+export const accountRemoved = (account) => {
+  removeSavedAccount(account);
   return {
-    data: publicKey,
+    data: account,
     type: actionTypes.accountRemoved,
+  };
+};
+
+/**
+ * An action to dispatch accountSwitched
+ */
+export const accountSwitched = (account) => {
+  setLastActiveAccount(account);
+  return {
+    data: account,
+    type: actionTypes.accountSwitched,
   };
 };
 
@@ -35,11 +49,10 @@ export const accountRemoved = (publicKey) => {
  * eventually it should receive an array and return that to reducer
  *
  */
-export const accountsRetrieved = () => {
-  const accounts = getSavedAccount();
-  const data = accounts !== undefined ? accounts : [];
-  return {
-    data,
-    type: actionTypes.accountsRetrieved,
-  };
-};
+export const accountsRetrieved = () => ({
+  data: {
+    accounts: getSavedAccounts(),
+    lastActive: getLastActiveAccount(),
+  },
+  type: actionTypes.accountsRetrieved,
+});

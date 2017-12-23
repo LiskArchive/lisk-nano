@@ -2,7 +2,7 @@
 
 exports.config = {
   specs: [
-    'features/*.feature',
+    'test/e2e/*.feature',
   ],
 
   directConnect: true,
@@ -13,8 +13,8 @@ exports.config = {
   frameworkPath: require.resolve('protractor-cucumber-framework'),
 
   cucumberOpts: {
-    require: 'features/step_definitions/*.js',
-    tags: '~@ignore',
+    require: 'test/e2e/step_definitions/*.js',
+    tags: [],
     format: 'pretty',
     profile: false,
     'no-source': true,
@@ -24,5 +24,8 @@ exports.config = {
     screenshotFolder: 'e2e-test-screenshots',
     baseURL: 'http://localhost:8080/',
     liskCoreURL: 'http://localhost:4000/',
+    testnetPassphrase: process.env.TESTNET_PASSPHRASE,
+    useTestnetPassphrase: false,
+    network: 'customNode',
   },
 };

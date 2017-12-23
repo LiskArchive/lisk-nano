@@ -2,13 +2,15 @@ import i18next from 'i18next';
 import ReceiveDialog from '../receiveDialog';
 import Register from '../register';
 import RegisterDelegate from '../registerDelegate';
-import SaveAccount from '../saveAccount';
+import SavedAccounts from '../savedAccounts';
 import SecondPassphrase from '../secondPassphrase';
 import Send from '../send';
 import Settings from '../settings';
 import SignMessage from '../signMessage';
 import VerifyMessage from '../verifyMessage';
 import VoteDialog from '../voteDialog';
+import EncryptMessage from '../encryptMessage';
+import DecryptMessage from '../decryptMessage';
 
 export default () => ({
   send: {
@@ -43,12 +45,20 @@ export default () => ({
     title: i18next.t('New Account'),
     component: Register,
   },
-  'save-account': {
-    title: i18next.t('Remember this account'),
-    component: SaveAccount,
+  'saved-accounts': {
+    title: i18next.t('Saved accounts'),
+    component: SavedAccounts,
   },
   settings: {
     title: i18next.t('Settings'),
     component: Settings,
+  },
+  'encrypt-message': {
+    title: i18next.t('Encrypt message'),
+    component: EncryptMessage,
+  },
+  'decrypt-message': {
+    title: i18next.t('Decrypt message'),
+    component: DecryptMessage,
   },
 });

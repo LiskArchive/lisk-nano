@@ -1,0 +1,14 @@
+.wrapper {
+  padding: 24px 16px !important;
+  text-align: center;
+  background-color: #d6f0ff !important;
+  margin-bottom: 16px;
+
+  & footer {
+    padding: 24px 0 16px;
+  }
+
+  & p {
+    line-height: 1.5em;
+  }
+}

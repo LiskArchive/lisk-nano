@@ -13,7 +13,7 @@ class SignMessageComponent extends React.Component {
   constructor() {
     super();
     this.state = {
-      message: '',
+      message: { value: '' },
       result: '',
       ...authStatePrefill(),
     };
@@ -31,6 +31,7 @@ class SignMessageComponent extends React.Component {
         value,
         error,
       },
+      result: undefined,
     });
   }
 
@@ -39,18 +40,19 @@ class SignMessageComponent extends React.Component {
       this.state.passphrase.value);
     const result = Lisk.crypto.printSignedMessage(
       message, signedMessage, this.props.account.publicKey);
-    this.setState({ result, resultIsShown: false, message });
+    this.setState({ result });
+    return result;
   }
 
   showResult(event) {
     event.preventDefault();
-    const copied = this.props.copyToClipboard(this.state.result, {
+    const result = this.sign(this.state.message.value);
+    const copied = this.props.copyToClipboard(result, {
       message: this.props.t('Press #{key} to copy'),
     });
     if (copied) {
       this.props.successToast({ label: this.props.t('Result copied to clipboard') });
     }
-    this.setState({ resultIsShown: true });
   }
 
   render() {
@@ -61,18 +63,18 @@ class SignMessageComponent extends React.Component {
           <br />
           {this.props.t('Note: Digital Signatures and signed messages are not encrypted!')}
         </InfoParagraph>
-        <form onSubmit={this.showResult.bind(this)}>
+        <form onSubmit={this.showResult.bind(this)} id='signMessageForm'>
           <section>
             <Input className='message' multiline label={this.props.t('Message')}
               autoFocus={true}
-              value={this.state.message}
-              onChange={this.sign.bind(this)} />
+              value={this.state.message.value}
+              onChange={this.handleChange.bind(this, 'message')} />
             <AuthInputs
               passphrase={this.state.passphrase}
               secondPassphrase={this.state.secondPassphrase}
               onChange={this.handleChange.bind(this)} />
           </section>
-          {this.state.resultIsShown ?
+          {this.state.result ?
             <SignVerifyResult result={this.state.result} title={this.props.t('Result')} /> :
             <ActionBar
               secondaryButton={{
@@ -82,8 +84,8 @@ class SignMessageComponent extends React.Component {
                 label: this.props.t('Sign and copy result to clipboard'),
                 className: 'sign-button',
                 type: 'submit',
-                disabled: (!this.state.result ||
-                  this.state.resultIsShown ||
+                disabled: (!this.state.message.value ||
+                  this.state.result ||
                   !authStateIsValid(this.state)),
               }} />
           }

@@ -1,8 +1,9 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
-const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const I18nScannerPlugin = require('../src/i18n-scanner');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const entries = {
@@ -37,5 +38,14 @@ module.exports = {
       filename: 'styles.css',
       allChunks: true,
     }),
+    new I18nScannerPlugin({
+      translationFunctionNames: ['i18next.t', 'props.t', 'this.props.t', 't'],
+      outputFilePath: './i18n/locales/en/common.json',
+      files: [
+        './src/**/*.js',
+        './app/src/**/*.js',
+      ],
+    }),
+    new HardSourceWebpackPlugin(),
   ],
 };

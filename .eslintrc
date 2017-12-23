@@ -4,7 +4,8 @@
     "plugin:react/recommended"
   ],
   "plugins": [
-    "import"
+    "import",
+    "mocha"
   ],
   "globals": {
     "describe": true,
@@ -13,13 +14,14 @@
     "afterEach": true,
     "ipc": true,
     "PRODUCTION": true,
-    "TEST": true,
+    "TEST": true
   },
   "env": {
     "browser": true,
     "node": true
   },
   "rules": {
+    "mocha/no-exclusive-tests": "error",
     "func-names": "off",
     "global-require": "off",
     "new-cap": ["error", {
@@ -37,9 +39,9 @@
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
     "import/no-extraneous-dependencies": ["error", {
-      devDependencies: [
+      "devDependencies": [
         "./src/**/*.test.js",
-        "./features/*/*.js",
+        "./test/**/*.js",
         "./src/**/stories.js",
         "./src/tests.js",
         "./src/i18n-scanner.js"
@@ -48,5 +50,10 @@
     ],
     "linebreak-style": 0,
     "no-param-reassign": "off"
+  },
+  "settings": {
+    "mocha/additionalTestFunctions": [
+      "describeModule"
+    ]
   }
 }

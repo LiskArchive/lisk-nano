@@ -1,5 +1,5 @@
 const actionTypes = {
-  metronomeBeat: 'METRONOME_BEAT',
+  newBlockCreated: 'NEW_BLOCK_CREATED',
   accountUpdated: 'ACCOUNT_UPDATED',
   accountLoggedOut: 'ACCOUNT_LOGGED_OUT',
   accountLoggedIn: 'ACCOUNT_LOGGED_IN',
@@ -32,6 +32,7 @@ const actionTypes = {
   accountsRetrieved: 'ACCOUNTS_RETRIEVED',
   accountSaved: 'ACCOUNT_SAVED',
   accountRemoved: 'ACCOUNT_REMOVED',
+  accountSwitched: 'ACCOUNT_SWITCHED',
 };
 
 export default actionTypes;
