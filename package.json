@@ -14,6 +14,7 @@
     "test": "karma start",
     "test-live": "npm test -- --auto-watch --no-single-run",
     "start": "electron ./app/",
+    "start-live": "electron ./app/ -l",
     "dist": "build --ia32 --x64 --armv7l --publish onTag",
     "dist:win": "build --win --ia32 --x64 --publish onTag",
     "dist:mac": "build --mac",
