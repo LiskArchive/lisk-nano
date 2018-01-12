@@ -1,4 +1,5 @@
 import React from 'react';
+import { fromRawLsk } from '../../utils/lsk';
 import Passphrase from '../passphrase';
 import Fees from '../../constants/fees';
 import Authenticate from '../authenticate';
@@ -22,8 +23,16 @@ const SecondPassphrase = ({
         fee={Fees.setSecondPassphrase}
         closeDialog={closeDialog}
         confirmButton={t('Register')}
-        useCaseNote={t('your second passphrase will be required for all transactions sent from this account')}
-        securityNote={t('Losing access to this passphrase will mean no funds can be sent from this account.')}/>
+        feeNote={
+          <div>
+            {t('Registering a second passphrase requires ')}
+            <b style={{ color: 'black' }}>
+              {t(' a fee of {{fee}} LSK.', { fee: fromRawLsk(Fees.setSecondPassphrase) })}
+            </b>
+            <br /><br />
+          </div>
+        }
+        useCaseNote={t('Note: After the registration is complete, your second passphrase will be required for all outgoing transactions from this account.')} />
       :
       <Authenticate nextAction={t('set second passphrase')} />);
 };

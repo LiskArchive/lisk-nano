@@ -34,8 +34,7 @@ const Register = ({
       keepModal={false}
       closeDialog={closeDialog}
       confirmButton={'Login'}
-      useCaseNote={t('your passphrase will be required for logging in to your account.')}
-      securityNote={t('This passphrase is not recoverable and if you lose it, you will lose access to your account forever.')}/>
+      useCaseNote={t('Note: After the registration is complete, your passphrase will be required for logging in to your account.')} />
   );
 };
 
