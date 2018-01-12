@@ -45,8 +45,7 @@ describe('SecondPassphrase', () => {
 
     it('should mount SecondPassphrase with appropriate properties', () => {
       const props = wrapper.find('Passphrase').props();
-      expect(props.securityNote).to.be.equal('Losing access to this passphrase will mean no funds can be sent from this account.');
-      expect(props.useCaseNote).to.be.equal('your second passphrase will be required for all transactions sent from this account');
+      expect(props.useCaseNote).to.be.equal('Note: After the registration is complete, your second passphrase will be required for all outgoing transactions from this account.');
       expect(props.confirmButton).to.be.equal('Register');
       expect(props.fee).to.be.equal(Fees.setSecondPassphrase);
       expect(props.keepModal).to.be.equal(true);

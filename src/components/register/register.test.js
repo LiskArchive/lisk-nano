@@ -49,8 +49,7 @@ describe('Register', () => {
 
   it('should mount Register with appropriate properties', () => {
     const props = wrapper.find('Passphrase').props();
-    expect(props.useCaseNote).to.be.equal('your passphrase will be required for logging in to your account.');
-    expect(props.securityNote).to.be.equal('This passphrase is not recoverable and if you lose it, you will lose access to your account forever.');
+    expect(props.useCaseNote).to.be.equal('Note: After the registration is complete, your passphrase will be required for logging in to your account.');
     expect(props.confirmButton).to.be.equal('Login');
     expect(props.keepModal).to.be.equal(false);
     expect(typeof props.onPassGenerated).to.be.equal('function');
