@@ -42,9 +42,9 @@ export const activePeerSet = data =>
     }
     if (config.custom) {
       getNethash(Lisk.api(config)).then((response) => {
-        config.testnet = response.nethash === netHashes.testnet;
-        if (!config.testnet && response.nethash !== netHashes.mainnet) {
-          config.nethash = response.nethash;
+        config.testnet = response.data.nethash === netHashes.testnet;
+        if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
+          config.nethash = response.data.nethash;
         }
         dispatch(peerSet(data, config));
       }).catch(() => {

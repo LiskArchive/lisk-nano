@@ -51,7 +51,7 @@ describe('actions: peers', () => {
       };
 
       activePeerSet(data)(dispatch);
-      getNetHash.resolves({ nethash });
+      getNetHash.resolves({ data: { nethash } });
 
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.options', data.network));
     });
@@ -72,7 +72,7 @@ describe('actions: peers', () => {
       };
 
       activePeerSet({ passphrase, network })(dispatch);
-      getNetHash.resolves({ nethash: netHashes.testnet });
+      getNetHash.resolves({ data: { nethash: netHashes.testnet } });
 
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.testnet', true));
     });
@@ -85,7 +85,7 @@ describe('actions: peers', () => {
       };
 
       activePeerSet({ passphrase, network })(dispatch);
-      getNetHash.resolves({ nethash: 'some other nethash' });
+      getNetHash.resolves({ data: { nethash: 'some other nethash' } });
 
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.testnet', false));
     });

@@ -6,7 +6,7 @@ const mergeVotes = (newList, oldDict) => {
       confirmed: true,
       unconfirmed: true,
       pending: false,
-      publicKey: delegate.publicKey,
+      account: delegate.account,
     };
     return tempDict;
   }, {});
@@ -51,7 +51,7 @@ const voting = (state = {
             votesDict[delegate.username] = {
               confirmed: true,
               unconfirmed: true,
-              publicKey: delegate.publicKey,
+              account: delegate.account,
             };
             return votesDict;
           }, {}),

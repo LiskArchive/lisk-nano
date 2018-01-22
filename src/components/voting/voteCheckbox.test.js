@@ -9,7 +9,7 @@ describe('VoteCheckbox', () => {
   const props = {
     data: {
       username: 'yashar',
-      publicKey: 'address 1',
+      account: { publicKey: 'address 1' },
     },
     styles,
     toggle: sinon.spy(),

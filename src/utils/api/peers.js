@@ -5,7 +5,7 @@ export const requestToActivePeer = (activePeer, path, urlParams) =>
   new Promise((resolve, reject) => {
     loadingStarted(path);
     activePeer.sendRequest(path, urlParams, (data) => {
-      if (data.success) {
+      if (data.data) {
         resolve(data);
       } else {
         reject(data);

@@ -6,7 +6,7 @@ import { getAccount, setSecondPassphrase, send, transactions, unconfirmedTransac
 describe('Utils: Account', () => {
   const address = '1449310910991872227L';
 
-  describe('getAccount', () => {
+  describe.skip('getAccount', () => {
     let activePeerMock;
     const activePeer = {
       getAccount: () => { },

@@ -1,14 +1,14 @@
 import { requestToActivePeer } from './peers';
 
 export const listAccountDelegates = (activePeer, address) =>
-  requestToActivePeer(activePeer, 'accounts/delegates', { address });
+  requestToActivePeer(activePeer, 'votes', { address });
 
 
 export const listDelegates = (activePeer, options) =>
-  requestToActivePeer(activePeer, `delegates/${options.q ? 'search' : ''}`, options);
+  requestToActivePeer(activePeer, 'delegates/', options);
 
 export const getDelegate = (activePeer, options) =>
-  requestToActivePeer(activePeer, 'delegates/get', options);
+  requestToActivePeer(activePeer, 'delegates/', options);
 
 export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) =>
   requestToActivePeer(activePeer, 'accounts/delegates', {
@@ -21,12 +21,12 @@ export const vote = (activePeer, secret, publicKey, voteList, unvoteList, second
   });
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
-  const options = { q: username };
+  const options = { search: username };
 
   return new Promise((resolve, reject) =>
     listDelegates(activePeer, options)
       .then((response) => {
-        resolve(response.delegates.filter(delegate =>
+        resolve(response.data.filter(delegate =>
           Object.keys(votedDict).filter(item => item === delegate.username).length === 0,
         ));
       })

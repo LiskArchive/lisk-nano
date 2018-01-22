@@ -20,7 +20,7 @@ describe('Utils: Nethash', () => {
     const mockedReturns = 'requestToActivePeer returns something';
 
     peersMock.expects('requestToActivePeer')
-      .withArgs(activePeer, 'blocks/getNethash')
+      .withArgs(activePeer, 'node/constants')
       .returns(mockedReturns);
 
     const returnedPromise = getNethash(activePeer);

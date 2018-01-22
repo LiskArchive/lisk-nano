@@ -27,7 +27,7 @@ const transactionsUpdated = (store) => {
     unconfirmedTransactions(peers.data, account.address)
       .then(response => store.dispatch(transactionsFailed({
         failed: transactions.pending.filter(tx =>
-          response.transactions.filter(unconfirmedTx => tx.id === unconfirmedTx.id).length === 0),
+          response.data.filter(unconfirmedTx => tx.id === unconfirmedTx.id).length === 0),
       })));
   }
 };

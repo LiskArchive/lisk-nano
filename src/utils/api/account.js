@@ -3,15 +3,15 @@ import { requestToActivePeer } from './peers';
 
 export const getAccount = (activePeer, address) =>
   new Promise((resolve, reject) => {
-    activePeer.getAccount(address, (data) => {
-      if (data.success) {
+    requestToActivePeer(activePeer, 'accounts', { address }).then((data) => {
+      if (data.data.length === 1) {
         resolve({
-          ...data.account,
-          serverPublicKey: data.account.publicKey,
+          ...data.data[0],
+          serverPublicKey: data.data.publicKey,
         });
-      } else if (!data.success && data.error === 'Account not found') {
+      } else if (data.data.length === 0) {
         // when the account has no transactions yet (therefore is not saved on the blockchain)
-        // this endpoint returns { success: false }
+        // this endpoint returns data: []
         resolve({
           address,
           balance: 0,
@@ -29,22 +29,22 @@ export const send = (activePeer, recipientId, amount, secret, secondSecret = nul
   requestToActivePeer(activePeer, 'transactions',
     { recipientId, amount, secret, secondSecret });
 
-export const transactions = (activePeer, address, limit = 20, offset = 0, orderBy = 'timestamp:desc') =>
+export const transactions = (activePeer, address, limit = 20, offset = 0, sort = 'timestamp:desc') =>
   requestToActivePeer(activePeer, 'transactions', {
     senderId: address,
     recipientId: address,
     limit,
     offset,
-    orderBy,
+    sort,
   });
 
-export const unconfirmedTransactions = (activePeer, address, limit = 20, offset = 0, orderBy = 'timestamp:desc') =>
-  requestToActivePeer(activePeer, 'transactions/unconfirmed', {
+export const unconfirmedTransactions = (activePeer, address, limit = 20, offset = 0, sort = 'timestamp:desc') =>
+  requestToActivePeer(activePeer, 'node/transactions/unconfirmed', {
     senderId: address,
     recipientId: address,
     limit,
     offset,
-    orderBy,
+    sort,
   });
 
 export const extractPublicKey = passphrase =>

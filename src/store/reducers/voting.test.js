@@ -15,14 +15,26 @@ describe('Reducer: voting(state, action)', () => {
     username3: { confirmed: false, unconfirmed: false, publicKey: 'sample_key' },
   };
   const pendingVotes = {
-    username1: { confirmed: true, unconfirmed: true, pending: true, publicKey: 'sample_key' },
-    username2: { confirmed: true, unconfirmed: true, pending: false, publicKey: 'sample_key' },
-    username3: { confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key' },
+    username1: {
+      confirmed: true, unconfirmed: true, pending: true, publicKey: 'sample_key',
+    },
+    username2: {
+      confirmed: true, unconfirmed: true, pending: false, publicKey: 'sample_key',
+    },
+    username3: {
+      confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key',
+    },
   };
   const restoredVotes = {
-    username1: { confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key' },
-    username2: { confirmed: true, unconfirmed: true, pending: false, publicKey: 'sample_key' },
-    username3: { confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key' },
+    username1: {
+      confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key',
+    },
+    username2: {
+      confirmed: true, unconfirmed: true, pending: false, publicKey: 'sample_key',
+    },
+    username3: {
+      confirmed: false, unconfirmed: false, pending: false, publicKey: 'sample_key',
+    },
   };
   const delegates1 = [
     { username: 'username1', publicKey: 'sample_key' },
@@ -31,6 +43,10 @@ describe('Reducer: voting(state, action)', () => {
   const delegates2 = [
     { username: 'username3', publicKey: 'sample_key' },
     { username: 'username4', publicKey: 'sample_key' },
+  ];
+  const delegates3 = [
+    { username: 'username5', account: { publicKey: 'sample_key_5' } },
+    { username: 'username6', account: { publicKey: 'sample_key_6' } },
   ];
   const fullDelegates = [...delegates1, ...delegates2];
 
@@ -58,13 +74,13 @@ describe('Reducer: voting(state, action)', () => {
     const action = {
       type: actionTypes.votesAdded,
       data: {
-        list: delegates1,
+        list: delegates3,
       },
     };
     const expectedState = {
       votes: {
-        username1: { confirmed: true, unconfirmed: true, publicKey: 'sample_key' },
-        username2: { confirmed: true, unconfirmed: true, publicKey: 'sample_key' },
+        username5: { confirmed: true, unconfirmed: true, account: { publicKey: 'sample_key_5' } },
+        username6: { confirmed: true, unconfirmed: true, account: { publicKey: 'sample_key_6' } },
       },
       delegates: [],
       refresh: false,

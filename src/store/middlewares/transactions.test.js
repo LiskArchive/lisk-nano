@@ -87,7 +87,7 @@ describe('transaction middleware', () => {
     ];
     accountApiMock.expects('unconfirmedTransactions')
       .withExactArgs(state.peers.data, state.account.address)
-      .returnsPromise().resolves({ transactions });
+      .returnsPromise().resolves({ data: transactions });
     store.getState = () => ({
       ...state,
       transactions: {

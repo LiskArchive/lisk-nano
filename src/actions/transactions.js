@@ -47,7 +47,7 @@ export const transactionsRequested = ({ activePeer, address, limit, offset }) =>
       .then((response) => {
         dispatch(transactionsLoaded({
           count: parseInt(response.count, 10),
-          confirmed: response.transactions,
+          confirmed: response.data,
         }));
       });
   };

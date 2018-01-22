@@ -45,9 +45,9 @@ describe('Utils: Delegate', () => {
       return expect(returnedPromise).to.eventually.equal('resolved promise');
     });
 
-    it('should return requestToActivePeer(activePeer, `delegates/search`, options) if options.q is set', () => {
-      const options = { q: 'genesis_1' };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/search', options)
+    it('should return requestToActivePeer(activePeer, `delegates/`, options) if options.search is set', () => {
+      const options = { search: 'genesis_1' };
+      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', options)
         .returnsPromise().resolves('resolved promise');
 
       const returnedPromise = listDelegates(activePeer, options);
@@ -56,9 +56,9 @@ describe('Utils: Delegate', () => {
   });
 
   describe('getDelegate', () => {
-    it('should return requestToActivePeer(activePeer, `delegates/get`, options)', () => {
+    it('should return requestToActivePeer(activePeer, `delegates/`, options)', () => {
       const options = { publicKey: '"86499879448d1b0215d59cbf078836e3d7d9d2782d56a2274a568761bff36f19"' };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/get', options)
+      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', options)
         .returnsPromise().resolves('resolved promise');
 
       const returnedPromise = getDelegate(activePeer, options);
@@ -140,8 +140,8 @@ describe('Utils: Delegate', () => {
         { username: 'genesis_44' },
       ];
       const votedDict = { genesis_3: { confirmed: true, unconfirmed: false, publicKey: 'sample_key' } };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/search', { q: username })
-        .returnsPromise().resolves({ success: true, delegates });
+      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', { search: username })
+        .returnsPromise().resolves({ success: true, data: delegates });
 
       const returnedPromise = voteAutocomplete(activePeer, username, votedDict);
       return expect(returnedPromise).to.eventually.eql(delegates);

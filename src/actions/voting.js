@@ -118,11 +118,11 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
  */
 export const votesFetched = ({ activePeer, address, type }) =>
   (dispatch) => {
-    listAccountDelegates(activePeer, address).then(({ delegates }) => {
+    listAccountDelegates(activePeer, address).then(({ data }) => {
       if (type === 'update') {
-        dispatch(votesUpdated({ list: delegates }));
+        dispatch(votesUpdated({ list: data.votes }));
       } else {
-        dispatch(votesAdded({ list: delegates }));
+        dispatch(votesAdded({ list: data.votes }));
       }
     });
   };
@@ -130,16 +130,16 @@ export const votesFetched = ({ activePeer, address, type }) =>
 /**
  * Gets list of all delegates
  */
-export const delegatesFetched = ({ activePeer, q, offset, refresh }) =>
+export const delegatesFetched = ({ activePeer, search, offset, refresh }) =>
   (dispatch) => {
     listDelegates(
       activePeer, {
         offset,
         limit: '100',
-        q,
+        ...(search === '' ? {} : { search }),
       },
-    ).then(({ delegates, totalCount }) => {
-      dispatch(delegatesAdded({ list: delegates, totalDelegates: totalCount, refresh }));
+    ).then(({ data, totalCount }) => {
+      dispatch(delegatesAdded({ list: data, totalDelegates: totalCount, refresh }));
     });
   };
 
@@ -153,6 +153,6 @@ export const urlVotesFound = ({ activePeer, upvotes, unvotes, address }) =>
       dispatch(votesAdded({ list: votes, upvotes, unvotes }));
     };
     listAccountDelegates(activePeer, address)
-      .then(({ delegates }) => { processUrlVotes(delegates); })
+      .then(({ data }) => { processUrlVotes(data); })
       .catch(() => { processUrlVotes([]); });
   };

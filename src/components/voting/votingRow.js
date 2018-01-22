@@ -40,7 +40,7 @@ class VotingRow extends React.Component {
       </TableCell>
       <TableCell>{data.rank}</TableCell>
       <TableCell>{data.username}</TableCell>
-      <TableCell>{data.address}</TableCell>
+      <TableCell>{data.account.address}</TableCell>
       <TableCell>{data.productivity} %</TableCell>
       <TableCell>{data.approval} %</TableCell>
     </TableRow>

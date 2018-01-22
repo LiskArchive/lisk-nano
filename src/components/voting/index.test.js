@@ -20,7 +20,10 @@ describe('VotingHOC', () => {
       },
       voting: {
         delegates: [
-          { username: 'username1', publicKey: 'sample_key' },
+          {
+            username: 'username1',
+            account: { publicKey: 'sample_key' },
+          },
         ],
         votes: {
           username1: { confirmed: true, unconfirmed: true, publicKey: 'sample_key' },

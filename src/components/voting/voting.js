@@ -70,13 +70,13 @@ class Voting extends React.Component {
    *  should replace the old delegates list
    * @param {Number} limit - The maximum number of results
    */
-  loadDelegates(q = '', refresh) {
+  loadDelegates(search = '', refresh) {
     this.freezeLoading = true;
     this.offset = refresh ? -1 : this.offset;
     this.props.delegatesFetched({
       activePeer: this.props.activePeer,
       offset: this.offset > -1 ? this.offset : 0,
-      q,
+      search,
       refresh,
     });
   }
@@ -112,7 +112,7 @@ class Voting extends React.Component {
               <TableCell>{this.props.t('Approval')}</TableCell>
             </TableHead>
             {this.props.delegates.map(item => (
-              <VotingRow key={item.address} data={item}
+              <VotingRow key={item.account.address} data={item}
                 voteToggled={this.props.voteToggled}
                 voteStatus={this.props.votes[item.username]}
               />
