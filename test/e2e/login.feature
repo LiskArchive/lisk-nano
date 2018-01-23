@@ -15,6 +15,8 @@ Feature: Login page
     And I wait 1 seconds
     Then I should see text "Unable to connect to the node" in "toast" element
 
+  # disabled because mainnet is not yet on the new API
+  @pending
   Scenario: should allow to login to Mainnet 
     Given I'm on login page
     When I fill in "wagon stock borrow episode laundry kitten salute link globe zero feed marble" to "passphrase" field
@@ -23,6 +25,8 @@ Feature: Login page
     Then I should be logged in
     And I should see text "Mainnet" in "peer network" element
 
+  # disabled because testnet is not yet on the new API
+  @pending
   Scenario: should remember the selected network
     Given I'm on login page
     When I fill in "wagon stock borrow episode laundry kitten salute link globe zero feed marble" to "passphrase" field
