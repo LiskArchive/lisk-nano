@@ -4,7 +4,7 @@ import { extractPublicKey } from '../../utils/api/account';
 
 class AuthInputs extends React.Component {
   componentDidMount() {
-    if (this.props.account.secondSignature) {
+    if (this.props.account.secondPublicKey) {
       this.props.onChange('secondPassphrase', '');
     }
   }
@@ -32,12 +32,12 @@ class AuthInputs extends React.Component {
           error={this.props.passphrase.error}
           value={this.props.passphrase.value}
           onChange={this.onChange.bind(this, 'passphrase')} />)}
-      {(this.props.account.secondSignature &&
+      {(this.props.account.secondPublicKey ?
         <PassphraseInput label={this.props.t('Second Passphrase')}
           className='second-passphrase'
           error={this.props.secondPassphrase.error}
           value={this.props.secondPassphrase.value}
-          onChange={this.onChange.bind(this, 'secondPassphrase')} />)}
+          onChange={this.onChange.bind(this, 'secondPassphrase')} /> : null)}
     </span>;
   }
 }

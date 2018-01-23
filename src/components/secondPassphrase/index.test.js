@@ -11,7 +11,9 @@ import SecondPassphraseHOC from './index';
 describe('SecondPassphraseHOC', () => {
   let wrapper;
   const peers = {};
-  const account = { secondSignature: 1 };
+  const account = {
+    secondPublicKey: 'fab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88',
+  };
   const store = configureMockStore([])({
     peers,
     account,

@@ -14,14 +14,13 @@ const mountWithRouter = (node, context) => mount(<Router>{node}</Router>, contex
 const ordinaryAccount = {
   passphrase: 'pass',
   publicKey: 'key',
-  secondSignature: 0,
   balance: 10e8,
 };
 const accountWithSecondPassphrase = {
   passphrase: 'awkward service glimpse punch genre calm grow life bullet boil match like',
   secondPassphrase: 'forest around decrease farm vanish permit hotel clay senior matter endorse domain',
   publicKey: 'key',
-  secondSignature: 1,
+  secondPublicKey: 'ec057d8816b18b83a2baac387eebf8af707f8fb565c963476a0e4533e8481eaf',
   balance: 10e8,
 };
 const votes = {

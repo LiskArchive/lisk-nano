@@ -5,7 +5,7 @@ import { TooltipWrapper } from '../timestamp';
 import styles from './account.css';
 
 const getStatusTooltip = (props) => {
-  if (props.secondSignature) {
+  if (props.secondPublicKey) {
     return props.t('This account is protected by a second passphrase');
   } else if (props.passphrase) {
     return props.t('Passphrase of the account is saved till the end of the session.');
@@ -39,7 +39,7 @@ const Address = (props) => {
             {content}
             <span className="status">
               <TooltipWrapper tooltip={getStatusTooltip(props)}>
-                <i className="material-icons">{props.passphrase && !props.secondSignature ? 'lock_open' : 'lock'}</i>
+                <i className="material-icons">{props.passphrase && !props.secondPublicKey ? 'lock_open' : 'lock'}</i>
               </TooltipWrapper>
             </span>
           </div>

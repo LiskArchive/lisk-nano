@@ -35,7 +35,7 @@ const withSecondSecretAccount = {
   delegate: {
     username: 'lisk-nano',
   },
-  secondSignature: 1,
+  secondPublicKey: 'fab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88',
 };
 
 const props = {

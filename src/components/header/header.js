@@ -30,7 +30,7 @@ const Header = props => (
             </MenuItem>
         }
         {
-          !props.account.secondSignature &&
+          !props.account.secondPublicKey &&
             <MenuItem theme={styles}>
               <RelativeLink className={`register-second-passphrase ${styles.menuLink}`}
                 to='register-second-passphrase'>{props.t('Register second passphrase')}</RelativeLink>

@@ -20,7 +20,7 @@ chai.use(chaiEnzyme());
 const ordinaryAccount = {
   passphrase: 'pass',
   publicKey: 'key',
-  secondSignature: 0,
+  secondPublicKey: undefined,
   balance: 10e8,
 };
 const delegates = [
