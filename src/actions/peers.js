@@ -9,7 +9,8 @@ const peerSet = (data, config) => ({
   data: Object.assign({
     passphrase: data.passphrase,
     publicKey: data.publicKey,
-    activePeer: Lisk.api(config),
+    // eslint-disable-next-line new-cap
+    activePeer: new Lisk.api(config),
   }),
   type: actionTypes.activePeerSet,
 });
@@ -41,7 +42,8 @@ export const activePeerSet = data =>
       config.testnet = config.port === '7000';
     }
     if (config.custom) {
-      getNethash(Lisk.api(config)).then((response) => {
+      // eslint-disable-next-line new-cap
+      getNethash(new Lisk.api(config)).then((response) => {
         config.testnet = response.data.nethash === netHashes.testnet;
         if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
           config.nethash = response.data.nethash;
