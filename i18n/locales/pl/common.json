@@ -1,5 +1,5 @@
 {
-  " Make sure that you are using the latest version of Lisk Nano.": " Upewnij sie że używasz najnowszej wersji portfela Lisk Nano.",
+  " Make sure that you are using the latest version of Oxy Nano.": " Upewnij sie że używasz najnowszej wersji portfela Oxy Nano.",
   "About": "O Nas",
   "Account saved": "Konto zapisane",
   "Account was successfully forgotten.": "Konto zostało pomyślnie zapomniane.",
@@ -141,8 +141,8 @@
   "Select a network": "Wybierz sieć",
   "Select all": "Wybierz wszystko",
   "Send": "Wyślij",
-  "Send Lisk from Blockchain Application": "Wyślij Lisk z Aplikacji Blockhain",
-  "Send Lisk to Blockchain Application": "Wyślij Lisk do Aplikacji Blockhain",
+  "Send Oxy from Blockchain Application": "Wyślij Oxy z Aplikacji Blockhain",
+  "Send Oxy to Blockchain Application": "Wyślij Oxy do Aplikacji Blockhain",
   "Send to this address": "Wyślij do tego adresu",
   "Sender PublicKey": "Publiczny Klucz Nadawcy",
   "Set maximum amount": "Wyślij maksymalną sumę",
