@@ -9,5 +9,10 @@ const languages = {
     common: require('./locales/de/common.json'),
     flag: require('./flags/de.png'),
   },
+  pl: {
+    name: 'Polski',
+    common: require('./locales/pl/common.json'),
+    flag: require('./flags/pl.png'),
+  },
 };
 export default languages;
