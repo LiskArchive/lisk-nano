@@ -92,8 +92,9 @@ describe('RegisterDelegate', () => {
 
     it('allows register as delegate for a non delegate account', () => {
       wrapper.find('.username input').simulate('change', { target: { value: 'sample_username' } });
+      expect(wrapper.find('.primary-button button')).to.have.prop('disabled', false);
       wrapper.find('button.next-button').simulate('submit');
-      expect(wrapper.find('.primary-button button').props().disabled).to.not.equal(true);
+      expect(wrapper.find('.primary-button button')).to.have.prop('disabled', true);
       expect(props.delegateRegistered).to.have.been.calledWith();
     });
 

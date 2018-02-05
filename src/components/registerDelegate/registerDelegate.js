@@ -38,6 +38,7 @@ class RegisterDelegate extends React.Component {
       passphrase: this.state.passphrase.value,
       secondPassphrase: this.state.secondPassphrase.value,
     });
+    this.setState({ executed: true });
   }
 
   render() {
@@ -79,6 +80,7 @@ class RegisterDelegate extends React.Component {
               className: 'register-button',
               disabled: (!this.state.name.value ||
                 this.props.account.isDelegate ||
+                this.state.executed ||
                 !authStateIsValid(this.state)),
             }} />
         </form>
