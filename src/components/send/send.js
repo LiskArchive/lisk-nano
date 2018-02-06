@@ -72,6 +72,7 @@ class Send extends React.Component {
       passphrase: this.state.passphrase.value,
       secondPassphrase: this.state.secondPassphrase.value,
     });
+    this.setState({ executed: true });
   }
 
   getMaxAmount() {
@@ -115,6 +116,7 @@ class Send extends React.Component {
               label: this.props.t('Send'),
               type: 'submit',
               disabled: (
+                this.state.executed ||
                 !!this.state.recipient.error ||
                 !this.state.recipient.value ||
                 !!this.state.amount.error ||
