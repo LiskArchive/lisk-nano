@@ -1,5 +1,5 @@
 {
-  " Make sure that you are using the latest version of Oxy Nano.": " Make sure that you are using the latest version of Oxy Nano.",
+  " Make sure that you are using the latest version of Oxycoin Nano.": " Make sure that you are using the latest version of Oxycoin Nano.",
   "About": "About",
   "Account saved": "Account saved",
   "Account was successfully forgotten.": "Account was successfully forgotten.",
@@ -141,8 +141,8 @@
   "Select a network": "Select a network",
   "Select all": "Select all",
   "Send": "Send",
-  "Send Lisk from Blockchain Application": "Send Lisk from Blockchain Application",
-  "Send Lisk to Blockchain Application": "Send Lisk to Blockchain Application",
+  "Send OXY from Blockchain Application": "Send OXY from Blockchain Application",
+  "Send OXY to Blockchain Application": "Send OXY to Blockchain Application",
   "Send to this address": "Send to this address",
   "Sender PublicKey": "Sender PublicKey",
   "Set maximum amount": "Set maximum amount",

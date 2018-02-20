@@ -6,7 +6,11 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
-  background-color: #eee;
+  background: url(../../assets/images/bg@2x-v2.png);
+  background-repeat: no-repeat;
+  background-color: #3057a5;
+  background-position: center top;
+  background-size: cover;
 }
 
 .body-wrapper {

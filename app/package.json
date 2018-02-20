@@ -1,10 +1,10 @@
 {
   "name": "oxy-nano",
   "version": "1.3.1",
-  "description": "Oxy Nano",
+  "description": "Oxycoin Nano",
   "main": "./build/main.js",
-  "author":{
+  "author": {
     "name": "Oxycoin",
-    "email": "info@oxy.io"
+    "email": "info@oxycoin.io"
   }
 }
