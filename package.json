@@ -1,6 +1,6 @@
 {
   "name": "oxy-nano",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Oxycoin Nano",
   "homepage": "https://github.com/oxycoin/oxy-nano",
   "bugs": "https://github.com/oxycoin/oxy-nano/issues",
@@ -44,7 +44,7 @@
     "i18next": "=10.0.3",
     "i18next-localstorage-cache": "=1.1.1",
     "i18next-xhr-backend": "=1.4.2",
-    "oxy-nano-js": "0.5.3",
+    "oxy-nano-js": "0.5.4",
     "moment": "2.18.1",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
