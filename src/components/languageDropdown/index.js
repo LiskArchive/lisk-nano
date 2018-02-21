@@ -17,7 +17,7 @@ const handleChange = (value) => {
 
 const customItem = item => (
   <div>
-    <img src={item.flag}/> {item.label}
+    <img className="languageItem" src={item.flag}/> {item.label}
   </div>
 );
 
