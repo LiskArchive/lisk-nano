@@ -13,6 +13,10 @@ const languages = {
     name: 'Polski',
     common: require('./locales/pl/common.json'),
     flag: require('./flags/pl.png'),
+  },nl: {
+    name: 'Nederlands',
+    common: require('./locales/nl/common.json'),
+    flag: require('./flags/nl.png'),
   },
 };
 export default languages;
