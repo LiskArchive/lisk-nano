@@ -24,10 +24,10 @@ const TransactionType = (props) => {
       type = t('Blockchain Application Registration');
       break;
     case 6:
-      type = t('Send Lisk to Blockchain Application');
+      type = t('Send OXY to Blockchain Application');
       break;
     case 7:
-      type = t('Send Lisk from Blockchain Application');
+      type = t('Send OXY from Blockchain Application');
       break;
     default:
       type = false;

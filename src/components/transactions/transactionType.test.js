@@ -44,10 +44,10 @@ const createTest = (type) => {
       expectedValue = 'Blockchain Application Registration';
       break;
     case 6:
-      expectedValue = 'Send Lisk to Blockchain Application';
+      expectedValue = 'Send OXY to Blockchain Application';
       break;
     case 7:
-      expectedValue = 'Send Lisk from Blockchain Application';
+      expectedValue = 'Send OXY from Blockchain Application';
       break;
     default:
       expectedValue = false;
