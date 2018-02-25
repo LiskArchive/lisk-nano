@@ -6,7 +6,7 @@ import i18n from '../../i18n';
 
 const FormattedNumber = ({ val }) => {
   // set numeral language
-  numeral.locale(i18n.language);
+  numeral.locale(i18n.language === 'nl' ? 'nl-nl' : i18n.language);
   const formatedNumber = numeral(val).format('0,0.[0000000000000]');
   return <span>{formatedNumber}</span>;
 };
