@@ -44,7 +44,7 @@
     "i18next": "=10.0.3",
     "i18next-localstorage-cache": "=1.1.1",
     "i18next-xhr-backend": "=1.4.2",
-    "lisk-js": "github:LiskHQ/lisk-js#1.0.0-dev-lisky",
+    "lisk-js": "github:LiskHQ/lisk-js#lisk-elements-1.0.0-RC1",
     "moment": "2.18.1",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
