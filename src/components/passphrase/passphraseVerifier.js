@@ -21,8 +21,11 @@ class PassphraseConfirmator extends React.Component {
     const words = this.props.passphrase.trim().split(/\s+/).filter(item => item.length > 0);
     const index = Math.floor(rand * (words.length - 1));
 
+    const passphraseBeforeHiddenWord = words.slice(0, index).join(' ');
+    const passphraseAfterHiddenWord = words.slice(index + 1).join(' ');
+
     this.setState({
-      passphraseParts: this.props.passphrase.split(words[index]),
+      passphraseParts: [passphraseBeforeHiddenWord, passphraseAfterHiddenWord],
       missing: words[index],
       answer: '',
     });
