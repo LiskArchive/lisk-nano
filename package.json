@@ -145,7 +145,7 @@
     "webpack": "3.6.0",
     "webpack-bundle-analyzer": "2.9.0",
     "webpack-dev-server": "2.8.2",
-    "serve": "http-server"
+    "http-server": "0.11.1"
   },
   "build": {
     "appId": "io.lisk.nano",
