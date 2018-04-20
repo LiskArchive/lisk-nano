@@ -51,7 +51,7 @@ const voting = (state = {
             votesDict[delegate.username] = {
               confirmed: true,
               unconfirmed: true,
-              account: delegate.account,
+              publicKey: delegate.publicKey,
             };
             return votesDict;
           }, {}),
