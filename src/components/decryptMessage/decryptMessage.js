@@ -37,7 +37,7 @@ class DecryptMessage extends React.Component {
     event.preventDefault();
     let decryptedMessage = null;
     try {
-      decryptedMessage = Lisk.crypto.decryptMessageWithSecret(
+      decryptedMessage = Lisk.cryptography.decryptMessageWithPassphrase(
         this.state.message.value,
         this.state.nonce.value,
         this.props.account.passphrase,
