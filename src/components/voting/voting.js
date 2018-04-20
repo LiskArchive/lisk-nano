@@ -86,7 +86,7 @@ class Voting extends React.Component {
    */
   loadMore() {
     /* istanbul-ignore-else */
-    if (!this.freezeLoading && this.props.totalDelegates > this.offset) {
+    if (!this.freezeLoading) {
       this.loadDelegates(this.query);
     }
   }

@@ -9,7 +9,7 @@ const VoteCheckbox = ({ data, status, styles, toggle }) => {
     <Checkbox
       className={styles.field}
       checked={status ? status.unconfirmed : false}
-      onChange={toggle.bind(null, { username, account })}
+      onChange={toggle.bind(null, { username, publicKey: account.publicKey })}
     />;
   return template;
 };
