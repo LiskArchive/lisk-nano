@@ -1,7 +1,7 @@
 import i18next from 'i18next';
 import Lisk from 'lisk-js';
 import actionTypes from '../constants/actions';
-import { getNethash } from './../utils/api/nethash';
+// import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';
 import netHashes from '../constants/netHashes';
 
@@ -9,8 +9,9 @@ const peerSet = (data, config) => ({
   data: Object.assign({
     passphrase: data.passphrase,
     publicKey: data.publicKey,
-    activePeer: Lisk.api(config),
-  }),
+    activePeer: new Lisk.APIClient(config.nodes, config.nethash, {}),
+    options: config,
+  }, {}),
   type: actionTypes.activePeerSet,
 });
 
@@ -24,6 +25,7 @@ const peerSet = (data, config) => ({
  */
 export const activePeerSet = data =>
   (dispatch) => {
+    console.log(Lisk);
     const addHttp = (url) => {
       const reg = /^(?:f|ht)tps?:\/\//i;
       return reg.test(url) ? url : `http://${url}`;
@@ -31,24 +33,29 @@ export const activePeerSet = data =>
     const config = data.network || {};
 
     if (config.address) {
-      const { hostname, port, protocol } = new URL(addHttp(config.address));
+      // const { hostname, port, protocol } = new URL(addHttp(config.address));
 
-      config.node = hostname;
-      config.ssl = protocol === 'https:';
-      config.port = port || (config.ssl ? 443 : 80);
+      // config.node = hostname;
+      // config.ssl = protocol === 'https:';
+      // config.port = port || (config.ssl ? 443 : 80);
+      config.nodes = [addHttp(config.address)];
     }
     if (config.testnet === undefined && config.port !== undefined) {
       config.testnet = config.port === '7000';
     }
     if (config.custom) {
-      getNethash(Lisk.api(config)).then((response) => {
+      const getNethash = new Lisk.APIClient(config.nodes, config.nethash, {});
+      console.log(getNethash);
+      getNethash.node.getConstants().then((response) => {
+        console.log(response.data);
         config.testnet = response.data.nethash === netHashes.testnet;
         if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
           config.nethash = response.data.nethash;
         }
         dispatch(peerSet(data, config));
-      }).catch(() => {
-        dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node') }));
+      }).catch((e) => {
+        console.log(e);
+        dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node 123') }));
       });
     } else {
       dispatch(peerSet(data, config));
