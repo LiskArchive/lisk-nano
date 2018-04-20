@@ -44,7 +44,7 @@
     "i18next": "=10.0.3",
     "i18next-localstorage-cache": "=1.1.1",
     "i18next-xhr-backend": "=1.4.2",
-    "lisk-js": "0.5.0",
+    "lisk-js": "1.0.0-beta.1",
     "moment": "2.18.1",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
