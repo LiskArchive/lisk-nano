@@ -33,7 +33,7 @@ class VerifyMessage extends React.Component {
     newState.signature.error = '';
     newState.result = '';
     try {
-      newState.result = lisk.crypto.verifyMessageWithPublicKey(
+      newState.result = lisk.cryptography.verifyMessageWithPublicKey(
         this.state.signature.value, this.state.publicKey.value);
     } catch (e) {
       if (e.message.indexOf('Invalid publicKey') !== -1 && this.state.publicKey.value) {
