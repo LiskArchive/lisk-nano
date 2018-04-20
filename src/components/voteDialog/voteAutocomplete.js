@@ -163,8 +163,8 @@ export class VoteAutocompleteRaw extends React.Component {
     this.setState({ [name]: list });
   }
   addToVoted(item) {
-    const { username, publicKey } = item;
-    this.props.voteToggled({ username, publicKey });
+    const { username, account } = item;
+    this.props.voteToggled({ username, publicKey: account.publicKey });
     this.setState({
       votedListSearch: '',
       votedSuggestionClass: styles.hidden,
