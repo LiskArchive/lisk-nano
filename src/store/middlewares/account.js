@@ -12,7 +12,7 @@ const updateTransactions = (store, peers, account) => {
   const maxBlockSize = 25;
   getTransactions(peers.data, account.address, maxBlockSize)
     .then(response => store.dispatch(transactionsUpdated({
-      confirmed: response.transactions,
+      confirmed: response.data,
       count: parseInt(response.count, 10),
     })));
 };
@@ -99,17 +99,17 @@ const checkTransactionsAndUpdateAccount = (store, action) => {
   }
 
   /*
-   * commented out because of API changed and it no longer provides list of transactions
-  const tx = action.data.block.transactions;
+  * commented out because of API changed and it no longer provides list of transactions
+ */
+  const tx = action.data.block.transactions || [];
   const accountAddress = state.account.address;
   const blockContainsRelevantTransaction = tx.filter((transaction) => {
     const sender = transaction ? transaction.senderId : null;
     const recipient = transaction ? transaction.recipientId : null;
     return accountAddress === recipient || accountAddress === sender;
   }).length > 0;
-  */
-  const emptyPayloadHash = ' e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
-  const blockContainsRelevantTransaction = action.data.block.payloadHash !== emptyPayloadHash;
+  // const emptyPayloadHash = ' e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+  // const blockContainsRelevantTransaction = action.data.block.payloadHash !== emptyPayloadHash;
 
   if (blockContainsRelevantTransaction) {
     updateAccountData(store, action);

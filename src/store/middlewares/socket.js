@@ -5,13 +5,6 @@ import { activePeerUpdate } from '../../actions/peers';
 let connection;
 let forcedClosing = false;
 
-const openConnection = (state) => {
-  const ssl = state.peers.data.options.ssl;
-  const protocol = ssl ? 'https' : 'http';
-
-  return io.connect(`${protocol}://${state.peers.data.currentPeer}:${state.peers.data.port}`);
-};
-
 const closeConnection = () => {
   if (connection) {
     forcedClosing = true;
@@ -28,7 +21,7 @@ const socketSetup = (store) => {
     ipc.on('focus', () => { windowIsFocused = true; });
   }
 
-  connection = openConnection(store.getState());
+  connection = io.connect(store.getState().peers.data.currentNode);
   connection.on('blocks/change', (block) => {
     store.dispatch({
       type: actionTypes.newBlockCreated,
