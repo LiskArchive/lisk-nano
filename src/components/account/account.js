@@ -38,11 +38,10 @@ const Account = ({
                   {status}
                 </span>
                 <p className="inner primary peer-network">
-                  {t(peers.data.options.name)}
+                  {t(peers.options.name)}
                 </p>
                 <p className="inner secondary peer">
-                  {peers.data.currentPeer}
-                  <span> : {peers.data.port}</span>
+                  {peers.data.currentNode}
                 </p>
               </div>
             </div>
