@@ -17,5 +17,6 @@ module.exports = {
     custom: true,
     address: 'http://localhost:4000',
     code: 2,
+    nethash: 'net',
   },
 };

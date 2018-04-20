@@ -1,24 +1,25 @@
-import { requestToActivePeer } from './peers';
+import Lisk from 'lisk-js';
 
 export const listAccountDelegates = (activePeer, address) =>
-  requestToActivePeer(activePeer, 'votes', { address });
+  activePeer.votes.get({ address, limit: 100 });
 
 
 export const listDelegates = (activePeer, options) =>
-  requestToActivePeer(activePeer, 'delegates/', options);
+  activePeer.delegates.get(options);
 
 export const getDelegate = (activePeer, options) =>
-  requestToActivePeer(activePeer, 'delegates/', options);
+  activePeer.delegates.get(options);
 
-export const vote = (activePeer, secret, publicKey, voteList, unvoteList, secondSecret = null) =>
-  requestToActivePeer(activePeer, 'accounts/delegates', {
-    secret,
-    publicKey,
-    delegates: voteList.map(delegate => `+${delegate}`).concat(
-      unvoteList.map(delegate => `-${delegate}`),
-    ),
-    secondSecret,
-  });
+export const vote = (activePeer, passphrase, publicKey,
+  votes, unvotes, secondPassphrase = null) => {
+  const transaction = Lisk.transaction
+    .castVotes({
+      passphrase,
+      votes,
+      unvotes,
+      secondPassphrase });
+  return activePeer.transactions.broadcast(transaction);
+};
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
   const options = { search: username };
@@ -40,10 +41,11 @@ export const unvoteAutocomplete = (username, votedDict) =>
     .map(element => ({ username: element, publicKey: votedDict[element].publicKey }))),
   );
 
-export const registerDelegate = (activePeer, username, secret, secondSecret = null) => {
-  const data = { username, secret };
-  if (secondSecret) {
-    data.secondSecret = secondSecret;
-  }
-  return requestToActivePeer(activePeer, 'delegates', data);
+export const registerDelegate = (activePeer, username, passphrase, secondPassphrase = null) => {
+  const transaction = Lisk.transaction
+    .registerDelegate({
+      username,
+      passphrase,
+      secondPassphrase });
+  return activePeer.transactions.broadcast(transaction);
 };
