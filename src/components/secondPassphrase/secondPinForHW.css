@@ -1,0 +1,21 @@
+.templateItem {
+  min-height: 130px;
+}
+
+.eyeIcon {
+  position: absolute;
+  right: 0;
+  bottom: 50%;
+  transform: translateY(50%);
+  line-height: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.inputWrapper input {
+  padding-right: 35px;
+}
+
+.wrapper {
+  position: relative;
+}

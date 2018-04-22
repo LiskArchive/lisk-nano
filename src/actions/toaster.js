@@ -25,6 +25,13 @@ export const errorToastDisplayed = ({ type = 'error', ...rest }) =>
   toastDisplayed({ type, ...rest });
 
 /**
+ * An action to dispatch to display an info toast
+ *
+ */
+export const infoToastDisplayed = ({ type = 'info', ...rest }) =>
+  toastDisplayed({ type, ...rest });
+
+/**
  * An action to dispatch to hide a toast
  *
  */

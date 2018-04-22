@@ -21,3 +21,9 @@
 .field {
   margin-top: 10px;
 }
+
+.styleOr {
+  border-top: 1px solid #8c8b8b;
+  border-bottom: none;
+  display: block !important;
+}

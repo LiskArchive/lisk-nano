@@ -57,7 +57,7 @@ class Authenticate extends React.Component {
             label: this.props.t('Unlock account'),
             onClick: this.update.bind(this),
             className: 'authenticate-button',
-            disabled: (!authStateIsValid(this.state)),
+            disabled: (!authStateIsValid(this.state, this.props.account)),
           }} />
       </form>);
   }

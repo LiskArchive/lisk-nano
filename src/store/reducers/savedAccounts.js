@@ -22,6 +22,7 @@ const savedAccounts = (state = { accounts: [] }, action) => {
         ...state,
         accounts: state.accounts.filter(account =>
           !(account.publicKey === action.data.publicKey &&
+          account.loginType === action.data.loginType &&
           account.network === action.data.network)),
       };
     default:

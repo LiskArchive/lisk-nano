@@ -5,6 +5,8 @@ import SavedAccounts from './savedAccounts';
 
 const mapStateToProps = state => ({
   publicKey: state.account.publicKey,
+  loginType: state.account.loginType,
+  hwInfo: state.account.hwInfo,
   networkOptions: state.peers.options,
   savedAccounts: state.savedAccounts.accounts,
 });

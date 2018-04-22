@@ -18,10 +18,12 @@ const savedAccountsMiddleware = store => next => (action) => {
       store.dispatch(accountLoggedOut());
       store.dispatch(activePeerSet({
         publicKey: action.data.publicKey,
+        loginType: action.data.loginType,
         network: {
           ...getNetwork(action.data.network),
           address: action.data.address,
         },
+        hwInfo: action.data.hwInfo,
       }));
       break;
     default:

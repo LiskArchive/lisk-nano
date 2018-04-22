@@ -22,10 +22,18 @@ class PassphraseInput extends React.Component {
 
     if (!value) {
       error = this.props.t('Required');
-    } else if (!isValidPassphrase(value)) {
-      error = this.getPassphraseValidationError(value);
-    } else if (this.hasExtraWhitespace(value)) {
-      error = this.getPassphraseWhitespaceError(value);
+    } else if (!this.props.isHW) {
+      // Normal Passphrase Checks
+      if (!isValidPassphrase(value)) {
+        error = this.getPassphraseValidationError(value);
+      } else if (this.hasExtraWhitespace(value)) {
+        error = this.getPassphraseWhitespaceError(value);
+      }
+      // Numerical Pin Check for Hardware Wallet
+    } else if (isNaN(value)) {
+      error = this.props.t('Only Numeric Value!');
+    } else if (value.length < 4) {
+      error = this.props.t('At least 4 digits');
     }
 
     this.props.onChange(value, error);

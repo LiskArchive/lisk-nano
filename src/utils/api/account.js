@@ -1,6 +1,7 @@
+import 'babel-polyfill';
 import Lisk from 'lisk-elements';
 
-export const getAccount = (activePeer, address) =>
+export const getAccount = async (activePeer, address) =>
   new Promise((resolve, reject) => {
     activePeer.accounts.get({ address }).then((res) => {
       if (res.data.length > 0) {

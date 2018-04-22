@@ -1,6 +1,7 @@
 import React from 'react';
 import PassphraseInput from '../passphraseInput';
 import { extractPublicKey } from '../../utils/api/account';
+import loginTypes from '../../constants/loginTypes';
 
 class AuthInputs extends React.Component {
   componentDidMount() {
@@ -9,8 +10,12 @@ class AuthInputs extends React.Component {
     }
   }
 
+  isHW() {
+    return this.props.account.loginType !== loginTypes.passphrase;
+  }
+
   onChange(name, value, error) {
-    if (!error) {
+    if (!error && this.props.account.loginType === loginTypes.passphrase) {
       const publicKeyMap = {
         passphrase: 'publicKey',
         secondPassphrase: 'secondPublicKey',
@@ -25,20 +30,22 @@ class AuthInputs extends React.Component {
   }
 
   render() {
-    return <span>
-      {(!this.props.account.passphrase &&
+    return (
+      <span>
+        {(!this.props.account.passphrase && !this.isHW() &&
         <PassphraseInput label={this.props.t('Passphrase')}
           className='passphrase'
           error={this.props.passphrase.error}
           value={this.props.passphrase.value}
           onChange={this.onChange.bind(this, 'passphrase')} />)}
-      {(this.props.account.secondPublicKey ?
-        <PassphraseInput label={this.props.t('Second Passphrase')}
-          className='second-passphrase'
-          error={this.props.secondPassphrase.error}
-          value={this.props.secondPassphrase.value}
-          onChange={this.onChange.bind(this, 'secondPassphrase')} /> : null)}
-    </span>;
+        {(this.props.account.secondPublicKey ?
+          <PassphraseInput label={this.isHW() ? this.props.t('Personal PIN') : this.props.t('Second Passphrase')}
+            className='second-passphrase'
+            isHW={this.isHW()}
+            error={this.props.secondPassphrase.error}
+            value={this.props.secondPassphrase.value}
+            onChange={this.onChange.bind(this, 'secondPassphrase')} /> : null)}
+      </span>);
   }
 }
 

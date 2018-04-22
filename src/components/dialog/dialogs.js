@@ -11,6 +11,7 @@ import VerifyMessage from '../verifyMessage';
 import VoteDialog from '../voteDialog';
 import EncryptMessage from '../encryptMessage';
 import DecryptMessage from '../decryptMessage';
+import HwDiscovery from '../hwDiscovery';
 
 export default () => ({
   send: {
@@ -60,5 +61,9 @@ export default () => ({
   'decrypt-message': {
     title: i18next.t('Decrypt message'),
     component: DecryptMessage,
+  },
+  'hw-discovery': {
+    title: i18next.t('Hardware Wallet Discovery'),
+    component: HwDiscovery,
   },
 });

@@ -2,6 +2,7 @@ import { translate } from 'react-i18next';
 import Input from 'react-toolbox/lib/input';
 import React from 'react';
 import lisk from 'lisk-elements';
+import signPrefix from '../../constants/signPrefix';
 
 import InfoParagraph from '../infoParagraph';
 import SignVerifyResult from '../signVerifyResult';
@@ -38,8 +39,9 @@ class VerifyMessage extends React.Component {
     newState.result = '';
 
     try {
+      const messageToVerify = signPrefix + this.state.message.value;
       newState.result = lisk.cryptography.verifyMessageWithPublicKey({
-        message: this.state.message.value,
+        message: messageToVerify,
         signature: this.state.signature.value,
         publicKey: this.state.publicKey.value,
       });

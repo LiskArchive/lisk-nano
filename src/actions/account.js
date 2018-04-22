@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import actionTypes from '../constants/actions';
 import { setSecondPassphrase, send } from '../utils/api/account';
+import { sendWithLedger, registerDelegateWithLedger, setSecondPassphraseWithLedger } from '../utils/api/ledger';
 import { registerDelegate } from '../utils/api/delegate';
 import { transactionAdded } from './transactions';
 import { errorAlertDialogDisplayed } from './dialog';
@@ -8,6 +9,8 @@ import Fees from '../constants/fees';
 import { toRawLsk } from '../utils/lsk';
 import transactionTypes from '../constants/transactionTypes';
 import { loadingStarted, loadingFinished } from '../utils/loading';
+import loginTypes from '../constants/loginTypes';
+import to from '../utils/to';
 
 /**
  * Trigger this action to update the account object
@@ -52,25 +55,47 @@ export const passphraseUsed = data => ({
  *
  */
 export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, account }) =>
-  (dispatch) => {
+  async (dispatch) => {
     loadingStarted('secondPassphraseRegistered');
-    setSecondPassphrase(activePeer, secondPassphrase, account.publicKey, account.passphrase)
-      .then((data) => {
-        loadingFinished('secondPassphraseRegistered');
-        dispatch(transactionAdded({
-          id: data.id,
-          senderPublicKey: account.publicKey,
-          senderId: account.address,
-          amount: 0,
-          fee: Fees.setSecondPassphrase,
-          type: transactionTypes.setSecondPassphrase,
-        }));
-      }).catch((error) => {
-        loadingFinished('secondPassphraseRegistered');
-        const text = (error && error.message) ? error.message : i18next.t('An error occurred while registering your second passphrase. Please try again.');
-        dispatch(errorAlertDialogDisplayed({ text }));
-      });
-    dispatch(passphraseUsed(account.passphrase));
+
+    let error;
+    let callReslut;
+
+    switch (account.loginType) {
+      case loginTypes.passphrase:
+        [error, callReslut] = await to(setSecondPassphrase(activePeer, secondPassphrase,
+          account.publicKey, account.passphrase));
+        break;
+
+      case loginTypes.ledgerNano:
+        [error, callReslut] =
+          await to(setSecondPassphraseWithLedger(activePeer, account, secondPassphrase));
+        break;
+
+      case loginTypes.trezor:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Not Yet Implemented. Sorry.') }));
+        break;
+
+      default:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Login Type not recognized.') }));
+    }
+
+    loadingFinished('secondPassphraseRegistered');
+
+    if (error) {
+      const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
+      dispatch(errorAlertDialogDisplayed({ text }));
+    } else {
+      dispatch(transactionAdded({
+        id: callReslut.id,
+        senderPublicKey: account.publicKey,
+        senderId: account.address,
+        amount: 0,
+        fee: Fees.setSecondPassphrase,
+        type: transactionTypes.setSecondPassphrase,
+      }));
+      dispatch(passphraseUsed(account.passphrase));
+    }
   };
 
 /**
@@ -78,29 +103,49 @@ export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, accou
  */
 export const delegateRegistered = ({
   activePeer, account, passphrase, username, secondPassphrase }) =>
-  (dispatch) => {
+  async (dispatch) => {
     loadingStarted('delegateRegistered');
-    registerDelegate(activePeer, username, passphrase, secondPassphrase)
-      .then((data) => {
-        loadingFinished('delegateRegistered');
-        // dispatch to add to pending transaction
-        dispatch(transactionAdded({
-          id: data.id,
-          senderPublicKey: account.publicKey,
-          senderId: account.address,
-          username,
-          amount: 0,
-          fee: Fees.registerDelegate,
-          type: transactionTypes.registerDelegate,
-        }));
-      })
-      .catch((error) => {
-        loadingFinished('delegateRegistered');
-        const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while registering as delegate.');
-        const actionObj = errorAlertDialogDisplayed({ text });
-        dispatch(actionObj);
-      });
-    dispatch(passphraseUsed(passphrase));
+
+    let error;
+    let callReslut;
+
+    switch (account.loginType) {
+      case loginTypes.passphrase:
+        [error, callReslut] =
+          await to(registerDelegate(activePeer, username, passphrase, secondPassphrase));
+        break;
+
+      // eslint-disable-next-line no-case-declarations
+      case loginTypes.ledgerNano:
+        [error, callReslut] =
+          await to(registerDelegateWithLedger(activePeer, account, username, secondPassphrase));
+        break;
+
+      case loginTypes.trezor:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Not Yet Implemented. Sorry.') }));
+        break;
+
+      default:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Login Type not recognized.') }));
+    }
+
+    loadingFinished('delegateRegistered');
+
+    if (error) {
+      const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
+      dispatch(errorAlertDialogDisplayed({ text }));
+    } else {
+      dispatch(transactionAdded({
+        id: callReslut.id,
+        senderPublicKey: account.publicKey,
+        senderId: account.address,
+        username,
+        amount: 0,
+        fee: Fees.registerDelegate,
+        type: transactionTypes.registerDelegate,
+      }));
+      dispatch(passphraseUsed(passphrase));
+    }
   };
 
 /**
@@ -108,25 +153,46 @@ export const delegateRegistered = ({
  */
 export const sent = ({ activePeer, account, recipientId,
   amount, passphrase, secondPassphrase, data }) =>
-  (dispatch) => {
+  async (dispatch) => {
     loadingStarted('sent');
-    send(activePeer, recipientId, toRawLsk(amount), passphrase, secondPassphrase, data)
-      .then((res) => {
-        loadingFinished('sent');
-        dispatch(transactionAdded({
-          id: res.id,
-          senderPublicKey: account.publicKey,
-          senderId: account.address,
-          recipientId,
-          amount: toRawLsk(amount),
-          fee: Fees.send,
-          type: transactionTypes.send,
-        }));
-      })
-      .catch((error) => {
-        loadingFinished('sent');
-        const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
-        dispatch(errorAlertDialogDisplayed({ text }));
-      });
-    dispatch(passphraseUsed(passphrase));
+
+    let error;
+    let callReslut;
+
+    switch (account.loginType) {
+      case loginTypes.passphrase:
+        [error, callReslut] = await to(send(activePeer, recipientId, toRawLsk(amount),
+          passphrase, secondPassphrase, data));
+        break;
+
+      case loginTypes.ledgerNano:
+        [error, callReslut] = await to(sendWithLedger(activePeer, account, recipientId,
+          toRawLsk(amount), secondPassphrase, data));
+        break;
+
+      case loginTypes.trezor:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Not Yet Implemented. Sorry.') }));
+        break;
+
+      default:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Login Type not recognized.') }));
+    }
+
+    loadingFinished('sent');
+
+    if (error) {
+      const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
+      dispatch(errorAlertDialogDisplayed({ text }));
+    } else {
+      dispatch(transactionAdded({
+        id: callReslut.id,
+        senderPublicKey: account.publicKey,
+        senderId: account.address,
+        recipientId,
+        amount: toRawLsk(amount),
+        fee: Fees.send,
+        type: transactionTypes.send,
+      }));
+      dispatch(passphraseUsed(passphrase));
+    }
   };

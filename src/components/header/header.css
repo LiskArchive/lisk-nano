@@ -44,3 +44,8 @@
   padding-left: 16px;
   padding-right: 16px;
 }
+
+.disableWhenLedger {
+  opacity: 0.5;
+  pointer-events: none;
+}

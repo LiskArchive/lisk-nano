@@ -1,10 +1,10 @@
 import { validateUrl } from './login';
 import { extractAddress } from './api/account';
 
-const isValidSavedAccount = ({ publicKey, network, address }) => {
+const isValidSavedAccount = ({ publicKey, loginType, network, address }) => {
   try {
     return extractAddress(publicKey) &&
-      network >= 0 && network <= 2 &&
+      network >= 0 && network <= 2 && loginType &&
       (validateUrl(address).addressValidity === '' || network !== 2);
   } catch (e) {
     return false;
@@ -23,9 +23,10 @@ export const getLastActiveAccount = () => (
   getSavedAccounts()[localStorage.getItem('lastActiveAccountIndex') || 0]
 );
 
-export const setLastActiveAccount = ({ publicKey, network, address }) => {
+export const setLastActiveAccount = ({ publicKey, loginType, network, address }) => {
   const lastActiveAccountIndex = getSavedAccounts().findIndex(account => (
     account.publicKey === publicKey &&
+    account.loginType === loginType &&
     account.network === network &&
     account.address === address
   ));
@@ -35,22 +36,25 @@ export const setLastActiveAccount = ({ publicKey, network, address }) => {
   return lastActiveAccountIndex;
 };
 
-export const setSavedAccount = ({ publicKey, network, address }) => {
+export const setSavedAccount = ({ publicKey, loginType, network, address, hwInfo }) => {
   const savedAccounts = [
     ...getSavedAccounts(),
     {
       publicKey,
+      loginType,
       network,
       address,
+      hwInfo,
     },
   ];
   localStorage.setItem('accounts', JSON.stringify(savedAccounts));
   return savedAccounts;
 };
 
-export const removeSavedAccount = ({ publicKey, network, address }) => {
+export const removeSavedAccount = ({ publicKey, loginType, network, address }) => {
   const accounts = getSavedAccounts().filter(account =>
     !(account.publicKey === publicKey &&
+      account.loginType === loginType &&
       account.network === network &&
       account.address === address));
   localStorage.setItem('accounts', JSON.stringify(accounts));

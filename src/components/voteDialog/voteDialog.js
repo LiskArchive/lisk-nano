@@ -28,7 +28,7 @@ export default class VoteDialog extends React.Component {
       activePeer: this.props.activePeer,
       account: this.props.account,
       votes: this.props.votes,
-      secondSecret: this.state.secondPassphrase.value,
+      secondPassphrase: this.state.secondPassphrase.value,
       passphrase: this.state.passphrase.value,
     });
     this.setState({ executed: true });
@@ -84,7 +84,7 @@ export default class VoteDialog extends React.Component {
                 getTotalVotesCount(votes) > maxCountOfVotes ||
                 countOfVotesInOneTurn === 0 ||
                 countOfVotesInOneTurn > maxCountOfVotesInOneTurn ||
-                !authStateIsValid(this.state)
+                !authStateIsValid(this.state, this.props.account)
               ),
             }} />
         </form>

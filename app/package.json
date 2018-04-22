@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Lisk Nano",
   "main": "./build/main.js",
-  "author":{
+  "author": {
     "name": "Lisk Foundation",
     "email": "admin@lisk.io"
   }

@@ -1,15 +1,19 @@
+import i18next from 'i18next';
 import { errorAlertDialogDisplayed } from './dialog';
 import {
   listAccountDelegates,
   listDelegates,
   vote,
 } from '../utils/api/delegate';
+import { voteWithLedger } from '../utils/api/ledger';
 import { passphraseUsed } from './account';
 import { transactionAdded } from './transactions';
 import Fees from '../constants/fees';
 import actionTypes from '../constants/actions';
 import transactionTypes from '../constants/transactionTypes';
 import { loadingStarted, loadingFinished } from '../utils/loading';
+import loginTypes from '../constants/loginTypes';
+import to from '../utils/to';
 
 /**
  * Add pending variable to the list of voted delegates and list of unvoted delegates
@@ -71,8 +75,8 @@ export const voteLookupStatusCleared = () => ({
  * Adds pending state and then after the duration of one round
  * cleans the pending state
  */
-export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecret }) =>
-  (dispatch) => {
+export const votePlaced = ({ activePeer, passphrase, account, votes, secondPassphrase }) =>
+  async (dispatch) => {
     const votedList = [];
     const unvotedList = [];
 
@@ -86,34 +90,47 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
     });
 
     loadingStarted('votePlaced');
-    vote(
-      activePeer,
-      passphrase,
-      account.publicKey,
-      votedList,
-      unvotedList,
-      secondSecret,
-    ).then((response) => {
-      loadingFinished('votePlaced');
-      // Ad to list
-      dispatch(pendingVotesAdded());
 
-      // Add the new transaction
-      // @todo Handle alerts either in transactionAdded action or middleware
+    let error;
+    let callReslut;
+
+    switch (account.loginType) {
+      case loginTypes.passphrase:
+        [error, callReslut] = await to(vote(activePeer, passphrase, account.publicKey,
+          votedList, unvotedList, secondPassphrase));
+        break;
+
+      // eslint-disable-next-line no-case-declarations
+      case loginTypes.ledgerNano:
+        [error, callReslut] =
+          await to(voteWithLedger(activePeer, account, votedList, unvotedList, secondPassphrase));
+        break;
+
+      case loginTypes.trezor:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Not Yet Implemented. Sorry.') }));
+        break;
+
+      default:
+        dispatch(errorAlertDialogDisplayed({ text: i18next.t('Login Type not recognized.') }));
+    }
+
+    loadingFinished('votePlaced');
+
+    if (error) {
+      const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
+      dispatch(errorAlertDialogDisplayed({ text }));
+    } else {
+      dispatch(pendingVotesAdded());
       dispatch(transactionAdded({
-        id: response.id,
+        id: callReslut.id,
         senderPublicKey: account.publicKey,
         senderId: account.address,
         amount: 0,
         fee: Fees.vote,
         type: transactionTypes.vote,
       }));
-    }).catch((error) => {
-      loadingFinished('votePlaced');
-      const text = error && error.message ? `${error.message}.` : 'An error occurred while placing your vote.';
-      dispatch(errorAlertDialogDisplayed({ text }));
-    });
-    dispatch(passphraseUsed(account.passphrase));
+      dispatch(passphraseUsed(passphrase));
+    }
   };
 
 /**

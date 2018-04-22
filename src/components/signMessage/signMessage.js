@@ -1,13 +1,16 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
 import Lisk from 'lisk-elements';
-
 import InfoParagraph from '../infoParagraph';
 import SignVerifyResult from '../signVerifyResult';
 import AuthInputs from '../authInputs';
 import ActionBar from '../actionBar';
 import { authStatePrefill, authStateIsValid } from '../../utils/form';
-
+import loginTypes from '../../constants/loginTypes';
+import signPrefix from '../../constants/signPrefix';
+import { signMessageWithLedger } from '../../utils/ledger';
+import { loadingStarted, loadingFinished } from '../../utils/loading';
+import to from '../../utils/to';
 
 class SignMessageComponent extends React.Component {
   constructor() {
@@ -35,23 +38,56 @@ class SignMessageComponent extends React.Component {
     });
   }
 
-  sign(message) {
-    const signedMessage = Lisk.cryptography.signMessageWithPassphrase(message,
-      this.state.passphrase.value);
-    const result = Lisk.cryptography.printSignedMessage(signedMessage);
-    this.setState({ result });
-    return result;
+  /* eslint-disable prefer-const */
+  async sign(message) {
+    loadingStarted('signMessageWithLedger');
+    let error;
+    let signedMessage;
+    // Add prefix to message:
+    const messageToSign = signPrefix + message;
+    switch (this.props.account.loginType) {
+      case loginTypes.passphrase:
+        signedMessage = Lisk.cryptography.signMessageWithPassphrase(messageToSign,
+          this.state.passphrase.value);
+        this.showResult(message, signedMessage);
+        break;
+
+      case loginTypes.ledgerNano:
+        [error, signedMessage] = await to(signMessageWithLedger(this.props.account, messageToSign));
+
+        if (error) {
+          const text = error && error.message ? `${error.message}.` : this.props.t('An error occurred while creating the transaction.');
+          this.props.errorToast({ label: text });
+        } else {
+          this.showResult(message, signedMessage);
+        }
+        break;
+
+      case loginTypes.trezor:
+        this.props.infoToast({ label: this.props.t('Trezor not yet supported.') });
+        break;
+      default:
+        this.props.errorToast({ label: this.props.t('Login Type not recognized.') });
+        break;
+    }
+    loadingFinished('signMessageWithLedger');
   }
 
-  showResult(event) {
-    event.preventDefault();
-    const result = this.sign(this.state.message.value);
+  showResult(message, signature) {
+    const result = Lisk.cryptography.printSignedMessage(
+      { message, signature, publicKey: this.props.account.publicKey });
+    this.setState({ result });
     const copied = this.props.copyToClipboard(result, {
       message: this.props.t('Press #{key} to copy'),
     });
     if (copied) {
       this.props.successToast({ label: this.props.t('Result copied to clipboard') });
     }
+  }
+
+  executeSign(event) {
+    event.preventDefault();
+    this.sign(this.state.message.value);
   }
 
   render() {
@@ -62,7 +98,7 @@ class SignMessageComponent extends React.Component {
           <br />
           {this.props.t('Note: Digital Signatures and signed messages are not encrypted!')}
         </InfoParagraph>
-        <form onSubmit={this.showResult.bind(this)} id='signMessageForm'>
+        <form onSubmit={this.executeSign.bind(this)} id='signMessageForm'>
           <section>
             <Input className='message' multiline label={this.props.t('Message')}
               autoFocus={true}
@@ -85,7 +121,7 @@ class SignMessageComponent extends React.Component {
                 type: 'submit',
                 disabled: (!this.state.message.value ||
                   this.state.result ||
-                  !authStateIsValid(this.state)),
+                  !authStateIsValid(this.state, this.props.account)),
               }} />
           }
         </form>

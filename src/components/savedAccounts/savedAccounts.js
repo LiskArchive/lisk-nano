@@ -6,12 +6,15 @@ import InfoParagraph from '../infoParagraph';
 import networks from '../../constants/networks';
 import getNetwork from '../../utils/getNetwork';
 import { extractAddress } from '../../utils/api/account';
+import loginTypes from '../../constants/loginTypes';
 
 import styles from './savedAccounts.css';
 
 const SavedAccounts = ({
   networkOptions,
   publicKey,
+  loginType,
+  hwInfo,
   closeDialog,
   accountSaved,
   accountRemoved,
@@ -24,6 +27,8 @@ const SavedAccounts = ({
       network: networkOptions.code,
       address: networkOptions.address,
       publicKey,
+      loginType,
+      hwInfo,
     });
   };
 
@@ -43,6 +48,7 @@ const SavedAccounts = ({
               <TableCell className={styles.iconCell} >{t('Switch')}</TableCell>
               <TableCell>{t('Address')}</TableCell>
               <TableCell>{t('Network')}</TableCell>
+              <TableCell>{t('Login Type')}</TableCell>
               <TableCell className={styles.iconCell} >{t('Forget')}</TableCell>
             </TableHead>
             {savedAccounts.map(account => (
@@ -56,11 +62,20 @@ const SavedAccounts = ({
                 </TableCell>
                 <TableCell>
                   {extractAddress(account.publicKey)}
+                  {account.loginType !== loginTypes.passphrase &&
+                    <div className={styles.hwDeviceInfo}>
+                      Account Index: <strong>{account.hwInfo.derivationIndex}</strong> -
+                      Device ID: {account.hwInfo.deviceId}
+                    </div>
+                  }
                 </TableCell>
                 <TableCell>
                   {account.network === networks.customNode.code ?
                     account.address :
                     t(getNetwork(account.network).name)}
+                </TableCell>
+                <TableCell>
+                  {account.loginType}
                 </TableCell>
                 <TableCell className={styles.iconCell} >
                   <IconButton icon='clear' className='forget-button'

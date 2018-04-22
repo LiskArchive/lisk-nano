@@ -9,6 +9,8 @@ const peerSet = (data, config) => ({
     passphrase: data.passphrase,
     publicKey: data.publicKey,
     activePeer: new Lisk.APIClient(config.nodes, { nethash: config.nethash }),
+    loginType: data.loginType,
+    hwInfo: data.hwInfo,
     options: config,
   }),
   type: actionTypes.activePeerSet,

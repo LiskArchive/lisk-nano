@@ -7,6 +7,11 @@
   text-align: right;
 }
 
+.iconCellLoading {
+  text-align: center;
+  font-weight: bold;
+}
+
 .isActive {
   background-color: #d6f0ff !important;
   font-weight: bold;

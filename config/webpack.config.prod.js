@@ -32,6 +32,9 @@ module.exports = merge(baseConfig, reactConfig, {
       name: 'vendor',
     }),
   ],
+  externals: {
+    "node-hid": 'commonjs node-hid',
+  },
   module: {
     rules: [
       {

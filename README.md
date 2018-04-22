@@ -69,7 +69,7 @@ npm run pack:win
 Build package for macOS (on macOs)
 
 ```
-npm run pack 
+npm run pack
 ```
 
 ### Linux
@@ -77,7 +77,7 @@ npm run pack
 Build package for Linux (on Linux).
 
 ```
-npm run pack 
+npm run pack
 ```
 
 ## Run unit tests

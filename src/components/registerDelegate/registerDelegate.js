@@ -81,7 +81,7 @@ class RegisterDelegate extends React.Component {
               disabled: (!this.state.name.value ||
                 this.props.account.isDelegate ||
                 this.state.executed ||
-                !authStateIsValid(this.state)),
+                !authStateIsValid(this.state, this.props.account)),
             }} />
         </form>
       </div>
