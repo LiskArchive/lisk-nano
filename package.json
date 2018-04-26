@@ -1,6 +1,6 @@
 {
   "name": "lisk-nano",
-  "version": "1.3.2",
+  "version": "1.3.4",
   "description": "Lisk Nano",
   "homepage": "https://github.com/LiskHQ/lisk-nano",
   "bugs": "https://github.com/LiskHQ/lisk-nano/issues",
@@ -25,7 +25,8 @@
     "pack": "npm install && npm run build && npm run clean-dist && npm run dist",
     "pack:win": "cmd /c npm install && npm run clean-build && npm run copy-files && npm run build-prod && npm run build-electron && npm run clean-dist && npm run dist:win",
     "storybook": "start-storybook -p 6006 -s ./src/",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "serve": "http-server"
   },
   "author": "Lisk Foundation <admin@lisk.io>, lightcurve GmbH <admin@lightcurve.io>",
   "license": "GPL-3.0",
@@ -45,7 +46,7 @@
     "i18next-localstorage-cache": "=1.1.1",
     "i18next-xhr-backend": "=1.4.2",
     "lisk-js": "1.0.0-beta.1",
-    "moment": "2.18.1",
+    "moment": "2.20.1",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
     "postcss-cssnext": "2.11.0",
@@ -87,7 +88,7 @@
     "css-loader": "0.28.7",
     "cucumber": "2.2.0",
     "del-cli": "1.1.0",
-    "electron": "1.8.1",
+    "electron": "1.8.2-beta.4",
     "electron-builder": "19.32.2",
     "electron-json-storage": "=3.2.0",
     "electron-updater": "2.16.1",
@@ -125,7 +126,7 @@
     "postcss-loader": "=2.0.6",
     "postcss-partial-import": "=4.1.0",
     "postcss-reporter": "5.0.0",
-    "protractor": "5.1.2",
+    "protractor": "5.3.1",
     "protractor-cucumber-framework": "3.1.0",
     "raw-loader": "1.0.0-beta.0",
     "react-addons-test-utils": "=15.6.0",
@@ -143,7 +144,8 @@
     "url-loader": "0.5.9",
     "webpack": "3.6.0",
     "webpack-bundle-analyzer": "2.9.0",
-    "webpack-dev-server": "2.8.2"
+    "webpack-dev-server": "2.8.2",
+    "http-server": "0.11.1"
   },
   "build": {
     "appId": "io.lisk.nano",
