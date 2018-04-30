@@ -119,7 +119,7 @@ node('lisk-nano') {
 	    cp -r ~/lisk-docker/examples/development $WORKSPACE/$BRANCH_NAME
 	    cd $WORKSPACE/$BRANCH_NAME
 	    cp /home/lisk/blockchain_explorer.db.gz ./blockchain.db.gz
-	    LISK_VERSION=1.0.0-alpha.3 make coldstart
+	    LISK_VERSION=1.0.0-beta.7.1 make coldstart
 	    LISK_PORT=$( docker-compose port lisk 4000 |cut -d ":" -f 2 )
 	    cd -
 
