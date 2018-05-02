@@ -92,7 +92,9 @@ describe('Send', () => {
   it('allows to send a transaction', () => {
     wrapper.find('.amount input').simulate('change', { target: { value: '120.25' } });
     wrapper.find('.recipient input').simulate('change', { target: { value: '11004588490103196952L' } });
+    expect(wrapper.find('.primary-button button')).to.have.prop('disabled', false);
     wrapper.find('.primary-button button').simulate('submit');
+    expect(wrapper.find('.primary-button button')).to.have.prop('disabled', true);
     expect(props.sent).to.have.been.calledWith({
       account: props.account,
       activePeer: {},

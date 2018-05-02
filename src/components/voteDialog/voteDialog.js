@@ -31,6 +31,7 @@ export default class VoteDialog extends React.Component {
       secondSecret: this.state.secondPassphrase.value,
       passphrase: this.state.passphrase.value,
     });
+    this.setState({ executed: true });
   }
 
   handleChange(name, value, error) {
@@ -79,6 +80,7 @@ export default class VoteDialog extends React.Component {
               fee: Fees.vote,
               type: 'button',
               disabled: (
+                this.state.executed ||
                 getTotalVotesCount(votes) > maxCountOfVotes ||
                 countOfVotesInOneTurn === 0 ||
                 countOfVotesInOneTurn > maxCountOfVotesInOneTurn ||
