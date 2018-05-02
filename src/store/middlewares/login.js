@@ -28,7 +28,7 @@ const loginMiddleware = store => next => (action) => {
   // redirect to main/transactions
   return getAccount(activePeer, address).then(accountData =>
     store.dispatch(accountLoggedIn({
-      ...accountData.data[0],
+      ...accountData,
       ...accountBasics,
       ...{ isDelegate: accountData.delegate !== undefined },
     })),
