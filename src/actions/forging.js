@@ -11,7 +11,7 @@ export const fetchAndUpdateForgedBlocks = ({ activePeer, limit, offset, generato
   (dispatch) => {
     getForgedBlocks(activePeer, limit, offset, generatorPublicKey)
       .then(response =>
-        dispatch(forgedBlocksUpdated(response.blocks)),
+        dispatch(forgedBlocksUpdated(response.data)),
       )
       .catch((error) => {
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
@@ -27,7 +27,7 @@ export const fetchAndUpdateForgedStats = ({ activePeer, key, startMoment, genera
   (dispatch) => {
     getForgedStats(activePeer, startMoment, generatorPublicKey)
       .then(response =>
-        dispatch(forgingStatsUpdated({ [key]: response.forged })),
+        dispatch(forgingStatsUpdated({ [key]: response.data.forged })),
       )
       .catch((error) => {
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
