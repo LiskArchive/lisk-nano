@@ -11,15 +11,18 @@ export const getDelegate = (activePeer, options) =>
   activePeer.delegates.get(options);
 
 export const vote = (activePeer, passphrase, publicKey,
-  votes, unvotes, secondPassphrase = null) => {
-  const transaction = Lisk.transaction
-    .castVotes({
-      passphrase,
-      votes,
-      unvotes,
-      secondPassphrase });
-  return activePeer.transactions.broadcast(transaction);
-};
+  votes, unvotes, secondPassphrase = null) =>
+  new Promise((resolve) => {
+    const transaction = Lisk.transaction
+      .castVotes({
+        passphrase,
+        votes,
+        unvotes,
+        secondPassphrase });
+    activePeer.transactions.broadcast(transaction).then(() => {
+      resolve(transaction);
+    });
+  });
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
   const options = { search: username };
@@ -41,11 +44,14 @@ export const unvoteAutocomplete = (username, votedDict) =>
     .map(element => ({ username: element, publicKey: votedDict[element].publicKey }))),
   );
 
-export const registerDelegate = (activePeer, username, passphrase, secondPassphrase = null) => {
-  const transaction = Lisk.transaction
-    .registerDelegate({
-      username,
-      passphrase,
-      secondPassphrase });
-  return activePeer.transactions.broadcast(transaction);
-};
+export const registerDelegate = (activePeer, username, passphrase, secondPassphrase = null) =>
+  new Promise((resolve) => {
+    const transaction = Lisk.transaction
+      .registerDelegate({
+        username,
+        passphrase,
+        secondPassphrase });
+    activePeer.transactions.broadcast(transaction).then(() => {
+      resolve(transaction);
+    });
+  });

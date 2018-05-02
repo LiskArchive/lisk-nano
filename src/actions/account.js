@@ -55,7 +55,7 @@ export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, accou
     setSecondPassphrase(activePeer, secondPassphrase, account.publicKey, account.passphrase)
       .then((data) => {
         dispatch(transactionAdded({
-          id: data.transactionId,
+          id: data.id,
           senderPublicKey: account.publicKey,
           senderId: account.address,
           amount: 0,
@@ -79,7 +79,7 @@ export const delegateRegistered = ({
       .then((data) => {
         // dispatch to add to pending transaction
         dispatch(transactionAdded({
-          id: data.transactionId,
+          id: data.id,
           senderPublicKey: account.publicKey,
           senderId: account.address,
           username,
@@ -104,7 +104,7 @@ export const sent = ({ activePeer, account, recipientId, amount, passphrase, sec
     send(activePeer, recipientId, toRawLsk(amount), passphrase, secondPassphrase)
       .then((data) => {
         dispatch(transactionAdded({
-          id: data.transactionId,
+          id: data.id,
           senderPublicKey: account.publicKey,
           senderId: account.address,
           recipientId,

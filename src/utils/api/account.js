@@ -1,24 +1,45 @@
 import Lisk from 'lisk-js';
 
 export const getAccount = (activePeer, address) =>
-  activePeer.accounts.get({ address });
+  new Promise((resolve) => {
+    activePeer.accounts.get({ address }).then((res) => {
+      if (res.data.length > 0) {
+        resolve({
+          ...res.data[0],
+          serverPublicKey: res.data[0].publicKey,
+        });
+      } else {
+        // when the account has no transactions yet (therefore is not saved on the blockchain)
+        // this endpoint returns { success: false }
+        resolve({
+          address,
+          balance: 0,
+        });
+      }
+    });
+  });
 
-export const setSecondPassphrase = (activePeer, secondPassphrase, publicKey, passphrase) => {
-  const transaction = Lisk.transaction
-    .registerSecondPassphrase({ passphrase, secondPassphrase });
-  return activePeer.transactions.broadcast(transaction);
-};
+export const setSecondPassphrase = (activePeer, secondPassphrase, publicKey, passphrase) =>
+  new Promise((resolve) => {
+    const transaction = Lisk.transaction
+      .registerSecondPassphrase({ passphrase, secondPassphrase });
+    activePeer.transactions.broadcast(transaction).then(() => {
+      resolve(transaction);
+    });
+  });
 
-export const send = (activePeer, recipientId, amount, passphrase, secondPassphrase = null) => {
-  const transaction = Lisk.transaction
-    .transfer({ recipientId, amount, passphrase, secondPassphrase });
-  return activePeer.transactions.broadcast(transaction);
-};
+export const send = (activePeer, recipientId, amount, passphrase, secondPassphrase = null) =>
+  new Promise((resolve) => {
+    const transaction = Lisk.transaction
+      .transfer({ recipientId, amount, passphrase, secondPassphrase });
+    activePeer.transactions.broadcast(transaction).then(() => {
+      resolve(transaction);
+    });
+  });
 
 export const transactions = (activePeer, address, limit = 20, offset = 0, sort = 'timestamp:desc') =>
   activePeer.transactions.get({
-    senderId: address,
-    // recipientId: address,
+    senderIdOrRecipientId: address,
     limit,
     offset,
     sort,

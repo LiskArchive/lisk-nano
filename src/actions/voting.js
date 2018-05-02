@@ -98,7 +98,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       // Add the new transaction
       // @todo Handle alerts either in transactionAdded action or middleware
       dispatch(transactionAdded({
-        id: response.transactionId,
+        id: response.id,
         senderPublicKey: account.publicKey,
         senderId: account.address,
         amount: 0,
