@@ -23,9 +23,9 @@ describe('Account', () => {
         data: {
           currentPeer: 'localhost',
           port: 4000,
-          options: {
-            name: 'Custom Node',
-          },
+        },
+        options: {
+          name: 'Custom Node',
         },
       },
       account: {

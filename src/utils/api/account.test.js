@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { mock } from 'sinon';
-import { getAccount, setSecondPassphrase, send, transactions, unconfirmedTransactions,
+import { getAccount, setSecondPassphrase, send,
   extractPublicKey, extractAddress } from './account';
 
 describe('Utils: Account', () => {
@@ -61,20 +61,6 @@ describe('Utils: Account', () => {
   describe('send', () => {
     it('should return a promise', () => {
       const promise = send();
-      expect(typeof promise.then).to.be.equal('function');
-    });
-  });
-
-  describe('transactions', () => {
-    it('should return a promise', () => {
-      const promise = transactions();
-      expect(typeof promise.then).to.be.equal('function');
-    });
-  });
-
-  describe('unconfirmedTransactions', () => {
-    it('should return a promise', () => {
-      const promise = unconfirmedTransactions();
       expect(typeof promise.then).to.be.equal('function');
     });
   });

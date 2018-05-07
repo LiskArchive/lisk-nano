@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
+import Lisk from 'lisk-js';
 import { listAccountDelegates,
   listDelegates,
   getDelegate,
@@ -7,7 +8,6 @@ import { listAccountDelegates,
   voteAutocomplete,
   unvoteAutocomplete,
   registerDelegate } from './delegate';
-import * as peers from './peers';
 
 const username = 'genesis_1';
 const secret = 'sample_secret';
@@ -19,8 +19,9 @@ describe('Utils: Delegate', () => {
   let activePeer;
 
   beforeEach(() => {
-    peersMock = sinon.mock(peers);
-    activePeer = {};
+    const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
+    activePeer = new Lisk.APIClient(['http://localhost:4000'], nethash, {});
+    peersMock = sinon.mock(activePeer.delegates);
   });
 
   afterEach(() => {
@@ -30,24 +31,26 @@ describe('Utils: Delegate', () => {
 
   describe('listAccountDelegates', () => {
     it('should return a promise', () => {
-      const promise = listAccountDelegates();
-      expect(typeof promise.then).to.be.equal('function');
+      const votingMock = sinon.mock(activePeer.votes);
+      votingMock.expects('get').withArgs({ address: 'address', limit: 100 })
+        .returnsPromise().resolves('resolved promise');
+      const returnedPromise = listAccountDelegates(activePeer, 'address');
+      return expect(returnedPromise).to.eventually.equal('resolved promise');
     });
   });
 
   describe('listDelegates', () => {
-    it('should return requestToActivePeer(activePeer, `delegates/`, options) if options = {}', () => {
+    it('should return activePeer.delegates.get(activePeer, options) if options = {}', () => {
       const options = {};
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', options)
+      peersMock.expects('get').withArgs(options)
         .returnsPromise().resolves('resolved promise');
-
       const returnedPromise = listDelegates(activePeer, options);
       return expect(returnedPromise).to.eventually.equal('resolved promise');
     });
 
-    it('should return requestToActivePeer(activePeer, `delegates/`, options) if options.search is set', () => {
+    it('should return activePeer.delegates.get(activePeer, options) if options.search is set', () => {
       const options = { search: 'genesis_1' };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', options)
+      peersMock.expects('get').withArgs(options)
         .returnsPromise().resolves('resolved promise');
 
       const returnedPromise = listDelegates(activePeer, options);
@@ -56,9 +59,9 @@ describe('Utils: Delegate', () => {
   });
 
   describe('getDelegate', () => {
-    it('should return requestToActivePeer(activePeer, `delegates/`, options)', () => {
+    it('should return activePeer.delegates.get(activePeer, options)', () => {
       const options = { publicKey: '"86499879448d1b0215d59cbf078836e3d7d9d2782d56a2274a568761bff36f19"' };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', options)
+      peersMock.expects('get').withArgs(options)
         .returnsPromise().resolves('resolved promise');
 
       const returnedPromise = getDelegate(activePeer, options);
@@ -91,30 +94,16 @@ describe('Utils: Delegate', () => {
   });
 
   describe('registerDelegate', () => {
-    it('should return requestToActivePeer(activePeer, `delegates`, data)', () => {
+    it('should return a promise', () => {
       const data = {
-        username: 'test',
-        secret: 'wagon dens',
-        secondSecret: 'wagon dens',
+        username: 'giraffe laugh math dash chalk butter ghost report truck interest merry lens',
+        passphrase: 'wagon dens',
+        secondPassphrase: 'wagon dens',
       };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates', data)
-        .returnsPromise().resolves('resolved promise');
 
       const returnedPromise = registerDelegate(
         activePeer, data.username, data.secret, data.secondSecret);
-      return expect(returnedPromise).to.eventually.equal('resolved promise');
-    });
-
-    it('should return requestToActivePeer(activePeer, `delegates`, data) even if no secondSecret specified', () => {
-      const data = {
-        username: 'test',
-        secret: 'wagon dens',
-      };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates', data)
-        .returnsPromise().resolves('resolved promise');
-
-      const returnedPromise = registerDelegate(activePeer, data.username, data.secret);
-      return expect(returnedPromise).to.eventually.equal('resolved promise');
+      expect(typeof returnedPromise.then).to.be.equal('function');
     });
   });
 
@@ -135,16 +124,16 @@ describe('Utils: Delegate', () => {
 
   describe('voteAutocomplete', () => {
     it('should return requestToActivePeer(activePeer, `delegates/`, data)', () => {
-      const delegates = [
-        { username: 'genesis_42' },
-        { username: 'genesis_44' },
-      ];
+      // const delegates = [
+      //   { username: 'genesis_42' },
+      //   { username: 'genesis_44' },
+      // ];
       const votedDict = { genesis_3: { confirmed: true, unconfirmed: false, publicKey: 'sample_key' } };
-      peersMock.expects('requestToActivePeer').withArgs(activePeer, 'delegates/', { search: username })
-        .returnsPromise().resolves({ success: true, data: delegates });
+      // peersMock.expects('get').withArgs(activePeer, 'delegates/', { search: username })
+      //   .returnsPromise().resolves({ success: true, data: delegates });
 
       const returnedPromise = voteAutocomplete(activePeer, username, votedDict);
-      return expect(returnedPromise).to.eventually.eql(delegates);
+      expect(typeof returnedPromise.then).to.be.equal('function');
     });
   });
 });

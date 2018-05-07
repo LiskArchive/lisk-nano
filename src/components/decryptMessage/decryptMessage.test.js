@@ -30,7 +30,7 @@ describe('DecryptMessage', () => {
     successToastSpy = sinon.spy();
     errorSpy = sinon.spy();
     copyMock = sinon.mock();
-    decryptMessageMock = sinon.stub(Lisk.crypto, 'decryptMessageWithSecret');
+    decryptMessageMock = sinon.stub(Lisk.cryptography, 'decryptMessageWithPassphrase');
     // decryptMessageSpy = sinon.spy(Lisk.crypto, 'decryptMessageWithSecret');
     const props = {
       account,

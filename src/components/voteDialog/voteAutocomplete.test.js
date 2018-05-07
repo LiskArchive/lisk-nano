@@ -16,8 +16,8 @@ const delegates = [
   { username: 'username2', publicKey: '123HG3522345L' },
 ];
 const unvotedDelegate = [
-  { username: 'username3', publicKey: '123HG3522445L' },
-  { username: 'username4', publicKey: '123HG3522545L' },
+  { username: 'username3', account: { publicKey: '123HG3522445L' } },
+  { username: 'username4', account: { publicKey: '123HG3522545L' } },
 ];
 const props = {
   activePeer: {},
@@ -160,7 +160,7 @@ describe('VoteAutocomplete', () => {
     wrapper.find('.votedListSearch.vote-auto-complete input').simulate('keyDown', { keyCode: keyCodes.enter });
     voteAutocompleteApiStub.restore();
     expect(props.voteToggled).to.have.been.calledWith({
-      publicKey: unvotedDelegate[0].publicKey,
+      publicKey: unvotedDelegate[0].account.publicKey,
       username: unvotedDelegate[0].username,
     });
   });
@@ -182,7 +182,7 @@ describe('VoteAutocomplete', () => {
     wrapper.find('.votedListSearch.vote-auto-complete input').simulate('keyDown', { keyCode: keyCodes.enter });
     voteAutocompleteApiStub.restore();
     expect(props.voteToggled).to.have.been.calledWith({
-      publicKey: unvotedDelegate[0].publicKey,
+      publicKey: unvotedDelegate[0].account.publicKey,
       username: unvotedDelegate[0].username,
     });
   });

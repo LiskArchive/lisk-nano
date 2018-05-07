@@ -45,8 +45,8 @@ describe('Reducer: voting(state, action)', () => {
     { username: 'username4', publicKey: 'sample_key' },
   ];
   const delegates3 = [
-    { username: 'username5', account: { publicKey: 'sample_key_5' } },
-    { username: 'username6', account: { publicKey: 'sample_key_6' } },
+    { username: 'username5', publicKey: 'sample_key_5' },
+    { username: 'username6', publicKey: 'sample_key_6' },
   ];
   const fullDelegates = [...delegates1, ...delegates2];
 
@@ -79,8 +79,8 @@ describe('Reducer: voting(state, action)', () => {
     };
     const expectedState = {
       votes: {
-        username5: { confirmed: true, unconfirmed: true, account: { publicKey: 'sample_key_5' } },
-        username6: { confirmed: true, unconfirmed: true, account: { publicKey: 'sample_key_6' } },
+        username5: { confirmed: true, unconfirmed: true, publicKey: 'sample_key_5' },
+        username6: { confirmed: true, unconfirmed: true, publicKey: 'sample_key_6' },
       },
       delegates: [],
       refresh: false,

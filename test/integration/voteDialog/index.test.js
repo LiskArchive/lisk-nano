@@ -17,8 +17,8 @@ const delegates = [
   { username: 'username2', publicKey: '123HG3522345L' },
 ];
 const unvotedDelegate = [
-  { username: 'username3', publicKey: '123HG3522445L' },
-  { username: 'username4', publicKey: '123HG3522545L' },
+  { username: 'username3', account: { publicKey: '123HG3522445L' } },
+  { username: 'username4', account: { publicKey: '123HG3522545L' } },
 ];
 
 const keyCodes = {
