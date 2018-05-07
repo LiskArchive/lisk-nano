@@ -15,7 +15,7 @@ const getStatusTooltip = (props) => {
 
 const Address = (props) => {
   const title = props.isDelegate ? props.t('Delegate') : props.t('Address');
-  const content = props.isDelegate ?
+  const content = (props.isDelegate && props.delegate) ?
     (<div>
       <p className="inner primary delegate-name">
         {props.delegate.username}
