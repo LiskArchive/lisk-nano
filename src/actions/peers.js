@@ -51,7 +51,7 @@ export const activePeerSet = data =>
         }
         dispatch(peerSet(data, config));
       }).catch(() => {
-        dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node 123') }));
+        dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node') }));
       });
     } else {
       dispatch(peerSet(data, config));
