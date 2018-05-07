@@ -11,7 +11,7 @@ const peerSet = (data, config) => ({
     publicKey: data.publicKey,
     activePeer: new Lisk.APIClient(config.nodes, config.nethash, {}),
     options: config,
-  }, {}),
+  }),
   type: actionTypes.activePeerSet,
 });
 
@@ -25,7 +25,6 @@ const peerSet = (data, config) => ({
  */
 export const activePeerSet = data =>
   (dispatch) => {
-    console.log(Lisk);
     const addHttp = (url) => {
       const reg = /^(?:f|ht)tps?:\/\//i;
       return reg.test(url) ? url : `http://${url}`;
@@ -45,16 +44,13 @@ export const activePeerSet = data =>
     }
     if (config.custom) {
       const getNethash = new Lisk.APIClient(config.nodes, config.nethash, {});
-      console.log(getNethash);
       getNethash.node.getConstants().then((response) => {
-        console.log(response.data);
         config.testnet = response.data.nethash === netHashes.testnet;
         if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
           config.nethash = response.data.nethash;
         }
         dispatch(peerSet(data, config));
-      }).catch((e) => {
-        console.log(e);
+      }).catch(() => {
         dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node 123') }));
       });
     } else {
