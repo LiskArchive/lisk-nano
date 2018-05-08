@@ -6,7 +6,7 @@ Feature: Register delegate
     And I click "register button"
     Then I should see alert dialog with title "Success" and text "Delegate registration was successfully submitted with username: "test". It can take several seconds before it is processed."
     And I click "ok button"
-    And I wait 15 seconds
+    And I wait 20 seconds
     And I should see text "test" in "delegate name" element 
     And There is no "register as delegate" in main menu
 
