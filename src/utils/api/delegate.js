@@ -1,7 +1,7 @@
 import Lisk from 'lisk-js';
 
 export const listAccountDelegates = (activePeer, address) =>
-  activePeer.votes.get({ address, limit: 100 });
+  activePeer.votes.get({ address, limit: 101 });
 
 
 export const listDelegates = (activePeer, options) =>
