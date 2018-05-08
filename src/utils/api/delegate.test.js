@@ -32,7 +32,7 @@ describe('Utils: Delegate', () => {
   describe('listAccountDelegates', () => {
     it('should return a promise', () => {
       const votingMock = sinon.mock(activePeer.votes);
-      votingMock.expects('get').withArgs({ address: 'address', limit: 100 })
+      votingMock.expects('get').withArgs({ address: 'address', limit: 101 })
         .returnsPromise().resolves('resolved promise');
       const returnedPromise = listAccountDelegates(activePeer, 'address');
       return expect(returnedPromise).to.eventually.equal('resolved promise');
