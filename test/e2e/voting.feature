@@ -1,4 +1,14 @@
 Feature: Voting tab
+  Scenario: should allow to register a delegate
+    Given I'm logged in as "delegate candidate"
+    When I click "register as delegate" in main menu
+    And I fill in "test" to "username" field
+    And I click "register button"
+    Then I should see alert dialog with title "Success" and text "Delegate registration was successfully submitted with username: "test". It can take several seconds before it is processed."
+    And I click "ok button"
+    And I wait 20 seconds
+    And I should see text "test" in "delegate name" element 
+    And There is no "register as delegate" in main menu
   Scenario: should allow to view delegates and more on scroll
     Given I'm logged in as "any account"
     When I click tab number 2
@@ -21,6 +31,7 @@ Feature: Voting tab
     And I should see table with 0 lines
     And I should see text "No delegates found" in "empty message" element
 
+  @pending
   @integration
   Scenario: should allow to view my votes
     Given I'm logged in as "genesis"
@@ -115,9 +126,10 @@ Feature: Voting tab
     And I click "cancel button"
     Then I should see no "modal dialog"
 
+  @pending
   Scenario: should allow to select delegates by URL
     Given I'm logged in as "delegate candidate"
-    When I go to "/main/voting/vote?votes=standby_27,standby_28,standby_29,nonexisting_22&unvotes=standby_33"
+    And I go to "/main/voting/vote?votes=standby_27,standby_28,standby_29,nonexisting_22&unvotes=standby_33"
     And I wait 3 seconds
     Then I should see text "3 delegate names were successfully resolved for voting." in "upvotes message" element
     And I should see text "1 of the delegate names selected for unvoting was not currently voted for:standby_33" in "notVotedYet message" element

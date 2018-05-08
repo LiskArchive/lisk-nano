@@ -23,6 +23,7 @@ Feature: Saved Accounts
     And I click "submit button"
     And I should see alert dialog with title "Success" and text "Your transaction of 2 LSK to 537318935439898807L was accepted and will be processed in a few seconds."
 
+  @pending
   Scenario: should allow to save second account
     Given I'm logged in as "genesis"
     When I click "saved accounts" in main menu
