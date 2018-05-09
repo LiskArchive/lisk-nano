@@ -1,14 +1,4 @@
 Feature: Voting tab
-  Scenario: should allow to register a delegate
-    Given I'm logged in as "delegate candidate"
-    When I click "register as delegate" in main menu
-    And I fill in "test" to "username" field
-    And I click "register button"
-    Then I should see alert dialog with title "Success" and text "Delegate registration was successfully submitted with username: "test". It can take several seconds before it is processed."
-    And I click "ok button"
-    And I wait 20 seconds
-    And I should see text "test" in "delegate name" element 
-    And There is no "register as delegate" in main menu
   Scenario: should allow to view delegates and more on scroll
     Given I'm logged in as "any account"
     When I click tab number 2
@@ -107,6 +97,7 @@ Feature: Voting tab
     Then I should see alert dialog with title "Success" and text "Your votes were successfully submitted. It can take several seconds before they are processed."
 
   @integration
+  @pending
   Scenario: should allow to remove votes form delegates
     Given I'm logged in as "genesis"
     When I click tab number 2

@@ -7,8 +7,8 @@ Feature: Register delegate
     Then I should see alert dialog with title "Success" and text "Delegate registration was successfully submitted with username: "test". It can take several seconds before it is processed."
     And I click "ok button"
     And I wait 20 seconds
-    And I should see text "test" in "delegate name" element 
-    And There is no "register as delegate" in main menu
+    # And I should see text "test" in "delegate name" element 
+    # And There is no "register as delegate" in main menu
 
   Scenario: should allow to register a delegate with second passphrase
     Given I'm logged in as "second passphrase account"
@@ -33,3 +33,4 @@ Feature: Register delegate
     And "register button" should be disabled
 
 
+@pending
