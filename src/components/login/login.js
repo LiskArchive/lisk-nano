@@ -100,6 +100,10 @@ class Login extends React.Component {
       [name]: value,
       ...validator(value, error),
     });
+
+    if (name === 'network' || name === 'address') {
+      localStorage.setItem(name, value);
+    }
   }
 
   devPreFill() {
