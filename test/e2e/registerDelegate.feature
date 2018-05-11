@@ -31,6 +31,3 @@ Feature: Register delegate
     When I click "register as delegate" in main menu
     Then I should see "Insufficient funds for 25 LSK fee" error message
     And "register button" should be disabled
-
-
-@pending
