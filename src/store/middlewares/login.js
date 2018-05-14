@@ -26,7 +26,6 @@ const loginMiddleware = store => next => (action) => {
   };
   const { activePeer } = action.data;
   loadingStarted('loginMiddleware');
-  loadingFinished('loginMiddleware');
   // redirect to main/transactions
   return getAccount(activePeer, address).then((accountData) => {
     loadingFinished('loginMiddleware');
