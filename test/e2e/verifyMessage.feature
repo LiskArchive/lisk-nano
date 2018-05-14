@@ -5,7 +5,7 @@ Feature: Verify message
     And  I fill in "Hello world" to "message" field
     And  I fill in "c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f" to "public key" field
     And  I fill in "079331d868678fd5f272f09d6dc8792fb21335aec42af7f11caadbfbc17d4707e7d7f343854b0c619b647b81ba3f29b23edb4eaf382a47c534746bad4529560b" to "signature" field
-    Then I should see "true" in "result" field
+    Then I should see "Message verified" in "result" field
 
   @integration
   Scenario: should allow to exit verify message dialog

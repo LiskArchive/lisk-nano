@@ -19,7 +19,7 @@ describe('VerifyMessage', () => {
     wrapper.find('.message input').simulate('change', { target: { value: message } });
     wrapper.find('.public-key input').simulate('change', { target: { value: publicKey } });
     wrapper.find('.signature textarea').simulate('change', { target: { value: signature } });
-    expect(wrapper.find('.result textarea').text()).to.equal('true');
+    expect(wrapper.find('.result textarea').text()).to.equal('Message verified');
   });
 
   it('recognizes invalid public key', () => {
