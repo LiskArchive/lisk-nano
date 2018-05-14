@@ -160,7 +160,7 @@
   "Switch": "Switch",
   "Testnet": "Testnet",
   "The URL was invalid": "The URL was invalid",
-  "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed then it is finished and prompted to restart the app.": "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed then it is finished and prompted to restart the app.",
+  "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed when it is finished and prompted to restart the app.": "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed when it is finished and prompted to restart the app.",
   "The easiest and cheapest way to do this is to send LSK to yourself by clicking this button. It will cost you only the usual 0.1 LSK transaction fee.": "The easiest and cheapest way to do this is to send LSK to yourself by clicking this button. It will cost you only the usual 0.1 LSK transaction fee.",
   "There are no transactions, yet.": "There are no transactions, yet.",
   "There is a new version ({{version}}) available, do you want to update now?": "There is a new version ({{version}}) available, do you want to update now?",

@@ -167,7 +167,7 @@
   "Switch": "Wechseln",
   "Testnet": "Testnet",
   "The URL was invalid": "Die URL war ungültig",
-  "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed then it is finished and prompted to restart the app.": "Der Download wurde gestartet. Dies kann, abhängig von deinem Internet, einige Minuten dauern. Du wirst informiert, wenn der Download abgeschlossen wurde und wirst dann aufgefordert, die App neu zu starten.",
+  "The download was started. Depending on your internet speed it can take up to several minutes. You will be informed when it is finished and prompted to restart the app.": "Der Download wurde gestartet. Dies kann, abhängig von deinem Internet, einige Minuten dauern. Du wirst informiert, wenn der Download abgeschlossen wurde und wirst dann aufgefordert, die App neu zu starten.",
   "The easiest and cheapest way to do this is to send LSK to yourself by clicking this button. It will cost you only the usual 0.1 LSK transaction fee.": "Am leichtesten und günstigsten ist es, wenn du einfach LSK an dich selbst sendest, indem du den folgenden Button klickst. Hierbei fällt lediglich die Gebühr von 0.1 LSK an." ,
   "There are no transactions, yet.": "Bisher noch keine Transaktionen.",
   "There is a new version ({{version}}) available, do you want to update now?": "Eine neue version ({{version}}) steht zur Verfügung, möchtest du jetzt aktualisieren?",
