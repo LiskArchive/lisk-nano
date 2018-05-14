@@ -4,8 +4,10 @@ export const listAccountDelegates = (activePeer, address) =>
   activePeer.votes.get({ address, limit: 101 });
 
 
-export const listDelegates = (activePeer, options) =>
-  activePeer.delegates.get(options);
+export const listDelegates = (activePeer, options) =>{
+  options.sort = 'rank:asc';
+  return activePeer.delegates.get(options);
+};
 
 export const getDelegate = (activePeer, options) =>
   activePeer.delegates.get(options);
