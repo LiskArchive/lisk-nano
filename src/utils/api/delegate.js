@@ -4,7 +4,7 @@ export const listAccountDelegates = (activePeer, address) =>
   activePeer.votes.get({ address, limit: 101 });
 
 
-export const listDelegates = (activePeer, options) =>{
+export const listDelegates = (activePeer, options) => {
   options.sort = 'rank:asc';
   return activePeer.delegates.get(options);
 };
@@ -14,7 +14,7 @@ export const getDelegate = (activePeer, options) =>
 
 export const vote = (activePeer, passphrase, publicKey,
   votes, unvotes, secondPassphrase = null) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const transaction = Lisk.transaction
       .castVotes({
         passphrase,
@@ -23,7 +23,8 @@ export const vote = (activePeer, passphrase, publicKey,
         secondPassphrase });
     activePeer.transactions.broadcast(transaction).then(() => {
       resolve(transaction);
-    });
+    })
+      .catch(reject);
   });
 
 export const voteAutocomplete = (activePeer, username, votedDict) => {
