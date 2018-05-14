@@ -7,6 +7,7 @@ import { errorAlertDialogDisplayed } from './dialog';
 import Fees from '../constants/fees';
 import { toRawLsk } from '../utils/lsk';
 import transactionTypes from '../constants/transactionTypes';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 /**
  * Trigger this action to update the account object
@@ -52,8 +53,10 @@ export const passphraseUsed = data => ({
  */
 export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, account }) =>
   (dispatch) => {
+    loadingStarted('secondPassphraseRegistered');
     setSecondPassphrase(activePeer, secondPassphrase, account.publicKey, account.passphrase)
       .then((data) => {
+        loadingFinished('secondPassphraseRegistered');
         dispatch(transactionAdded({
           id: data.id,
           senderPublicKey: account.publicKey,
@@ -75,8 +78,10 @@ export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, accou
 export const delegateRegistered = ({
   activePeer, account, passphrase, username, secondPassphrase }) =>
   (dispatch) => {
+    loadingStarted('delegateRegistered');
     registerDelegate(activePeer, username, passphrase, secondPassphrase)
       .then((data) => {
+        loadingFinished('delegateRegistered');
         // dispatch to add to pending transaction
         dispatch(transactionAdded({
           id: data.id,
@@ -101,8 +106,10 @@ export const delegateRegistered = ({
  */
 export const sent = ({ activePeer, account, recipientId, amount, passphrase, secondPassphrase }) =>
   (dispatch) => {
+    loadingStarted('sent');
     send(activePeer, recipientId, toRawLsk(amount), passphrase, secondPassphrase)
       .then((data) => {
+        loadingFinished('sent');
         dispatch(transactionAdded({
           id: data.id,
           senderPublicKey: account.publicKey,

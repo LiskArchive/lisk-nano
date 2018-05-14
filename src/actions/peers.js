@@ -4,6 +4,7 @@ import actionTypes from '../constants/actions';
 // import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';
 import netHashes from '../constants/netHashes';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 const peerSet = (data, config) => ({
   data: Object.assign({
@@ -44,7 +45,9 @@ export const activePeerSet = data =>
     }
     if (config.custom) {
       const getNethash = new Lisk.APIClient(config.nodes, config.nethash, {});
+      loadingStarted('getConstants');
       getNethash.node.getConstants().then((response) => {
+        loadingFinished('getConstants');
         config.testnet = response.data.nethash === netHashes.testnet;
         if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
           config.nethash = response.data.nethash;

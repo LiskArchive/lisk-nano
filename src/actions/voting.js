@@ -9,6 +9,7 @@ import { transactionAdded } from './transactions';
 import Fees from '../constants/fees';
 import actionTypes from '../constants/actions';
 import transactionTypes from '../constants/transactionTypes';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 /**
  * Add pending variable to the list of voted delegates and list of unvoted delegates
@@ -84,6 +85,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       }
     });
 
+    loadingStarted('votePlaced');
     vote(
       activePeer,
       passphrase,
@@ -92,6 +94,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       unvotedList,
       secondSecret,
     ).then((response) => {
+      loadingFinished('votePlaced');
       // Ad to list
       dispatch(pendingVotesAdded());
 
@@ -118,7 +121,9 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
  */
 export const votesFetched = ({ activePeer, address, type }) =>
   (dispatch) => {
+    loadingStarted('votesFetched');
     listAccountDelegates(activePeer, address).then(({ data }) => {
+      loadingFinished('votesFetched');
       if (type === 'update') {
         dispatch(votesUpdated({ list: data.votes }));
       } else {
@@ -132,6 +137,7 @@ export const votesFetched = ({ activePeer, address, type }) =>
  */
 export const delegatesFetched = ({ activePeer, search, offset, refresh }) =>
   (dispatch) => {
+    loadingStarted('delegatesFetched');
     listDelegates(
       activePeer, {
         offset,
@@ -139,6 +145,7 @@ export const delegatesFetched = ({ activePeer, search, offset, refresh }) =>
         ...(search === '' ? {} : { search }),
       },
     ).then(({ data, totalCount }) => {
+      loadingFinished('delegatesFetched');
       dispatch(delegatesAdded({ list: data, totalDelegates: totalCount, refresh }));
     });
   };
@@ -152,7 +159,11 @@ export const urlVotesFound = ({ activePeer, upvotes, unvotes, address }) =>
     const processUrlVotes = (votes) => {
       dispatch(votesAdded({ list: votes, upvotes, unvotes }));
     };
+    loadingStarted('urlVotesFound');
     listAccountDelegates(activePeer, address)
-      .then(({ data }) => { processUrlVotes(data); })
+      .then(({ data }) => {
+        loadingFinished('urlVotesFound');
+        processUrlVotes(data);
+      })
       .catch(() => { processUrlVotes([]); });
   };

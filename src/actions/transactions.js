@@ -1,5 +1,6 @@
 import actionTypes from '../constants/actions';
 import { transactions } from '../utils/api/account';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 /**
  * An action to dispatch transactionAdded
@@ -43,8 +44,10 @@ export const transactionsLoaded = data => ({
  */
 export const transactionsRequested = ({ activePeer, address, limit, offset }) =>
   (dispatch) => {
+    loadingStarted('transactionsRequested');
     transactions(activePeer, address, limit, offset)
       .then((response) => {
+        loadingFinished('transactionsRequested');
         dispatch(transactionsLoaded({
           count: parseInt(response.count, 10),
           confirmed: response.data,

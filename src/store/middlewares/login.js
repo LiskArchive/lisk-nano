@@ -3,6 +3,7 @@ import { getAccount, extractAddress, extractPublicKey } from '../../utils/api/ac
 import { accountLoggedIn } from '../../actions/account';
 import actionTypes from '../../constants/actions';
 import { errorToastDisplayed } from '../../actions/toaster';
+import { loadingStarted, loadingFinished } from '../../utils/loading';
 
 const loginMiddleware = store => next => (action) => {
   if (action.type !== actionTypes.activePeerSet) {
@@ -24,15 +25,17 @@ const loginMiddleware = store => next => (action) => {
     address,
   };
   const { activePeer } = action.data;
-
+  loadingStarted('loginMiddleware');
+  loadingFinished('loginMiddleware');
   // redirect to main/transactions
-  return getAccount(activePeer, address).then(accountData =>
+  return getAccount(activePeer, address).then((accountData) => {
+    loadingFinished('loginMiddleware');
     store.dispatch(accountLoggedIn({
       ...accountData,
       ...accountBasics,
       ...{ isDelegate: accountData.delegate !== undefined },
-    })),
-  ).catch(() => {
+    }));
+  }).catch(() => {
     store.dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node') }));
   });
 };

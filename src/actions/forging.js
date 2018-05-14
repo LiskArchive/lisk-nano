@@ -1,6 +1,7 @@
 import actionTypes from '../constants/actions';
 import { getForgedBlocks, getForgedStats } from '../utils/api/forging';
 import { errorAlertDialogDisplayed } from './dialog';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 export const forgedBlocksUpdated = data => ({
   data,
@@ -9,10 +10,12 @@ export const forgedBlocksUpdated = data => ({
 
 export const fetchAndUpdateForgedBlocks = ({ activePeer, limit, offset, generatorPublicKey }) =>
   (dispatch) => {
+    loadingStarted('fetchAndUpdateForgedBlocks');
     getForgedBlocks(activePeer, limit, offset, generatorPublicKey)
-      .then(response =>
-        dispatch(forgedBlocksUpdated(response.data)),
-      )
+      .then((response) => {
+        loadingFinished('fetchAndUpdateForgedBlocks');
+        return dispatch(forgedBlocksUpdated(response.data));
+      })
       .catch((error) => {
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
       });
@@ -25,10 +28,12 @@ export const forgingStatsUpdated = data => ({
 
 export const fetchAndUpdateForgedStats = ({ activePeer, key, startMoment, generatorPublicKey }) =>
   (dispatch) => {
+    loadingStarted('fetchAndUpdateForgedStats');
     getForgedStats(activePeer, startMoment, generatorPublicKey)
-      .then(response =>
-        dispatch(forgingStatsUpdated({ [key]: response.data.forged })),
-      )
+      .then((response) => {
+        loadingFinished('fetchAndUpdateForgedStats');
+        return dispatch(forgingStatsUpdated({ [key]: response.data.forged }));
+      })
       .catch((error) => {
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
       });
