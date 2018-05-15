@@ -36,6 +36,10 @@ class Voting extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.clearDelegates();
+  }
+
   componentDidMount() {
     this.loadVotedDelegates(true);
   }
