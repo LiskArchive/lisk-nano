@@ -27,8 +27,11 @@ class Transactions extends React.Component {
   }
 
   componentDidUpdate() {
-    const { count, transactions } = this.props;
-    this.canLoadMore = count === null || count > transactions.length;
+    this.canLoadMore = true;
+  }
+
+  componentWillUpdate(nextProps) {
+    this.canLoadMore = (this.props.transactions.length < nextProps.transactions.length);
   }
 
   render() {
