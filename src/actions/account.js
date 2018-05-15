@@ -66,6 +66,7 @@ export const secondPassphraseRegistered = ({ activePeer, secondPassphrase, accou
           type: transactionTypes.setSecondPassphrase,
         }));
       }).catch((error) => {
+        loadingFinished('secondPassphraseRegistered');
         const text = (error && error.message) ? error.message : i18next.t('An error occurred while registering your second passphrase. Please try again.');
         dispatch(errorAlertDialogDisplayed({ text }));
       });
@@ -94,6 +95,7 @@ export const delegateRegistered = ({
         }));
       })
       .catch((error) => {
+        loadingFinished('delegateRegistered');
         const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while registering as delegate.');
         const actionObj = errorAlertDialogDisplayed({ text });
         dispatch(actionObj);
@@ -121,6 +123,7 @@ export const sent = ({ activePeer, account, recipientId, amount, passphrase, sec
         }));
       })
       .catch((error) => {
+        loadingFinished('sent');
         const text = error && error.message ? `${error.message}.` : i18next.t('An error occurred while creating the transaction.');
         dispatch(errorAlertDialogDisplayed({ text }));
       });

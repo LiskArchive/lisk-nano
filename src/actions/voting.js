@@ -109,6 +109,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
         type: transactionTypes.vote,
       }));
     }).catch((error) => {
+      loadingFinished('votePlaced');
       const text = error && error.message ? `${error.message}.` : 'An error occurred while placing your vote.';
       dispatch(errorAlertDialogDisplayed({ text }));
     });
@@ -129,6 +130,9 @@ export const votesFetched = ({ activePeer, address, type }) =>
       } else {
         dispatch(votesAdded({ list: data.votes }));
       }
+    }).catch((error) => {
+      loadingFinished('votesFetched');
+      dispatch(errorAlertDialogDisplayed({ text: error.message }));
     });
   };
 
@@ -147,6 +151,9 @@ export const delegatesFetched = ({ activePeer, search, offset, refresh }) =>
     ).then(({ data, totalCount }) => {
       loadingFinished('delegatesFetched');
       dispatch(delegatesAdded({ list: data, totalDelegates: totalCount, refresh }));
+    }).catch((error) => {
+      loadingFinished('delegatesFetched');
+      dispatch(errorAlertDialogDisplayed({ text: error.message }));
     });
   };
 
@@ -165,5 +172,8 @@ export const urlVotesFound = ({ activePeer, upvotes, unvotes, address }) =>
         loadingFinished('urlVotesFound');
         processUrlVotes(data);
       })
-      .catch(() => { processUrlVotes([]); });
+      .catch(() => {
+        loadingFinished('urlVotesFound');
+        processUrlVotes([]);
+      });
   };

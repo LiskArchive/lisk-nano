@@ -1,3 +1,4 @@
+import { errorAlertDialogDisplayed } from './dialog';
 import actionTypes from '../constants/actions';
 import { transactions } from '../utils/api/account';
 import { loadingStarted, loadingFinished } from '../utils/loading';
@@ -52,5 +53,8 @@ export const transactionsRequested = ({ activePeer, address, limit, offset }) =>
           count: parseInt(response.count, 10),
           confirmed: response.data,
         }));
+      }).catch((error) => {
+        loadingFinished('transactionsRequested');
+        dispatch(errorAlertDialogDisplayed({ text: error.message }));
       });
   };

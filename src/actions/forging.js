@@ -17,6 +17,7 @@ export const fetchAndUpdateForgedBlocks = ({ activePeer, limit, offset, generato
         return dispatch(forgedBlocksUpdated(response.data));
       })
       .catch((error) => {
+        loadingFinished('fetchAndUpdateForgedBlocks');
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
       });
   };
@@ -35,6 +36,7 @@ export const fetchAndUpdateForgedStats = ({ activePeer, key, startMoment, genera
         return dispatch(forgingStatsUpdated({ [key]: response.data.forged }));
       })
       .catch((error) => {
+        loadingFinished('fetchAndUpdateForgedStats');
         dispatch(errorAlertDialogDisplayed({ text: error.message }));
       });
   };
