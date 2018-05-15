@@ -33,12 +33,12 @@ export const activePeerSet = data =>
     const config = data.network || {};
 
     if (config.address) {
-      // const { hostname, port, protocol } = new URL(addHttp(config.address));
+      const { hostname, port, protocol } = new URL(addHttp(config.address));
 
-      // config.node = hostname;
-      // config.ssl = protocol === 'https:';
-      // config.port = port || (config.ssl ? 443 : 80);
-      config.nodes = [addHttp(config.address)];
+      config.node = hostname;
+      config.ssl = protocol === 'https:';
+      config.port = port || (config.ssl ? 443 : 80);
+      config.nodes = [`${protocol}//${hostname}:${port}`];
     }
     if (config.testnet === undefined && config.port !== undefined) {
       config.testnet = config.port === '7000';
