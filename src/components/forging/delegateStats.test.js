@@ -9,7 +9,7 @@ import DelegateStats from './delegateStats';
 describe('DelegateStats', () => {
   const delegate = {
     username: 'genesis_17',
-    rate: 19,
+    rank: 19,
     approval: 30,
     productivity: 99.2,
   };

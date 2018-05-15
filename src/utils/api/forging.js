@@ -1,16 +1,24 @@
 import moment from 'moment';
-import { requestToActivePeer } from './peers';
+import { extractAddress } from '../api/account';
 
 export const getForgedBlocks = (activePeer, limit = 10, offset = 0, generatorPublicKey) =>
-  requestToActivePeer(activePeer, 'blocks', {
+  activePeer.blocks.get({
     limit,
     offset,
     generatorPublicKey,
   });
 
 export const getForgedStats = (activePeer, startMoment, generatorPublicKey) =>
-  requestToActivePeer(activePeer, 'delegates/forging/getForgedByAccount', {
-    generatorPublicKey,
-    start: moment(startMoment).unix(),
-    end: moment().unix(),
-  });
+  activePeer.delegates.getForgingStatistics(
+    extractAddress(generatorPublicKey),
+    {
+      start: moment(startMoment).unix(),
+      end: moment().unix(),
+    },
+  );
+
+
+// export const listDelegates = (activePeer, options) =>
+// activePeer.delegates.get(options);
+// getForgers
+// getForgingStatistics

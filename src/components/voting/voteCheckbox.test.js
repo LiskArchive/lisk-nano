@@ -9,7 +9,7 @@ describe('VoteCheckbox', () => {
   const props = {
     data: {
       username: 'yashar',
-      publicKey: 'address 1',
+      account: { publicKey: 'address 1' },
     },
     styles,
     toggle: sinon.spy(),
@@ -29,8 +29,12 @@ describe('VoteCheckbox', () => {
     });
 
     it('should Checkbox change event should call props.toggle', () => {
+      const expectedValue = {
+        username: props.data.username,
+        publicKey: props.data.account.publicKey,
+      };
       wrapper.find('input').simulate('click');
-      expect(props.toggle).to.have.been.calledWith(props.data);
+      expect(props.toggle).to.have.been.calledWith(expectedValue);
     });
   });
 

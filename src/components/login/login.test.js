@@ -32,6 +32,7 @@ describe('Login', () => {
     },
     replace: spy(),
   };
+  const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
   const props = {
     peers,
     account,
@@ -40,8 +41,8 @@ describe('Login', () => {
     t: data => data,
     onAccountUpdated: () => {},
     setActiveDialog: spy(),
-    activePeerSet: (network) => {
-      props.peers.data = Lisk.api(network);
+    activePeerSet: () => {
+      props.peers.data = new Lisk.APIClient(['http://localhost:4000'], nethash, {});
     },
   };
   const options = {

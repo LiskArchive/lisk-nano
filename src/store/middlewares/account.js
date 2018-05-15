@@ -7,14 +7,19 @@ import actionTypes from '../../constants/actions';
 import { fetchAndUpdateForgedBlocks } from '../../actions/forging';
 import { getDelegate } from '../../utils/api/delegate';
 import transactionTypes from '../../constants/transactionTypes';
+import { loadingStarted, loadingFinished } from '../../utils/loading';
 
 const updateTransactions = (store, peers, account) => {
+  loadingStarted('updateTransactions');
   const maxBlockSize = 25;
   getTransactions(peers.data, account.address, maxBlockSize)
-    .then(response => store.dispatch(transactionsUpdated({
-      confirmed: response.transactions,
-      count: parseInt(response.count, 10),
-    })));
+    .then((response) => {
+      loadingFinished('updateTransactions');
+      store.dispatch(transactionsUpdated({
+        confirmed: response.data,
+        count: parseInt(response.count, 10),
+      }));
+    });
 };
 
 const hasRecentTransactions = txs => (
@@ -23,9 +28,11 @@ const hasRecentTransactions = txs => (
 );
 
 const updateAccountData = (store, action) => {
+  loadingStarted('updateTransactions');
   const { peers, account, transactions } = store.getState();
 
   getAccount(peers.data, account.address).then((result) => {
+    loadingFinished('updateTransactions');
     if (result.balance !== account.balance) {
       if (!action.data.windowIsFocused || !hasRecentTransactions(transactions)) {
         updateTransactions(store, peers, account);
@@ -60,8 +67,10 @@ const delegateRegistration = (store, action) => {
   const state = store.getState();
 
   if (delegateRegistrationTx) {
+    loadingStarted('delegateRegistrationTx');
     getDelegate(state.peers.data, { publicKey: state.account.publicKey })
       .then((delegateData) => {
+        loadingFinished('delegateRegistrationTx');
         store.dispatch(accountLoggedIn(Object.assign({},
           { delegate: delegateData.delegate, isDelegate: true })));
       });
@@ -98,13 +107,18 @@ const checkTransactionsAndUpdateAccount = (store, action) => {
     updateTransactions(store, peers, account);
   }
 
-  const tx = action.data.block.transactions;
+  /*
+  * commented out because of API changed and it no longer provides list of transactions
+ */
+  const tx = action.data.block.transactions || [];
   const accountAddress = state.account.address;
   const blockContainsRelevantTransaction = tx.filter((transaction) => {
     const sender = transaction ? transaction.senderId : null;
     const recipient = transaction ? transaction.recipientId : null;
     return accountAddress === recipient || accountAddress === sender;
   }).length > 0;
+  // const emptyPayloadHash = ' e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+  // const blockContainsRelevantTransaction = action.data.block.payloadHash !== emptyPayloadHash;
 
   if (blockContainsRelevantTransaction) {
     updateAccountData(store, action);

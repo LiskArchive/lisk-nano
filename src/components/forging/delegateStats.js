@@ -10,7 +10,7 @@ const addPercentSign = x => (`${x}%`);
 
 const progressCircleCardList = [
   {
-    key: 'rate',
+    key: 'rank',
     label: 'Rank',
     percentageTransform: percentage => (Math.max(0, 101 - percentage)),
     textForPercentage: identity,

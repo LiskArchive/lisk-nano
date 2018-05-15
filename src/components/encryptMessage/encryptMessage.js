@@ -35,7 +35,7 @@ class EncryptMessage extends React.Component {
     event.preventDefault();
     let cryptoResult = null;
     try {
-      cryptoResult = Lisk.crypto.encryptMessageWithSecret(
+      cryptoResult = Lisk.cryptography.encryptMessageWithPassphrase(
         this.state.message.value,
         this.props.account.passphrase,
         this.state.recipientPublicKey.value);

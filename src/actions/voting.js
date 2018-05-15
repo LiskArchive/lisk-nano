@@ -9,6 +9,7 @@ import { transactionAdded } from './transactions';
 import Fees from '../constants/fees';
 import actionTypes from '../constants/actions';
 import transactionTypes from '../constants/transactionTypes';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 /**
  * Add pending variable to the list of voted delegates and list of unvoted delegates
@@ -84,6 +85,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       }
     });
 
+    loadingStarted('votePlaced');
     vote(
       activePeer,
       passphrase,
@@ -92,13 +94,14 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
       unvotedList,
       secondSecret,
     ).then((response) => {
+      loadingFinished('votePlaced');
       // Ad to list
       dispatch(pendingVotesAdded());
 
       // Add the new transaction
       // @todo Handle alerts either in transactionAdded action or middleware
       dispatch(transactionAdded({
-        id: response.transactionId,
+        id: response.id,
         senderPublicKey: account.publicKey,
         senderId: account.address,
         amount: 0,
@@ -106,6 +109,7 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
         type: transactionTypes.vote,
       }));
     }).catch((error) => {
+      loadingFinished('votePlaced');
       const text = error && error.message ? `${error.message}.` : 'An error occurred while placing your vote.';
       dispatch(errorAlertDialogDisplayed({ text }));
     });
@@ -118,28 +122,38 @@ export const votePlaced = ({ activePeer, passphrase, account, votes, secondSecre
  */
 export const votesFetched = ({ activePeer, address, type }) =>
   (dispatch) => {
-    listAccountDelegates(activePeer, address).then(({ delegates }) => {
+    loadingStarted('votesFetched');
+    listAccountDelegates(activePeer, address).then(({ data }) => {
+      loadingFinished('votesFetched');
       if (type === 'update') {
-        dispatch(votesUpdated({ list: delegates }));
+        dispatch(votesUpdated({ list: data.votes }));
       } else {
-        dispatch(votesAdded({ list: delegates }));
+        dispatch(votesAdded({ list: data.votes }));
       }
+    }).catch((error) => {
+      loadingFinished('votesFetched');
+      dispatch(errorAlertDialogDisplayed({ text: error.message }));
     });
   };
 
 /**
  * Gets list of all delegates
  */
-export const delegatesFetched = ({ activePeer, q, offset, refresh }) =>
+export const delegatesFetched = ({ activePeer, search, offset, refresh }) =>
   (dispatch) => {
+    loadingStarted('delegatesFetched');
     listDelegates(
       activePeer, {
         offset,
         limit: '100',
-        q,
+        ...(search === '' ? {} : { search }),
       },
-    ).then(({ delegates, totalCount }) => {
-      dispatch(delegatesAdded({ list: delegates, totalDelegates: totalCount, refresh }));
+    ).then(({ data, totalCount }) => {
+      loadingFinished('delegatesFetched');
+      dispatch(delegatesAdded({ list: data, totalDelegates: totalCount, refresh }));
+    }).catch((error) => {
+      loadingFinished('delegatesFetched');
+      dispatch(errorAlertDialogDisplayed({ text: error.message }));
     });
   };
 
@@ -152,7 +166,14 @@ export const urlVotesFound = ({ activePeer, upvotes, unvotes, address }) =>
     const processUrlVotes = (votes) => {
       dispatch(votesAdded({ list: votes, upvotes, unvotes }));
     };
+    loadingStarted('urlVotesFound');
     listAccountDelegates(activePeer, address)
-      .then(({ delegates }) => { processUrlVotes(delegates); })
-      .catch(() => { processUrlVotes([]); });
+      .then(({ data }) => {
+        loadingFinished('urlVotesFound');
+        processUrlVotes(data);
+      })
+      .catch(() => {
+        loadingFinished('urlVotesFound');
+        processUrlVotes([]);
+      });
   };

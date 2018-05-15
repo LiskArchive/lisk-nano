@@ -23,7 +23,7 @@ describe('EncryptMessage', () => {
   };
 
   beforeEach(() => {
-    encryptMessageSpy = sinon.spy(Lisk.crypto, 'encryptMessageWithSecret');
+    encryptMessageSpy = sinon.spy(Lisk.cryptography, 'encryptMessageWithPassphrase');
     props = {
       account,
       successToast: sinon.spy(),

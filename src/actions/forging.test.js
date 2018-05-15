@@ -59,7 +59,7 @@ describe('actions', () => {
     });
 
     it('should dispatch forgedBlocksUpdated action if resolved', () => {
-      forgingApiMock.returnsPromise().resolves({ blocks: 'value' });
+      forgingApiMock.returnsPromise().resolves({ data: 'value' });
 
       actionFunction(dispatch);
       expect(dispatch).to.have.been.calledWith(forgedBlocksUpdated('value'));
@@ -100,7 +100,7 @@ describe('actions', () => {
     });
 
     it('should dispatch forgingStatsUpdated action if resolved', () => {
-      forgingApiMock.returnsPromise().resolves({ forged: 'value' });
+      forgingApiMock.returnsPromise().resolves({ data: { forged: 'value' } });
 
       actionFunction(dispatch);
       expect(dispatch).to.have.been.calledWith(forgingStatsUpdated({ [key]: 'value' }));

@@ -35,18 +35,18 @@ const withSecondSecretAccount = {
   delegate: {
     username: 'lisk-nano',
   },
-  secondSignature: 1,
+  secondPublicKey: 'fab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88',
 };
 
 const props = {
   peers: {
-    data: Lisk.api({
-      name: 'Custom Node',
-      custom: true,
-      address: 'http://localhost:4000',
-      testnet: true,
-      nethash: '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
-    }),
+    data: new Lisk.APIClient(['http://localhost:4000'],
+      '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
+      {
+        name: 'Custom Node',
+        custom: true,
+        testnet: true,
+      }),
   },
   closeDialog: () => {},
   delegateRegistered: sinon.spy(),

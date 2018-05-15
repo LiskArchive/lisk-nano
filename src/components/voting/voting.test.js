@@ -14,14 +14,20 @@ describe('Voting', () => {
 
   const delegates = [
     {
-      address: 'address 1',
       username: 'username1',
-      publicKey: 'sample_key',
+      account: {
+        address: 'address 1',
+        publicKey: 'sample_key',
+      },
+      rank: 1,
     },
     {
-      address: 'address 2',
       username: 'username2',
-      publicKey: 'sample_key',
+      account: {
+        address: 'address 2',
+        publicKey: 'sample_key',
+      },
+      rank: 2,
     },
   ];
   const votes = {
@@ -80,7 +86,7 @@ describe('Voting', () => {
     expect(props.delegatesFetched).to.be.calledWith({
       activePeer: props.activePeer,
       offset: 0,
-      q: 'query',
+      search: 'query',
       refresh: true,
     });
     clock.restore();

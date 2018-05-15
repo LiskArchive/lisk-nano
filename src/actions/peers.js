@@ -1,15 +1,17 @@
 import i18next from 'i18next';
 import Lisk from 'lisk-js';
 import actionTypes from '../constants/actions';
-import { getNethash } from './../utils/api/nethash';
+// import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';
 import netHashes from '../constants/netHashes';
+import { loadingStarted, loadingFinished } from '../utils/loading';
 
 const peerSet = (data, config) => ({
   data: Object.assign({
     passphrase: data.passphrase,
     publicKey: data.publicKey,
-    activePeer: Lisk.api(config),
+    activePeer: new Lisk.APIClient(config.nodes, config.nethash, {}),
+    options: config,
   }),
   type: actionTypes.activePeerSet,
 });
@@ -36,18 +38,23 @@ export const activePeerSet = data =>
       config.node = hostname;
       config.ssl = protocol === 'https:';
       config.port = port || (config.ssl ? 443 : 80);
+      config.nodes = [`${protocol}//${hostname}:${port}`];
     }
     if (config.testnet === undefined && config.port !== undefined) {
       config.testnet = config.port === '7000';
     }
     if (config.custom) {
-      getNethash(Lisk.api(config)).then((response) => {
-        config.testnet = response.nethash === netHashes.testnet;
-        if (!config.testnet && response.nethash !== netHashes.mainnet) {
-          config.nethash = response.nethash;
+      const getNethash = new Lisk.APIClient(config.nodes, config.nethash, {});
+      loadingStarted('getConstants');
+      getNethash.node.getConstants().then((response) => {
+        loadingFinished('getConstants');
+        config.testnet = response.data.nethash === netHashes.testnet;
+        if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
+          config.nethash = response.data.nethash;
         }
         dispatch(peerSet(data, config));
       }).catch(() => {
+        loadingFinished('getConstants');
         dispatch(errorToastDisplayed({ label: i18next.t('Unable to connect to the node') }));
       });
     } else {

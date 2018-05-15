@@ -87,7 +87,7 @@ describe('actions: transactions', () => {
     });
 
     it('should dispatch transactionAdded action if resolved', () => {
-      accountApiMock.returnsPromise().resolves({ transactions: [], count: '0' });
+      accountApiMock.returnsPromise().resolves({ data: [], count: '0' });
       const expectedAction = {
         count: 0,
         confirmed: [],
