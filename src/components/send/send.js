@@ -21,9 +21,9 @@ class Send extends React.Component {
       reference: {
         value: '',
       },
+      fee: 0.1,
       ...authStatePrefill(),
     };
-    this.fee = 0.1;
     this.inputValidationRegexps = {
       recipient: /^\d{1,21}[L|l]$/,
       amount: /^\d+(\.\d{1,8})?$/,
@@ -44,7 +44,10 @@ class Send extends React.Component {
   }
 
   handleChange(name, value, error) {
+    const fee = (name === 'reference' && value.length > 0) ?
+      0.2 : 0.1;
     this.setState({
+      fee,
       [name]: {
         value,
         error: typeof error === 'string' ? error : this.validateInput(name, value),
@@ -53,7 +56,7 @@ class Send extends React.Component {
   }
 
   validateInput(name, value) {
-    if (!value) {
+    if (!value && name !== 'reference') {
       return this.props.t('Required');
     } else if (!value.match(this.inputValidationRegexps[name])) {
       return this.props.t('Invalid');
@@ -80,7 +83,7 @@ class Send extends React.Component {
   }
 
   getMaxAmount() {
-    return fromRawLsk(Math.max(0, this.props.account.balance - toRawLsk(this.fee)));
+    return fromRawLsk(Math.max(0, this.props.account.balance - toRawLsk(this.state.fee)));
   }
 
   setMaxAmount() {
@@ -102,7 +105,9 @@ class Send extends React.Component {
             error={this.state.amount.error}
             value={this.state.amount.value}
             onChange={this.handleChange.bind(this, 'amount')} />
-          <Input label={this.props.t('Reference')}
+          <Input
+            label={this.props.t('Reference (If you use this field, your transaction fee will be 0.2 LSK)')}
+            required={false}
             className='reference'
             error={this.state.reference.error}
             value={this.state.reference.value}
@@ -111,7 +116,7 @@ class Send extends React.Component {
             passphrase={this.state.passphrase}
             secondPassphrase={this.state.secondPassphrase}
             onChange={this.handleChange.bind(this)} />
-          <div className={styles.fee}> {this.props.t('Fee: {{fee}} LSK', { fee: this.fee })} </div>
+          <div className={styles.fee}> {this.props.t('Fee: {{fee}} LSK', { fee: this.state.fee })} </div>
           <IconMenu icon='more_vert' position='topRight' menuRipple className={`${styles.sendAllMenu} transaction-amount`} >
             <MenuItem onClick={this.setMaxAmount.bind(this)}
               caption={this.props.t('Set maximum amount')}
