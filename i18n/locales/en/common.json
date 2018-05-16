@@ -121,7 +121,7 @@
   "Recipient Address": "Recipient Address",
   "Recipient PublicKey": "Recipient PublicKey",
   "Redo": "Redo",
-  "Reference": "Reference",
+  "Reference (If you use this field, your transaction fee will be 0.2 LSK)": "Reference (If you use this field, your transaction fee will be 0.2 LSK)",
   "Register": "Register",
   "Register Second Passphrase": "Register Second Passphrase",
   "Register as delegate": "Register as delegate",
