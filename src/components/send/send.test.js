@@ -40,7 +40,7 @@ describe('Send', () => {
   });
 
   it('renders two Input components', () => {
-    expect(wrapper.find('Input')).to.have.length(2);
+    expect(wrapper.find('Input')).to.have.length(3);
   });
 
   it('renders two Button components', () => {
@@ -102,6 +102,7 @@ describe('Send', () => {
       passphrase: props.account.passphrase,
       recipientId: '11004588490103196952L',
       secondPassphrase: null,
+      data: '',
     });
   });
 });

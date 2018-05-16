@@ -18,6 +18,9 @@ class Send extends React.Component {
       amount: {
         value: '',
       },
+      reference: {
+        value: '',
+      },
       ...authStatePrefill(),
     };
     this.fee = 0.1;
@@ -71,6 +74,7 @@ class Send extends React.Component {
       amount: this.state.amount.value,
       passphrase: this.state.passphrase.value,
       secondPassphrase: this.state.secondPassphrase.value,
+      data: this.state.reference.value,
     });
     this.setState({ executed: true });
   }
@@ -98,6 +102,11 @@ class Send extends React.Component {
             error={this.state.amount.error}
             value={this.state.amount.value}
             onChange={this.handleChange.bind(this, 'amount')} />
+          <Input label={this.props.t('Reference')}
+            className='reference'
+            error={this.state.reference.error}
+            value={this.state.reference.value}
+            onChange={this.handleChange.bind(this, 'reference')} />
           <AuthInputs
             passphrase={this.state.passphrase}
             secondPassphrase={this.state.secondPassphrase}
