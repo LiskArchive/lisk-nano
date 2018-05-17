@@ -28,10 +28,17 @@ export const setSecondPassphrase = (activePeer, secondPassphrase, publicKey, pas
     });
   });
 
-export const send = (activePeer, recipientId, amount, passphrase, secondPassphrase = null) =>
+export const send = (activePeer, recipientId, amount,
+  passphrase, secondPassphrase = null, data = null) =>
   new Promise((resolve) => {
     const transaction = Lisk.transaction
-      .transfer({ recipientId, amount, passphrase, secondPassphrase });
+      .transfer({
+        recipientId,
+        amount,
+        passphrase,
+        secondPassphrase,
+        data,
+      });
     activePeer.transactions.broadcast(transaction).then(() => {
       resolve(transaction);
     });

@@ -106,14 +106,15 @@ export const delegateRegistered = ({
 /**
  *
  */
-export const sent = ({ activePeer, account, recipientId, amount, passphrase, secondPassphrase }) =>
+export const sent = ({ activePeer, account, recipientId,
+  amount, passphrase, secondPassphrase, data }) =>
   (dispatch) => {
     loadingStarted('sent');
-    send(activePeer, recipientId, toRawLsk(amount), passphrase, secondPassphrase)
-      .then((data) => {
+    send(activePeer, recipientId, toRawLsk(amount), passphrase, secondPassphrase, data)
+      .then((res) => {
         loadingFinished('sent');
         dispatch(transactionAdded({
-          id: data.id,
+          id: res.id,
           senderPublicKey: account.publicKey,
           senderId: account.address,
           recipientId,

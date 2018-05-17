@@ -40,7 +40,7 @@ describe('Send', () => {
   });
 
   it('renders two Input components', () => {
-    expect(wrapper.find('Input')).to.have.length(2);
+    expect(wrapper.find('Input')).to.have.length(3);
   });
 
   it('renders two Button components', () => {
@@ -65,6 +65,13 @@ describe('Send', () => {
   it('recognizes too high amount', () => {
     wrapper.find('.amount input').simulate('change', { target: { value: '12000' } });
     expect(wrapper.find('Input.amount').text()).to.contain('Insufficient funds');
+  });
+
+
+  it('show filling reference field increase transaction fee to 0.2 LSK', () => {
+    expect(wrapper.state('fee')).to.be.equal(0.1);
+    wrapper.find('.reference input').simulate('change', { target: { value: 'message' } });
+    expect(wrapper.state('fee')).to.be.equal(0.2);
   });
 
   it('recognizes empty amount', () => {
@@ -102,6 +109,7 @@ describe('Send', () => {
       passphrase: props.account.passphrase,
       recipientId: '11004588490103196952L',
       secondPassphrase: null,
+      data: '',
     });
   });
 });
