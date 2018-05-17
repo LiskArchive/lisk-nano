@@ -10,12 +10,15 @@ export default {
 
     if (ipc) {
       ipc.on('openUrl', (action, url) => {
-        const normalizedUrl = url.toLowerCase().replace('lisk://', '/');
-        const route = routesReg.find(item => item.regex.test(normalizedUrl));
-        if (route !== undefined) {
-          history.push(normalizedUrl);
-        } else {
-          store.dispatch(errorToastDisplayed({ label: i18next.t('The URL was invalid') }));
+        const protocol = url.split(':/')[0];
+        const normalizedUrl = url.split(':/')[1];
+        if (protocol && protocol.toLowerCase() === 'lisk' && normalizedUrl) {
+          const route = routesReg.find(item => item.regex.test(normalizedUrl));
+          if (route !== undefined) {
+            history.push(normalizedUrl);
+          } else {
+            store.dispatch(errorToastDisplayed({ label: i18next.t('The URL was invalid') }));
+          }
         }
       });
     }
