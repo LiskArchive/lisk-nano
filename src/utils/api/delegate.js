@@ -48,7 +48,7 @@ export const unvoteAutocomplete = (username, votedDict) =>
   );
 
 export const registerDelegate = (activePeer, username, passphrase, secondPassphrase = null) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const transaction = Lisk.transaction
       .registerDelegate({
         username,
@@ -56,5 +56,5 @@ export const registerDelegate = (activePeer, username, passphrase, secondPassphr
         secondPassphrase });
     activePeer.transactions.broadcast(transaction).then(() => {
       resolve(transaction);
-    });
+    }).catch(reject);
   });

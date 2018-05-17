@@ -1,7 +1,7 @@
 import Lisk from 'lisk-js';
 
 export const getAccount = (activePeer, address) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     activePeer.accounts.get({ address }).then((res) => {
       if (res.data.length > 0) {
         resolve({
@@ -16,21 +16,21 @@ export const getAccount = (activePeer, address) =>
           balance: 0,
         });
       }
-    });
+    }).catch(reject);
   });
 
 export const setSecondPassphrase = (activePeer, secondPassphrase, publicKey, passphrase) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const transaction = Lisk.transaction
       .registerSecondPassphrase({ passphrase, secondPassphrase });
     activePeer.transactions.broadcast(transaction).then(() => {
       resolve(transaction);
-    });
+    }).catch(reject);
   });
 
 export const send = (activePeer, recipientId, amount,
   passphrase, secondPassphrase = null, data = null) =>
-  new Promise((resolve) => {
+  new Promise((resolve, reject) => {
     const transaction = Lisk.transaction
       .transfer({
         recipientId,
@@ -41,7 +41,7 @@ export const send = (activePeer, recipientId, amount,
       });
     activePeer.transactions.broadcast(transaction).then(() => {
       resolve(transaction);
-    });
+    }).catch(reject);
   });
 
 export const transactions = (activePeer, address, limit = 20, offset = 0, sort = 'timestamp:desc') =>
