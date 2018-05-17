@@ -1,6 +1,7 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
 import { IconMenu, MenuItem } from 'react-toolbox/lib/menu';
+import FontIcon from 'react-toolbox/lib/font_icon';
 import { fromRawLsk, toRawLsk } from '../../utils/lsk';
 import AuthInputs from '../authInputs';
 import ActionBar from '../actionBar';
@@ -64,6 +65,8 @@ class Send extends React.Component {
       return this.props.t('Insufficient funds');
     } else if (name === 'amount' && value === '0') {
       return this.props.t('Zero not allowed');
+    } else if (name === 'reference' && value.length > 64) {
+      return this.props.t('Maximum length of 64 characters is exceeded.');
     }
     return undefined;
   }
@@ -106,12 +109,16 @@ class Send extends React.Component {
             value={this.state.amount.value}
             onChange={this.handleChange.bind(this, 'amount')} />
           <Input
-            label={this.props.t('Reference (If you use this field, your transaction fee will be 0.2 LSK)')}
+            label={this.props.t('Reference')}
             required={false}
             className='reference'
             error={this.state.reference.error}
             value={this.state.reference.value}
             onChange={this.handleChange.bind(this, 'reference')} />
+          {this.state.reference.value.length > 0 ? <div>
+            <FontIcon className={styles.notice} value='error_outline' />
+            {this.props.t('Using a reference will cost an additional fee of 0.1 LSK. Your total transaction fee will be 0.2 LSK if you choose to use a reference.')}
+          </div> : null }
           <AuthInputs
             passphrase={this.state.passphrase}
             secondPassphrase={this.state.secondPassphrase}

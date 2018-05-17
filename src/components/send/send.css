@@ -16,3 +16,10 @@
   line-height: 14px;
   color: grey;
 }
+
+.notice {
+  float: left;
+  margin-right: 10px;
+  display: inline-block;
+  margin-top: -3px;
+}
