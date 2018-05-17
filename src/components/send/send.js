@@ -26,7 +26,7 @@ class Send extends React.Component {
       ...authStatePrefill(),
     };
     this.inputValidationRegexps = {
-      recipient: /^\d{1,21}[L|l]$/,
+      recipient: /^\d{1,21}L$/,
       amount: /^\d+(\.\d{1,8})?$/,
     };
   }
