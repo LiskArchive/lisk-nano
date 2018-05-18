@@ -69,8 +69,7 @@ export const extractPublicKey = passphrase =>
  */
 export const extractAddress = (data) => {
   if (data.indexOf(' ') < 0) {
-    return Lisk.cryptography.getAddress(data);
+    return Lisk.cryptography.getAddressFromPublicKey(data);
   }
-  const { publicKey } = Lisk.cryptography.getKeys(data);
-  return Lisk.cryptography.getAddress(publicKey);
+  return Lisk.cryptography.getAddressFromPassphrase(data);
 };
