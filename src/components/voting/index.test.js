@@ -15,7 +15,7 @@ describe('VotingHOC', () => {
   beforeEach(() => {
     store.getState = () => ({
       peers: {
-        data: new Lisk.APIClient(['http://localhost:4000'], 'nethash', {}),
+        data: new Lisk.APIClient(['http://localhost:4000'], {}),
       },
       transactions: {
         pending: [],

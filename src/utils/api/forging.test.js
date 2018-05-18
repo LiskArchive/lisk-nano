@@ -10,8 +10,7 @@ describe('Utils: Forging', () => {
   const publicKey = 'c094ebee7ec0c50ebee32918655e089f6e1a604b83bcaa760293c61e0f18ab6f';
 
   beforeEach(() => {
-    const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
-    activePeer = new Lisk.APIClient(['http://localhost:4000'], nethash, {});
+    activePeer = new Lisk.APIClient(['http://localhost:4000'], {});
   });
 
   describe('getForgedBlocks', () => {

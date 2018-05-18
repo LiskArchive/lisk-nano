@@ -10,7 +10,7 @@ const peerSet = (data, config) => ({
   data: Object.assign({
     passphrase: data.passphrase,
     publicKey: data.publicKey,
-    activePeer: new Lisk.APIClient(config.nodes, config.nethash, {}),
+    activePeer: new Lisk.APIClient(config.nodes, { nethash: config.nethash }),
     options: config,
   }),
   type: actionTypes.activePeerSet,
@@ -44,7 +44,7 @@ export const activePeerSet = data =>
       config.testnet = config.port === '7000';
     }
     if (config.custom) {
-      const getNethash = new Lisk.APIClient(config.nodes, config.nethash, {});
+      const getNethash = new Lisk.APIClient(config.nodes, { nethash: config.nethash });
       loadingStarted('getConstants');
       getNethash.node.getConstants().then((response) => {
         loadingFinished('getConstants');
