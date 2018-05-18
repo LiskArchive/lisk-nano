@@ -6,14 +6,17 @@ import { getAccount, setSecondPassphrase, send,
 describe('Utils: Account', () => {
   const address = '1449310910991872227L';
 
-  describe.skip('getAccount', () => {
+  describe('getAccount', () => {
+    let activePeer;
     let activePeerMock;
-    const activePeer = {
-      getAccount: () => { },
-    };
 
     beforeEach(() => {
-      activePeerMock = mock(activePeer);
+      activePeer = {
+        accounts: {
+          get: () => { },
+        },
+      };
+      activePeerMock = mock(activePeer.accounts).expects('get').returnsPromise();
     });
 
     afterEach(() => {
@@ -21,23 +24,23 @@ describe('Utils: Account', () => {
       activePeerMock.restore();
     });
 
-    it('should return a promise that is resolved when activePeer.getAccount() calls its callback with data.success == true', () => {
+    it('should return a promise that is resolved when activePeer.accounts.get() resolves one account', () => {
       const account = { address, balance: 0, publicKey: null };
-      const response = { success: true, account };
+      const response = { data: [account] };
 
-      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
       const requestPromise = getAccount(activePeer, address);
+      activePeerMock.resolves(response);
       return expect(requestPromise).to.eventually.eql({
         ...account,
         serverPublicKey: null,
       });
     });
 
-    it('should return a promise that is resolved even when activePeer.getAccount() calls its callback with data.success == false and "Account not found"', () => {
-      const response = { success: false, error: 'Account not found' };
+    it('should return a promise that is resolved even when activePeer.accounts.get() resolves no accounts', () => {
+      const response = { data: [] };
       const account = { address, balance: 0 };
 
-      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
+      activePeerMock.resolves(response);
       const requestPromise = getAccount(activePeer, address);
       return expect(requestPromise).to.eventually.eql(account);
     });
@@ -45,7 +48,7 @@ describe('Utils: Account', () => {
     it('should otherwise return a promise that is rejected', () => {
       const response = { success: false };
 
-      activePeerMock.expects('getAccount').withArgs(address).callsArgWith(1, response);
+      activePeerMock.rejects(response);
       const requestPromise = getAccount(activePeer, address);
       return expect(requestPromise).to.eventually.be.rejectedWith(response);
     });
