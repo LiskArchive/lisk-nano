@@ -24,22 +24,26 @@ describe('actions: peers', () => {
 
   describe('activePeerSet', () => {
     let dispatch;
-    let getNetHashMock;
+    let APIClientBackup;
+    let getConstantsMock;
 
     beforeEach(() => {
       dispatch = spy();
-      // TODO: this doesn't work because Lisk.APIClient is called with 'new'
-      getNetHashMock = stub(Lisk, 'APIClient').returns({
-        node: {
-          getConstants: new Promise((resolve) => {
-            resolve({ data: { nethash } });
-          }),
-        },
-      });
+      getConstantsMock = stub().returnsPromise();
+      APIClientBackup = Lisk.APIClient;
+
+      // TODO: find a better way of mocking Lisk.APIClient
+      Lisk.APIClient = class MockAPIClient {
+        constructor() {
+          this.node = {
+            getConstants: getConstantsMock,
+          };
+        }
+      };
     });
 
     afterEach(() => {
-      getNetHashMock.restore();
+      Lisk.APIClient = APIClientBackup;
     });
 
     it('dispatch activePeerSet action also when address http missing', () => {
@@ -75,8 +79,7 @@ describe('actions: peers', () => {
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.constants.TESTNET_NODES));
     });
 
-    // skipped because I don't know how to stub liskAPIClient.node.getConstants()
-    it.skip('dispatch activePeerSet action with custom node', () => {
+    it('dispatch activePeerSet action with custom node', () => {
       const data = {
         passphrase,
         network: {
@@ -87,10 +90,29 @@ describe('actions: peers', () => {
           nethash,
         },
       };
+      getConstantsMock.resolves({ data: { nethash } });
 
       activePeerSet(data)(dispatch);
 
       expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', [data.network.address]));
+    });
+
+    it('dispatch error toast action if getConstants() API call fails', () => {
+      const data = {
+        passphrase,
+        network: {
+          name: 'Custom Node',
+          custom: true,
+          address: 'http://localhost:4000',
+          testnet: true,
+          nethash,
+        },
+      };
+      getConstantsMock.rejects({});
+
+      activePeerSet(data)(dispatch);
+
+      expect(dispatch).to.have.been.calledWith(match.has('type', actionTypes.toastDisplayed));
     });
   });
 });
