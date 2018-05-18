@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import PropTypes from 'prop-types';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import i18n from '../../i18n';
 import store from '../../store';
 import Authenticate from '../authenticate';

@@ -1,4 +1,4 @@
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import { expect } from 'chai';
 import { spy, stub, mock } from 'sinon';
 import middleware from './login';

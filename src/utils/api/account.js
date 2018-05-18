@@ -1,4 +1,4 @@
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 
 export const getAccount = (activePeer, address) =>
   new Promise((resolve) => {

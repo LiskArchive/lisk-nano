@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import { listAccountDelegates,
   listDelegates,
   getDelegate,

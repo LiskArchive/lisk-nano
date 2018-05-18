@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import actionTypes from '../constants/actions';
 // import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';

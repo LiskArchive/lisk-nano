@@ -13,7 +13,7 @@ const peers = (state = { status: {}, options: {} }, action) => {
     case actionTypes.activePeerSet:
       return Object.assign({}, state, {
         data: action.data.activePeer,
-        // options are duplicated here because lisk-js later on removes it from the 'data' object
+        // options are duplicated here because lisk-elements doesn't expose it as lisk-js did
         options: action.data.options,
       });
     case actionTypes.activePeerUpdate:

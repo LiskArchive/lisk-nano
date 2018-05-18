@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { spy, stub, match } from 'sinon';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import actionTypes from '../constants/actions';
 import netHashes from '../constants/netHashes';
 import { activePeerSet, activePeerUpdate } from './peers';

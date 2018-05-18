@@ -4,7 +4,7 @@ import { spy } from 'sinon';
 import { mount, shallow } from 'enzyme';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
 import Login from './login';

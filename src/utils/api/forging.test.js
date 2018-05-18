@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import { mock } from 'sinon';
 import moment from 'moment';
 import { getForgedBlocks, getForgedStats } from './forging';
