@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { spy, stub, match } from 'sinon';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import actionTypes from '../constants/actions';
 import netHashes from '../constants/netHashes';
 import { activePeerSet, activePeerUpdate } from './peers';
@@ -8,7 +8,7 @@ import { activePeerSet, activePeerUpdate } from './peers';
 describe.skip('actions: peers', () => {
   const passphrase = 'wagon stock borrow episode laundry kitten salute link globe zero feed marble';
   const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
-  const nethashApi = new Lisk.APIClient(['http://localhost:4000'], nethash, {});
+  const nethashApi = new Lisk.APIClient(['http://localhost:4000'], { nethash });
   describe('activePeerUpdate', () => {
     it('should create an action to update the active peer', () => {
       const data = {

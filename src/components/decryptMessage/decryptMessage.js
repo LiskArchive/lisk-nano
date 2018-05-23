@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import { translate } from 'react-i18next';
 import ActionBar from '../actionBar';
 import Authenticate from '../authenticate';

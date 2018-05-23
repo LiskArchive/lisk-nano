@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../i18n'; // initialized i18next instance
@@ -41,7 +41,6 @@ const withSecondSecretAccount = {
 const props = {
   peers: {
     data: new Lisk.APIClient(['http://localhost:4000'],
-      '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d',
       {
         name: 'Custom Node',
         custom: true,

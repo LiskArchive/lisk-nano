@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import i18n from '../../i18n';
 import VotingHOC from './';
 import store from '../../store';
@@ -15,7 +15,7 @@ describe('VotingHOC', () => {
   beforeEach(() => {
     store.getState = () => ({
       peers: {
-        data: new Lisk.APIClient(['http://localhost:4000'], 'nethash', {}),
+        data: new Lisk.APIClient(['http://localhost:4000'], {}),
       },
       transactions: {
         pending: [],

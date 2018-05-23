@@ -4,7 +4,7 @@ import { spy } from 'sinon';
 import { mount, shallow } from 'enzyme';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureMockStore from 'redux-mock-store';
-import Lisk from 'lisk-js';
+import Lisk from 'lisk-elements';
 import PropTypes from 'prop-types';
 import i18n from '../../i18n';
 import Login from './login';
@@ -32,7 +32,6 @@ describe('Login', () => {
     },
     replace: spy(),
   };
-  const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
   const props = {
     peers,
     account,
@@ -42,7 +41,7 @@ describe('Login', () => {
     onAccountUpdated: () => {},
     setActiveDialog: spy(),
     activePeerSet: () => {
-      props.peers.data = new Lisk.APIClient(['http://localhost:4000'], nethash, {});
+      props.peers.data = new Lisk.APIClient(['http://localhost:4000'], {});
     },
   };
   const options = {
