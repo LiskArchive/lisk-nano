@@ -66,20 +66,26 @@ const voting = (state = {
         refresh: true,
       });
 
-    case actionTypes.voteToggled:
+    case actionTypes.voteToggled: {
+      const { username, publicKey } = action.data;
+
+      const newVotes = Object.assign({}, state.votes);
+      const currentVote = state.votes[username];
+      if (currentVote && currentVote.unconfirmed && !currentVote.confirmed) {
+        delete newVotes[action.data.username];
+      } else {
+        newVotes[username] = {
+          confirmed: currentVote ? currentVote.confirmed : false,
+          unconfirmed: currentVote ? !currentVote.unconfirmed : true,
+          publicKey,
+        };
+      }
+
       return Object.assign({}, state, {
         refresh: false,
-        votes: Object.assign({}, state.votes, {
-          [action.data.username]: {
-            confirmed: state.votes[action.data.username] ?
-              state.votes[action.data.username].confirmed : false,
-            unconfirmed: state.votes[action.data.username] ?
-              !state.votes[action.data.username].unconfirmed : true,
-            publicKey: action.data.publicKey,
-          },
-        }),
+        votes: newVotes,
       });
-
+    }
 
     case actionTypes.accountLoggedOut:
       return Object.assign({}, state, {
