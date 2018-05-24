@@ -40,6 +40,7 @@ describe('actions: peers', () => {
           };
         }
       };
+      Lisk.APIClient.constants = APIClientBackup.constants;
     });
 
     afterEach(() => {
@@ -49,7 +50,7 @@ describe('actions: peers', () => {
     it('dispatch activePeerSet action also when address http missing', () => {
       const network = {
         address: 'localhost:8000',
-        nethash: Lisk.constants.MAINNET_NETHASH,
+        nethash: Lisk.APIClient.constants.MAINNET_NETHASH,
       };
 
       activePeerSet({ passphrase, network })(dispatch);
@@ -60,13 +61,13 @@ describe('actions: peers', () => {
     it('dispatch activePeerSet action with mainnet nodes if network.address is undefined', () => {
       activePeerSet({ passphrase, network: {} })(dispatch);
 
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.constants.MAINNET_NODES));
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.MAINNET_NODES));
     });
 
     it('dispatch activePeerSet action with mainnet nodes if network is undefined', () => {
       activePeerSet({ passphrase })(dispatch);
 
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.constants.MAINNET_NODES));
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.MAINNET_NODES));
     });
 
     it('dispatch activePeerSet action with testnet nodes if testnet option is set', () => {
@@ -76,7 +77,7 @@ describe('actions: peers', () => {
 
       activePeerSet({ passphrase, network })(dispatch);
 
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.constants.TESTNET_NODES));
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.TESTNET_NODES));
     });
 
     it('dispatch activePeerSet action with custom node', () => {
