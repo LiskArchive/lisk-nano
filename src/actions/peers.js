@@ -1,9 +1,7 @@
 import i18next from 'i18next';
 import Lisk from 'lisk-elements';
 import actionTypes from '../constants/actions';
-// import { getNethash } from './../utils/api/nethash';
 import { errorToastDisplayed } from './toaster';
-import netHashes from '../constants/netHashes';
 import { loadingStarted, loadingFinished } from '../utils/loading';
 
 const peerSet = (data, config) => ({
@@ -39,19 +37,20 @@ export const activePeerSet = data =>
       config.ssl = protocol === 'https:';
       config.port = port || (config.ssl ? 443 : 80);
       config.nodes = [`${protocol}//${hostname}:${port}`];
+    } else if (config.testnet) {
+      config.nodes = Lisk.APIClient.constants.TESTNET_NODES;
+      config.nethash = Lisk.APIClient.constants.TESTNET_NETHASH;
+    } else {
+      config.nodes = Lisk.APIClient.constants.MAINNET_NODES;
+      config.nethash = Lisk.APIClient.constants.MAINNET_NETHASH;
     }
-    if (config.testnet === undefined && config.port !== undefined) {
-      config.testnet = config.port === '7000';
-    }
+
     if (config.custom) {
-      const getNethash = new Lisk.APIClient(config.nodes, { nethash: config.nethash });
+      const liskAPIClient = new Lisk.APIClient(config.nodes, { nethash: config.nethash });
       loadingStarted('getConstants');
-      getNethash.node.getConstants().then((response) => {
+      liskAPIClient.node.getConstants().then((response) => {
         loadingFinished('getConstants');
-        config.testnet = response.data.nethash === netHashes.testnet;
-        if (!config.testnet && response.data.nethash !== netHashes.mainnet) {
-          config.nethash = response.data.nethash;
-        }
+        config.nethash = response.data.nethash;
         dispatch(peerSet(data, config));
       }).catch(() => {
         loadingFinished('getConstants');

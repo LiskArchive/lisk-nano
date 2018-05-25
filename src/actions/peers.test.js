@@ -2,13 +2,12 @@ import { expect } from 'chai';
 import { spy, stub, match } from 'sinon';
 import Lisk from 'lisk-elements';
 import actionTypes from '../constants/actions';
-import netHashes from '../constants/netHashes';
 import { activePeerSet, activePeerUpdate } from './peers';
 
-describe.skip('actions: peers', () => {
+describe('actions: peers', () => {
   const passphrase = 'wagon stock borrow episode laundry kitten salute link globe zero feed marble';
   const nethash = '198f2b61a8eb95fbeed58b8216780b68f697f26b849acf00c8c93bb9b24f783d';
-  const nethashApi = new Lisk.APIClient(['http://localhost:4000'], { nethash });
+
   describe('activePeerUpdate', () => {
     it('should create an action to update the active peer', () => {
       const data = {
@@ -25,20 +24,63 @@ describe.skip('actions: peers', () => {
 
   describe('activePeerSet', () => {
     let dispatch;
-    let getNetHash;
+    let APIClientBackup;
+    let getConstantsMock;
 
     beforeEach(() => {
       dispatch = spy();
-      const node = nethashApi.node;
-      getNetHash = stub(node, 'getConstants');
+      getConstantsMock = stub().returnsPromise();
+      APIClientBackup = Lisk.APIClient;
+
+      // TODO: find a better way of mocking Lisk.APIClient
+      Lisk.APIClient = class MockAPIClient {
+        constructor() {
+          this.node = {
+            getConstants: getConstantsMock,
+          };
+        }
+      };
+      Lisk.APIClient.constants = APIClientBackup.constants;
     });
 
     afterEach(() => {
-      getNetHash.restore();
+      Lisk.APIClient = APIClientBackup;
     });
 
-    it('creates active peer config', () => {
-      getNetHash.returnsPromise();
+    it('dispatch activePeerSet action also when address http missing', () => {
+      const network = {
+        address: 'localhost:8000',
+        nethash: Lisk.APIClient.constants.MAINNET_NETHASH,
+      };
+
+      activePeerSet({ passphrase, network })(dispatch);
+
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.address', 'localhost:8000'));
+    });
+
+    it('dispatch activePeerSet action with mainnet nodes if network.address is undefined', () => {
+      activePeerSet({ passphrase, network: {} })(dispatch);
+
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.MAINNET_NODES));
+    });
+
+    it('dispatch activePeerSet action with mainnet nodes if network is undefined', () => {
+      activePeerSet({ passphrase })(dispatch);
+
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.MAINNET_NODES));
+    });
+
+    it('dispatch activePeerSet action with testnet nodes if testnet option is set', () => {
+      const network = {
+        testnet: true,
+      };
+
+      activePeerSet({ passphrase, network })(dispatch);
+
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', Lisk.APIClient.constants.TESTNET_NODES));
+    });
+
+    it('dispatch activePeerSet action with custom node', () => {
       const data = {
         passphrase,
         network: {
@@ -49,68 +91,29 @@ describe.skip('actions: peers', () => {
           nethash,
         },
       };
+      getConstantsMock.resolves({ data: { nethash } });
 
       activePeerSet(data)(dispatch);
-      getNetHash.resolves({ data: { nethash } });
 
-      expect(dispatch).to.have.been.calledOnce();
+      expect(dispatch).to.have.been.calledWith(match.hasNested('data.options.nodes', [data.network.address]));
     });
 
-    it('dispatch activePeerSet action also when address http missing', () => {
-      const network = { address: 'localhost:8000' };
-
-      activePeerSet({ passphrase, network })(dispatch);
-
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.options.address', 'localhost:8000'));
-    });
-
-    it('dispatch activePeerSet with testnet config set to true when the network is a custom node and nethash is testnet', () => {
-      getNetHash.returnsPromise();
-      const network = {
-        address: 'http://localhost:4000',
-        custom: true,
+    it('dispatch error toast action if getConstants() API call fails', () => {
+      const data = {
+        passphrase,
+        network: {
+          name: 'Custom Node',
+          custom: true,
+          address: 'http://localhost:4000',
+          testnet: true,
+          nethash,
+        },
       };
+      getConstantsMock.rejects({});
 
-      activePeerSet({ passphrase, network })(dispatch);
-      getNetHash.resolves({ data: { nethash: netHashes.testnet } });
+      activePeerSet(data)(dispatch);
 
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.testnet', true));
-    });
-
-    it('dispatch activePeerSet with testnet config set to false when the network is a custom node and nethash is testnet', () => {
-      getNetHash.returnsPromise();
-      const network = {
-        address: 'http://localhost:4000',
-        custom: true,
-      };
-
-      activePeerSet({ passphrase, network })(dispatch);
-      getNetHash.resolves({ data: { nethash: 'some other nethash' } });
-
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.testnet', false));
-    });
-
-    it('dispatch activePeerSet action even if network is undefined', () => {
-      activePeerSet({ passphrase })(dispatch);
-
-      expect(dispatch).to.have.been.calledWith();
-    });
-
-    it('dispatch activePeerSet action even if network.address is undefined', () => {
-      activePeerSet({ passphrase, network: {} })(dispatch);
-
-      expect(dispatch).to.have.been.calledWith();
-    });
-
-    it('should set to testnet if not defined in config but port is 7000', () => {
-      const network7000 = { address: 'http://127.0.0.1:7000', nethash };
-      const network4000 = { address: 'http://127.0.0.1:4000', nethash };
-
-      activePeerSet({ passphrase, network: network7000 })(dispatch);
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.options.testnet', true));
-
-      activePeerSet({ passphrase, network: network4000 })(dispatch);
-      expect(dispatch).to.have.been.calledWith(match.hasNested('data.activePeer.options.testnet', false));
+      expect(dispatch).to.have.been.calledWith(match.has('type', actionTypes.toastDisplayed));
     });
   });
 });
