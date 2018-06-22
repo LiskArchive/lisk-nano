@@ -47,9 +47,9 @@ describe('PassphraseVerifier', () => {
 
   it('should break passphrase, hide a word and show it', () => {
     const expectedValues = [
-      'survey stereo pool fortune oblige ',
+      'survey stereo pool fortune oblige',
       '-----',
-      ' gravity goddess mistake sentence anchor pool',
+      'gravity goddess mistake sentence anchor pool',
     ];
     const spanTags = wrapper.find('.passphrase-holder span');
 
