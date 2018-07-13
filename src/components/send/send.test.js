@@ -67,13 +67,6 @@ describe('Send', () => {
     expect(wrapper.find('Input.amount').text()).to.contain('Insufficient funds');
   });
 
-
-  it('show filling reference field increase transaction fee to 0.2 LSK', () => {
-    expect(wrapper.state('fee')).to.be.equal(0.1);
-    wrapper.find('.reference input').simulate('change', { target: { value: 'message' } });
-    expect(wrapper.state('fee')).to.be.equal(0.2);
-  });
-
   it('recognizes empty amount', () => {
     wrapper.find('.amount input').simulate('change', { target: { value: '12000' } });
     wrapper.find('.amount input').simulate('change', { target: { value: '' } });
