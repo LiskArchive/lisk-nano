@@ -1,7 +1,6 @@
 import React from 'react';
 import Input from 'react-toolbox/lib/input';
 import { IconMenu, MenuItem } from 'react-toolbox/lib/menu';
-import FontIcon from 'react-toolbox/lib/font_icon';
 import { fromRawLsk, toRawLsk } from '../../utils/lsk';
 import AuthInputs from '../authInputs';
 import ActionBar from '../actionBar';
@@ -45,10 +44,7 @@ class Send extends React.Component {
   }
 
   handleChange(name, value, error) {
-    const fee = (name === 'reference' && value.length > 0) ?
-      0.2 : 0.1;
     this.setState({
-      fee,
       [name]: {
         value,
         error: typeof error === 'string' ? error : this.validateInput(name, value),
@@ -115,10 +111,6 @@ class Send extends React.Component {
             error={this.state.reference.error}
             value={this.state.reference.value}
             onChange={this.handleChange.bind(this, 'reference')} />
-          {this.state.reference.value.length > 0 ? <div>
-            <FontIcon className={styles.notice} value='error_outline' />
-            {this.props.t('Using a reference will cost an additional fee of 0.1 LSK. Your total transaction fee will be 0.2 LSK if you choose to use a reference.')}
-          </div> : null }
           <AuthInputs
             passphrase={this.state.passphrase}
             secondPassphrase={this.state.secondPassphrase}
