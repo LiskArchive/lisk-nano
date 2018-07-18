@@ -114,10 +114,10 @@ node('lisk-nano') {
             export DISPLAY=:1$N
             Xvfb :1$N -ac -screen 0 1280x1024x24 &
 
-	    cp -r ~/lisk-docker/examples/development $WORKSPACE/$BRANCH_NAME
+	    cp -r ~/liskhq/lisk-docker/examples/development $WORKSPACE/$BRANCH_NAME
 	    cd $WORKSPACE/$BRANCH_NAME
 	    cp /home/lisk/blockchain_explorer.db.gz ./blockchain.db.gz
-	    LISK_VERSION=1.0.0-beta.7.1 make coldstart
+	    LISK_VERSION=1.0.0-rc.1 make coldstart
 	    LISK_PORT=$( docker-compose port lisk 4000 |cut -d ":" -f 2 )
 	    cd -
 
