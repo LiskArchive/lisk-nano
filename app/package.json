@@ -1,6 +1,6 @@
 {
   "name": "lisk-nano",
-  "version": "2.0.0",
+  "version": "2.0.0-Ledger-rc.1",
   "description": "Lisk Nano",
   "main": "./build/main.js",
   "author": {
