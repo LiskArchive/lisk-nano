@@ -95,8 +95,8 @@
     "css-loader": "0.28.7",
     "cucumber": "2.2.0",
     "del-cli": "1.1.0",
-    "electron": "1.8.4",
-    "electron-builder": "19.32.2",
+    "electron": "1.8.7",
+    "electron-builder": "20.14.7",
     "electron-json-storage": "=3.2.0",
     "electron-rebuild": "1.7.3",
     "electron-updater": "2.16.1",
@@ -173,10 +173,7 @@
     ],
     "linux": {
       "target": [
-        "AppImage",
-        "deb",
-        "rpm",
-        "tar.gz"
+        "AppImage"
       ],
       "desktop": {
         "MimeType": "application/lisk;x-scheme-handler/lisk"
