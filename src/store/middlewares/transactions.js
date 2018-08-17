@@ -21,6 +21,7 @@ const transactionAdded = (store, action) => {
   store.dispatch(newAction);
 };
 
+// eslint-disable-next-line no-unused-vars
 const transactionsUpdated = (store) => {
   const { transactions, account, peers } = store.getState();
   if (transactions.pending.length) {
@@ -39,7 +40,14 @@ const transactionsMiddleware = store => next => (action) => {
       transactionAdded(store, action);
       break;
     case actionTypes.transactionsUpdated:
+      // this was disabled, because this caused pending transactions
+      // to disappear from the list before they appeared again as confirmed.
+      // Currently, the problem is that a pending transaction will not be removed
+      // from the list if it fails. Caused by Lisk Core 1.0.0
+      // TODO: figure out how to make this work again
+      /*
       transactionsUpdated(store, action);
+      */
       break;
     default: break;
   }
