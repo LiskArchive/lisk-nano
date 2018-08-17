@@ -16,7 +16,7 @@ describe('SavedAccounts', () => {
   const publicKey = 'fab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88';
   const savedAccounts = [
     {
-      publicKey: 'hab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88',
+      publicKey: 'eab9d261ea050b9e326d7e11587eccc343a20e64e29d8781b50fd06683cacc88',
       network: 0,
     },
     {
