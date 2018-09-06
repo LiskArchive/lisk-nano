@@ -15,7 +15,7 @@ export const createSendTX = (senderPublicKey, recipientId, amount, data = null) 
     fee: Lisk.transaction.constants.TRANSFER_FEE.toString(),
     senderPublicKey,
     recipientId,
-    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch(),
+    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch() - 100,
     asset: createAsset(data),
   };
   return transaction;
@@ -28,7 +28,7 @@ export const createDelegateTX = (senderPublicKey, username) => {
     fee: Lisk.transaction.constants.DELEGATE_FEE.toString(),
     senderPublicKey,
     recipientId: '',
-    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch(),
+    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch() - 100,
     asset: {
       delegate: {
         username,
@@ -45,7 +45,7 @@ export const createSecondPassphraseTX = (senderPublicKey, secondPublicKey) => {
     fee: Lisk.transaction.constants.SIGNATURE_FEE.toString(),
     senderPublicKey,
     recipientId: '',
-    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch(),
+    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch() - 100,
     asset: {
       signature: {
         publicKey: secondPublicKey,
@@ -66,7 +66,7 @@ export const createRawVoteTX = (senderPublicKey, recipientId, votedList, unvoted
     fee: Lisk.transaction.constants.VOTE_FEE.toString(),
     senderPublicKey,
     recipientId,
-    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch(),
+    timestamp: Lisk.transaction.utils.getTimeFromBlockchainEpoch() - 100,
     asset: { votes: concatVoteLists(votedList, unvotedList) },
   };
   return transaction;
