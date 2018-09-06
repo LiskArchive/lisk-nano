@@ -36,13 +36,13 @@ const Header = props => (
                 to='register-second-passphrase'>{props.t('Register second passphrase')}</RelativeLink>
             </MenuItem>
         }
-        <MenuItem theme={styles}>
+        <MenuItem theme={styles} disabled={props.account.loginType !== loginTypes.passphrase}>
           <RelativeLink className={`sign-message ${styles.menuLink}`}
-            to='sign-message'>{props.t('Sign message')}</RelativeLink>
+            to='sign-message'>{props.t('Sign message')} {props.account.loginType === loginTypes.ledgerNano ? '(Coming Soon)' : ''}</RelativeLink>
         </MenuItem>
-        <MenuItem theme={styles}>
+        <MenuItem theme={styles} disabled={props.account.loginType !== loginTypes.passphrase}>
           <RelativeLink className={`verify-message ${styles.menuLink}`}
-            to='verify-message'>{props.t('Verify message')}</RelativeLink>
+            to='verify-message'>{props.t('Verify message')} {props.account.loginType === loginTypes.ledgerNano ? '(Coming Soon)' : ''}</RelativeLink>
         </MenuItem>
         <MenuItem theme={styles} disabled={props.account.loginType !== loginTypes.passphrase}>
           <RelativeLink disableWhenLedger className={`encrypt-message ${styles.menuLink}`}
