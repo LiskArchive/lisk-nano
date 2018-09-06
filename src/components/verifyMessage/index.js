@@ -2,7 +2,6 @@ import { translate } from 'react-i18next';
 import Input from 'react-toolbox/lib/input';
 import React from 'react';
 import lisk from 'lisk-elements';
-import signPrefix from '../../constants/signPrefix';
 
 import InfoParagraph from '../infoParagraph';
 import SignVerifyResult from '../signVerifyResult';
@@ -36,14 +35,14 @@ class VerifyMessage extends React.Component {
   verify(newState) {
     newState.publicKey.error = '';
     newState.signature.error = '';
-    newState.result = '';
+    newState.result = false;
 
     if (!this.state.message.value || !this.state.signature.value || !this.state.publicKey.value) {
       return newState;
     }
 
     try {
-      const messageToVerify = signPrefix + this.state.message.value;
+      const messageToVerify = this.state.message.value;
       newState.result = lisk.cryptography.verifyMessageWithPublicKey({
         message: messageToVerify,
         signature: this.state.signature.value,
@@ -54,7 +53,7 @@ class VerifyMessage extends React.Component {
       }
     } catch (e) {
       newState.signature.error = this.props.t('Invalid');
-      newState.result = '';
+      newState.result = false;
     }
     return newState;
   }
@@ -82,7 +81,7 @@ class VerifyMessage extends React.Component {
             error={this.state.signature.error}
             onChange={this.handleChange.bind(this, 'signature')} />
         </section>
-        {this.state.result !== '' ?
+        {this.state.result ?
           <SignVerifyResult result={result} title={t('Status')} /> :
           null
         }

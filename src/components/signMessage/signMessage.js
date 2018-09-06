@@ -7,7 +7,6 @@ import AuthInputs from '../authInputs';
 import ActionBar from '../actionBar';
 import { authStatePrefill, authStateIsValid } from '../../utils/form';
 import loginTypes from '../../constants/loginTypes';
-import signPrefix from '../../constants/signPrefix';
 import { signMessageWithLedger } from '../../utils/ledger';
 import { loadingStarted, loadingFinished } from '../../utils/loading';
 import to from '../../utils/to';
@@ -40,20 +39,20 @@ class SignMessageComponent extends React.Component {
 
   /* eslint-disable prefer-const */
   async sign(message) {
-    loadingStarted('signMessageWithLedger');
     let error;
     let signedMessage;
     // Add prefix to message:
-    const messageToSign = signPrefix + message;
     switch (this.props.account.loginType) {
       case loginTypes.passphrase:
-        signedMessage = Lisk.cryptography.signMessageWithPassphrase(messageToSign,
+        signedMessage = Lisk.cryptography.signMessageWithPassphrase(message,
           this.state.passphrase.value);
         this.showResult(message, signedMessage.signature);
         break;
 
+      // eslint-disable-next-line no-case-declarations
       case loginTypes.ledgerNano:
-        [error, signedMessage] = await to(signMessageWithLedger(this.props.account, messageToSign));
+        loadingStarted('signMessageWithLedger');
+        [error, signedMessage] = await to(signMessageWithLedger(this.props.account, message));
 
         if (error) {
           const text = error && error.message ? `${error.message}.` : this.props.t('An error occurred while creating the transaction.');
@@ -61,6 +60,7 @@ class SignMessageComponent extends React.Component {
         } else {
           this.showResult(message, signedMessage);
         }
+        loadingFinished('signMessageWithLedger');
         break;
 
       case loginTypes.trezor:
@@ -70,7 +70,6 @@ class SignMessageComponent extends React.Component {
         this.props.errorToast({ label: this.props.t('Login Type not recognized.') });
         break;
     }
-    loadingFinished('signMessageWithLedger');
   }
 
   showResult(message, signature) {

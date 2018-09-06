@@ -6,6 +6,7 @@ import { LedgerAccount, SupportedCoin, DposLedger } from 'dpos-ledger-api';
 import isElectron from 'is-electron';
 import hwConstants from '../constants/hwConstants';
 import { loadingStarted, loadingFinished } from './loading';
+import signPrefix from '../constants/signPrefix';
 import { infoToastDisplayed } from '../actions/toaster';
 import { calculateTxId, getBufferToHex, getTransactionBytes } from './rawTransactionWrapper';
 import store from '../store';
@@ -52,7 +53,8 @@ export const signMessageWithLedger = async (account, message) => {
   store.dispatch(infoToastDisplayed({ label: ledgerMessages.confirmation }));
 
   try {
-    const signature = await liskLedger.signMSG(ledgerAccount, message);
+    const messageToSign = signPrefix + message;
+    const signature = await liskLedger.signMSG(ledgerAccount, messageToSign);
     return getBufferToHex(signature.slice(0, 64));
   } catch (e) {
     throw new Error(ledgerMessages.notConnected);
