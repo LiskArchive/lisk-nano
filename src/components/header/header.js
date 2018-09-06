@@ -24,15 +24,14 @@ const Header = props => (
       >
         {
           !props.account.isDelegate &&
-            <MenuItem theme={styles}>
+            <MenuItem disabled={props.account.loginType !== loginTypes.passphrase} theme={styles}>
               <RelativeLink className={`register-as-delegate ${styles.menuLink}`}
-                disabled={props.account.loginType !== loginTypes.passphrase}
                 to='register-delegate'>{props.t('Register as delegate')}</RelativeLink>
             </MenuItem>
         }
         {
           !props.account.secondPublicKey &&
-            <MenuItem theme={styles}>
+            <MenuItem disabled={props.account.loginType !== loginTypes.passphrase} theme={styles}>
               <RelativeLink className={`register-second-passphrase ${styles.menuLink}`}
                 to='register-second-passphrase'>{props.t('Register second passphrase')}</RelativeLink>
             </MenuItem>
