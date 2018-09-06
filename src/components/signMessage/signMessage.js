@@ -49,7 +49,7 @@ class SignMessageComponent extends React.Component {
       case loginTypes.passphrase:
         signedMessage = Lisk.cryptography.signMessageWithPassphrase(messageToSign,
           this.state.passphrase.value);
-        this.showResult(message, signedMessage);
+        this.showResult(message, signedMessage.signature);
         break;
 
       case loginTypes.ledgerNano:

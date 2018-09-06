@@ -38,6 +38,10 @@ class VerifyMessage extends React.Component {
     newState.signature.error = '';
     newState.result = '';
 
+    if (!this.state.message.value || !this.state.signature.value || !this.state.publicKey.value) {
+      return newState;
+    }
+
     try {
       const messageToVerify = signPrefix + this.state.message.value;
       newState.result = lisk.cryptography.verifyMessageWithPublicKey({
@@ -45,12 +49,11 @@ class VerifyMessage extends React.Component {
         signature: this.state.signature.value,
         publicKey: this.state.publicKey.value,
       });
-    } catch (e) {
-      if (e.message.indexOf('Invalid publicKey') !== -1 && this.state.publicKey.value) {
-        newState.publicKey.error = this.props.t('Invalid');
-      } else if (e.message.indexOf('Invalid signature') !== -1 && this.state.signature.value) {
+      if (!newState.result) {
         newState.signature.error = this.props.t('Invalid');
       }
+    } catch (e) {
+      newState.signature.error = this.props.t('Invalid');
       newState.result = '';
     }
     return newState;
@@ -65,7 +68,7 @@ class VerifyMessage extends React.Component {
           {t('When you have the signature, you only need the publicKey of the signer in order to verify that the message came from the right private/publicKey pair. Be aware, everybody knowing the signature and the publicKey can verify the message. If ever there is a dispute, everybody can take the publicKey and signature to a judge and prove that the message is coming from the specific private/publicKey pair.')}
         </InfoParagraph>
         <section>
-          <Input className='message' type='text' label={t('Message')}
+          <Input className='message' type='text' multiline label={t('Message')}
             autoFocus="true"
             value={this.state.message.value}
             error={this.state.message.error}
@@ -79,7 +82,7 @@ class VerifyMessage extends React.Component {
             error={this.state.signature.error}
             onChange={this.handleChange.bind(this, 'signature')} />
         </section>
-        {this.state.result ?
+        {this.state.result !== '' ?
           <SignVerifyResult result={result} title={t('Status')} /> :
           null
         }
