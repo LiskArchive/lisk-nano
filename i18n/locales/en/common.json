@@ -206,6 +206,7 @@
   "Transactions": "Transactions",
   "Trezor not yet supported.": "Trezor not yet supported.",
   "URL is invalid": "URL is invalid",
+  "Unable to Detect the communication Layer with your Ledger Nano S": "Unable to Detect the communication Layer with your Ledger Nano S",
   "Unable to connect to Ledger Nano S. Be sure your device is unlocked and inside the Lisk App": "Unable to connect to Ledger Nano S. Be sure your device is unlocked and inside the Lisk App",
   "Unable to connect to the node": "Unable to connect to the node",
   "Undo": "Undo",

@@ -14,6 +14,8 @@ const { app, ipcMain } = electron;
 let appIsReady = false;
 
 
+console.info(process.platform);
+
 app.on('ready', () => {
   appIsReady = true;
   win.create({ electron, path, electronLocalshortcut, storage, checkForUpdates });
