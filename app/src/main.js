@@ -3,6 +3,7 @@ import electronLocalshortcut from 'electron-localshortcut'; // eslint-disable-li
 import { autoUpdater } from 'electron-updater'; // eslint-disable-line import/no-extraneous-dependencies
 import path from 'path';
 import storage from 'electron-json-storage'; // eslint-disable-line import/no-extraneous-dependencies
+import TransportNodeHid from '@ledgerhq/hw-transport-node-hid'; // eslint-disable-line import/no-extraneous-dependencies
 import win from './modules/win';
 import localeHandler from './modules/localeHandler';
 import updateChecker from './modules/autoUpdater';
@@ -12,9 +13,6 @@ const checkForUpdates = updateChecker({ autoUpdater, dialog: electron.dialog, wi
 const { app, ipcMain } = electron;
 
 let appIsReady = false;
-
-
-console.info(process.platform);
 
 app.on('ready', () => {
   appIsReady = true;
@@ -86,4 +84,19 @@ ipcMain.on('set-locale', (event, locale) => {
 
 ipcMain.on('request-locale', () => {
   localeHandler.send({ storage });
+});
+
+let transport;
+TransportNodeHid.create()
+  .then((t) => {
+    transport = t;
+  })
+  .catch((e) => {
+    transport = e;
+  });
+
+ipcMain.on('getLedgerTransportNodeHid', (event) => {
+  console.info(process.platform);
+  console.info(transport);
+  event.returnValue = transport;
 });

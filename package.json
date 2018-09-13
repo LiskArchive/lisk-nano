@@ -36,8 +36,8 @@
     "url": "https://github.com/LiskHQ/lisk-nano"
   },
   "dependencies": {
-    "@ledgerhq/hw-transport-node-hid": "^4.18.0",
-    "@ledgerhq/hw-transport-u2f": "^4.15.0",
+    "@ledgerhq/hw-transport-node-hid": "^4.22.0",
+    "@ledgerhq/hw-transport-u2f": "^4.21.0",
     "babel-polyfill": "6.26.0",
     "bignumber.js": "4.0.4",
     "bitcore-mnemonic": "1.2.5",

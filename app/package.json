@@ -8,6 +8,6 @@
     "email": "admin@lisk.io"
   },
   "dependencies": {
-    "node-hid": "0.7.3"
+    "usb": "1.3.3"
   }
 }
