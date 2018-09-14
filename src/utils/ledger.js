@@ -3,7 +3,6 @@ import isElectron from 'is-electron';
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import i18next from 'i18next';
 import { LedgerAccount, SupportedCoin, DposLedger } from 'dpos-ledger-api';
-import TransportNodeHid from '@ledgerhq/hw-transport-node-hid'; // eslint-disable-line import/no-extraneous-dependencies
 import hwConstants from '../constants/hwConstants';
 import { loadingStarted, loadingFinished } from './loading';
 import signPrefix from '../constants/signPrefix';
@@ -58,7 +57,6 @@ export const ledgerMessages = {
 };
 
 const throwIfError = (returnValue) => {
-  console.info('throwIfError');
   if (returnValue instanceof Error) {
     throw returnValue;
   }
@@ -73,7 +71,7 @@ const getLedgerTransport = async () => {
   } else if (isBrowser) {
     return getLedgerTransportU2F();
   }
-  return TransportNodeHid.create();
+  return new Error(ledgerMessages.noTransport);
 };
 
 export const getLedgerAccount = (index = 0) => {
@@ -87,9 +85,7 @@ export const calculateSecondPassphraseIndex =
   (accountIndex, pin) => accountIndex + parseInt(pin, 10) + hwConstants.secondPassphraseOffset;
 
 export const getLiskDposLedger = async () => {
-  console.info('getLiskDposLedger');
   const transport = throwIfError(await getLedgerTransport());
-  console.info(transport); // TOFIX HERE (transport is not a TransportNodeHid object
   return new DposLedger(transport);
 };
 
