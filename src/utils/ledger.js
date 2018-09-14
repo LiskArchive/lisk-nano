@@ -3,12 +3,50 @@ import isElectron from 'is-electron';
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import i18next from 'i18next';
 import { LedgerAccount, SupportedCoin, DposLedger } from 'dpos-ledger-api';
+import TransportNodeHid from '@ledgerhq/hw-transport-node-hid'; // eslint-disable-line import/no-extraneous-dependencies
 import hwConstants from '../constants/hwConstants';
 import { loadingStarted, loadingFinished } from './loading';
 import signPrefix from '../constants/signPrefix';
 import { infoToastDisplayed } from '../actions/toaster';
 import { calculateTxId, getBufferToHex, getTransactionBytes } from './rawTransactionWrapper';
 import store from '../store';
+
+const { ipc } = window;
+
+class IPCTransport {
+  constructor(key) {
+    this.key = key;
+  }
+
+  static create() {
+    const key = (Math.random() * 10000).toString(16);
+    return this.__rawSend('ledger.createTransport', key)
+      .then(() => new this(key));
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  setScrambleKey(k) {
+    ipc.sendSync(`ledger[${this.key}].setScrambleKey`, k);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  send(...args) {
+    return IPCTransport.__rawSend(`ledger[${this.key}].send`, ...args);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  static __rawSend(k, ...args) {
+    return new Promise((resolve, reject) => {
+      ipc.once(`${k}.result`, (event, res) => {
+        if (res.success) {
+          return resolve(res.data);
+        }
+        return reject(new Error(res.error));
+      });
+      ipc.send(`${k}.request`, ...args);
+    });
+  }
+}
 
 
 export const ledgerMessages = {
@@ -27,25 +65,15 @@ const throwIfError = (returnValue) => {
   return returnValue;
 };
 
-const getLedgerTransportNodeHid = async () => {
-  console.info('getLedgerTransportNodeHid');
-  const { ipc } = window;
-  if (ipc) {
-    return ipc.sendSync('getLedgerTransportNodeHid');
-  }
-  throw new Error(ledgerMessages.notConnected);
-};
-
 const getLedgerTransportU2F = async () => TransportU2F.create();
 
 const getLedgerTransport = async () => {
-  console.info('getLedgerTransport');
   if (isElectron()) {
-    return getLedgerTransportNodeHid();
+    return IPCTransport.create();
   } else if (isBrowser) {
     return getLedgerTransportU2F();
   }
-  return getLedgerTransportNodeHid();
+  return TransportNodeHid.create();
 };
 
 export const getLedgerAccount = (index = 0) => {
