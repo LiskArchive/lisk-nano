@@ -6,18 +6,38 @@ import { LedgerAccount, SupportedCoin, DposLedger } from 'dpos-ledger-api';
 import hwConstants from '../constants/hwConstants';
 import { loadingStarted, loadingFinished } from './loading';
 import signPrefix from '../constants/signPrefix';
-import { infoToastDisplayed } from '../actions/toaster';
+import { infoToastDisplayed, errorToastDisplayed } from '../actions/toaster';
 import { calculateTxId, getBufferToHex, getTransactionBytes } from './rawTransactionWrapper';
 import store from '../store';
 
 const { ipc } = window;
+
+export const ledgerMessages = {
+  noTransport: i18next.t('Unable to detect the communication layer with your Ledger Nano S'),
+  notConnected: i18next.t('Unable to detect your Ledger Nano S. Be sure your device is connected and inside the Lisk App'),
+  ledgerConnected: i18next.t('Ledger Nano S Connected.'),
+  ledgerDisconnected: i18next.t('Ledger Nano S Disconnected.'),
+  actionDenied: i18next.t('Action Denied by User'),
+  confirmation: i18next.t('Look at your Ledger for confirmation'),
+  confirmationForPin: i18next.t('Look at your Ledger for confirmation of second signature'),
+};
+
+if (ipc) { // On browser-mode is undefined
+  ipc.on('ledgerConnected', () => {
+    store.dispatch(infoToastDisplayed({ label: ledgerMessages.ledgerConnected }));
+  });
+
+  ipc.on('ledgerDisconnected', () => {
+    store.dispatch(errorToastDisplayed({ label: ledgerMessages.ledgerDisconnected }));
+  });
+}
 
 class IPCTransport {
   constructor(key) {
     this.key = key;
   }
 
-  static create() {
+  static async create() {
     const key = (Math.random() * 10000).toString(16);
     return this.__rawSend('ledger.createTransport', key)
       .then(() => new this(key));
@@ -40,21 +60,13 @@ class IPCTransport {
         if (res.success) {
           return resolve(res.data);
         }
-        return reject(new Error(res.error));
+        return reject(res.error);
       });
       ipc.send(`${k}.request`, ...args);
     });
   }
 }
 
-
-export const ledgerMessages = {
-  noTransport: i18next.t('Unable to Detect the communication Layer with your Ledger Nano S'),
-  notConnected: i18next.t('Unable to connect to Ledger Nano S. Be sure your device is unlocked and inside the Lisk App'),
-  actionDenied: i18next.t('Action Denied by User'),
-  confirmation: i18next.t('Look at your Ledger for confirmation'),
-  confirmationForPin: i18next.t('Look at your Ledger for confirmation of second signature'),
-};
 
 const throwIfError = (returnValue) => {
   if (returnValue instanceof Error) {
