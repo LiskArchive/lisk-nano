@@ -60,7 +60,10 @@ class HwDiscovery extends React.Component {
 
     loadingFinished('hwDiscovery');
 
-    this.setState({ isLoading: false });
+    this.setState({
+      isLoading: false,
+      showNextAvailable: (index === 1),
+    });
   }
 
   showNextAvailableWallet() {
