@@ -3,88 +3,38 @@ import isElectron from 'is-electron';
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import i18next from 'i18next';
 import { LedgerAccount, SupportedCoin, DposLedger } from 'dpos-ledger-api';
-import hwConstants from '../constants/hwConstants';
+import { hwConstants, LEDGER_COMMANDS } from '../constants/hwConstants';
 import { loadingStarted, loadingFinished } from './loading';
 import signPrefix from '../constants/signPrefix';
 import { infoToastDisplayed, errorToastDisplayed } from '../actions/toaster';
 import { calculateTxId, getBufferToHex, getTransactionBytes } from './rawTransactionWrapper';
 import store from '../store';
 
-const { ipc } = window;
-
-export const ledgerMessages = {
-  noTransport: i18next.t('Unable to detect the communication layer with your Ledger Nano S'),
-  notConnected: i18next.t('Unable to detect your Ledger Nano S. Be sure your device is connected and inside the Lisk App'),
-  ledgerConnected: i18next.t('Ledger Nano S Connected.'),
-  ledgerDisconnected: i18next.t('Ledger Nano S Disconnected.'),
-  actionDenied: i18next.t('Action Denied by User'),
-  confirmation: i18next.t('Look at your Ledger for confirmation'),
-  confirmationForPin: i18next.t('Look at your Ledger for confirmation of second signature'),
+export const LEDGER_MSG = {
+  LEDGER_NO_TRANSPORT_AVAILABLE: i18next.t('Unable to detect the communication layer with your Ledger Nano S'),
+  LEDGER_NO_TRANSPORT_AVAILABLE_U2F: i18next.t('Unable to detect the communication layer. Is ledger connected? Is Fido U2F Extension Installed?'),
+  LEDGER_IS_NOT_CONNECTED: i18next.t('Unable to detect your Ledger Nano S. Be sure your device is connected and inside the Lisk App'),
+  LEDGER_ERR_DURING_CONNECTION: i18next.t('Error on Ledger Connection. Be sure your device is connected properly'),
+  LEDGER_CONNECTED: i18next.t('Ledger Nano S Connected.'),
+  LEDGER_DISCONNECTED: i18next.t('Ledger Nano S Disconnected.'),
+  LEDGER_ACTION_DENIED_BY_USER: i18next.t('Action Denied by User'),
+  LEDGER_ASK_FOR_CONFIRMATION: i18next.t('Look at your Ledger for confirmation'),
+  LEDGER_ASK_FOR_CONFIRMATION_PIN: i18next.t('Look at your Ledger for confirmation of second signature'),
 };
+
+const { ipc } = window;
 
 if (ipc) { // On browser-mode is undefined
   ipc.on('ledgerConnected', () => {
-    store.dispatch(infoToastDisplayed({ label: ledgerMessages.ledgerConnected }));
+    store.dispatch(infoToastDisplayed({ label: LEDGER_MSG.LEDGER_CONNECTED }));
   });
 
   ipc.on('ledgerDisconnected', () => {
-    store.dispatch(errorToastDisplayed({ label: ledgerMessages.ledgerDisconnected }));
+    store.dispatch(errorToastDisplayed({ label: LEDGER_MSG.LEDGER_DISCONNECTED }));
   });
 }
 
-class IPCTransport {
-  constructor(key) {
-    this.key = key;
-  }
-
-  static async create() {
-    const key = (Math.random() * 10000).toString(16);
-    return this.__rawSend('ledger.createTransport', key)
-      .then(() => new this(key));
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  setScrambleKey(k) {
-    ipc.sendSync(`ledger[${this.key}].setScrambleKey`, k);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  send(...args) {
-    return IPCTransport.__rawSend(`ledger[${this.key}].send`, ...args);
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  static __rawSend(k, ...args) {
-    return new Promise((resolve, reject) => {
-      ipc.once(`${k}.result`, (event, res) => {
-        if (res.success) {
-          return resolve(res.data);
-        }
-        return reject(res.error);
-      });
-      ipc.send(`${k}.request`, ...args);
-    });
-  }
-}
-
-
-const throwIfError = (returnValue) => {
-  if (returnValue instanceof Error) {
-    throw returnValue;
-  }
-  return returnValue;
-};
-
 const getLedgerTransportU2F = async () => TransportU2F.create();
-
-const getLedgerTransport = async () => {
-  if (isElectron()) {
-    return IPCTransport.create();
-  } else if (isBrowser) {
-    return getLedgerTransportU2F();
-  }
-  return new Error(ledgerMessages.noTransport);
-};
 
 export const getLedgerAccount = (index = 0) => {
   const ledgerAccount = new LedgerAccount();
@@ -96,77 +46,133 @@ export const getLedgerAccount = (index = 0) => {
 export const calculateSecondPassphraseIndex =
   (accountIndex, pin) => accountIndex + parseInt(pin, 10) + hwConstants.secondPassphraseOffset;
 
-export const getLiskDposLedger = async () => {
-  const transport = throwIfError(await getLedgerTransport());
-  return new DposLedger(transport);
+
+const sendIpcCommand = command =>
+  new Promise((resolve, reject) => {
+    ipc.once('ledgerCommand.result', (event, res) => {
+      if (res.success) {
+        return resolve(res.data);
+      }
+      return reject(new Error(LEDGER_MSG[res.errorKey]));
+    });
+    ipc.send('ledgerCommand.request', command);
+  });
+
+const ledgerPlatformHendler = async (command) => {
+  if (isElectron()) {
+    return sendIpcCommand(command);
+  }
+
+  if (isBrowser) {
+    let transport = null;
+    try {
+      transport = await getLedgerTransportU2F();
+    } catch (e) {
+      throw new Error(LEDGER_MSG.LEDGER_NO_TRANSPORT_AVAILABLE_U2F);
+    }
+
+    try {
+      const liskLedger = new DposLedger(transport);
+      const ledgerAccount = getLedgerAccount(command.data.index);
+
+      let commandResult;
+      if (command.action === LEDGER_COMMANDS.GET_ACCOUNT) {
+        commandResult = await liskLedger.getPubKey(ledgerAccount);
+      }
+      if (command.action === LEDGER_COMMANDS.SIGN_MSG) {
+        const signature = await liskLedger.signMSG(ledgerAccount, command.data.message);
+        commandResult = getBufferToHex(signature.slice(0, 64));
+      }
+      if (command.action === LEDGER_COMMANDS.SIGN_TX) {
+        commandResult = await liskLedger.signTX(ledgerAccount, command.data.tx, false);
+      }
+
+      transport.close();
+      return commandResult;
+    } catch (err) {
+      if (err.statusText && err.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+        throw new Error(LEDGER_MSG.LEDGER_ACTION_DENIED_BY_USER);
+      } else {
+        throw new Error(LEDGER_MSG.LEDGER_IS_NOT_CONNECTED);
+      }
+    }
+  }
+
+  throw new Error(LEDGER_MSG.LEDGER_NO_TRANSPORT_AVAILABLE);
+};
+
+
+export const getAccountFromLedgerIndex = async (index = 0) => {
+  const command = {
+    action: LEDGER_COMMANDS.GET_ACCOUNT,
+    data: { index },
+  };
+  return ledgerPlatformHendler(command);
 };
 
 export const signMessageWithLedger = async (account, message) => {
-  const liskLedger = await getLiskDposLedger();
-  const ledgerAccount = getLedgerAccount(account.hwInfo.derivationIndex);
+  const command = {
+    action: LEDGER_COMMANDS.SIGN_MSG,
+    data: {
+      index: account.hwInfo.derivationIndex,
+      message: signPrefix + message,
+    },
+  };
 
-  store.dispatch(infoToastDisplayed({ label: ledgerMessages.confirmation }));
+  store.dispatch(infoToastDisplayed({ label: LEDGER_MSG.LEDGER_ASK_FOR_CONFIRMATION_PIN }));
 
-  try {
-    const messageToSign = signPrefix + message;
-    const signature = await liskLedger.signMSG(ledgerAccount, messageToSign);
-    return getBufferToHex(signature.slice(0, 64));
-  } catch (e) {
-    throw new Error(ledgerMessages.notConnected);
-  }
-};
-
-export const getPublicKeyFromLedgerIndex = async (index = 0) => {
-  try {
-    const liskLedger = await getLiskDposLedger();
-    const ledgerAccount = getLedgerAccount(index);
-    const getResult = await liskLedger.getPubKey(ledgerAccount);
-    return getResult.publicKey;
-  } catch (e) {
-    throw new Error(ledgerMessages.notConnected);
-  }
+  return ledgerPlatformHendler(command);
 };
 
 /* eslint-disable prefer-const */
 export const signTransactionWithLedger = async (tx, account, pin) => {
-  const liskLedger = await getLiskDposLedger();
-  const ledgerAccount = getLedgerAccount(account.hwInfo.derivationIndex);
+  const command = {
+    action: LEDGER_COMMANDS.SIGN_TX,
+    data: {
+      index: account.hwInfo.derivationIndex,
+      tx: getTransactionBytes(tx),
+    },
+  };
 
   loadingStarted('ledgerUserAction');
-  store.dispatch(infoToastDisplayed({ label: ledgerMessages.confirmation }));
+  store.dispatch(infoToastDisplayed({ label: LEDGER_MSG.LEDGER_ASK_FOR_CONFIRMATION }));
 
   let signature;
   try {
-    signature = await liskLedger.signTX(ledgerAccount, getTransactionBytes(tx), false);
+    signature = await ledgerPlatformHendler(command);
   } catch (err) {
     loadingFinished('ledgerUserAction');
-    if (err.statusText && err.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
-      throw new Error(ledgerMessages.actionDenied);
-    } else {
-      throw new Error(ledgerMessages.notConnected);
-    }
+    throw err;
   }
+
   tx.signature = getBufferToHex(signature);
   loadingFinished('ledgerUserAction');
 
+  // In case of second signature (PIN)
   if (typeof pin === 'string' && pin !== '') {
+    const command2 = {
+      action: LEDGER_COMMANDS.SIGN_TX,
+      data: {
+        index: calculateSecondPassphraseIndex(account.hwInfo.derivationIndex, pin),
+        tx: getTransactionBytes(tx),
+      },
+    };
+
     loadingStarted('ledgerUserAction');
-    store.dispatch(infoToastDisplayed({ label: ledgerMessages.confirmationForPin }));
-    const ledgerAccountSecondPassphrase =
-      getLedgerAccount(calculateSecondPassphraseIndex(account.hwInfo.derivationIndex, pin));
+    store.dispatch(infoToastDisplayed({ label: LEDGER_MSG.LEDGER_ASK_FOR_CONFIRMATION_PIN }));
 
     let signSignature;
     try {
-      signSignature =
-        await liskLedger.signTX(ledgerAccountSecondPassphrase, getTransactionBytes(tx), false);
+      signSignature = await ledgerPlatformHendler(command2);
     } catch (err) {
       loadingFinished('ledgerUserAction');
-      throw new Error(ledgerMessages.actionDenied);
+      throw err;
     }
+
     tx.signSignature = getBufferToHex(signSignature);
     loadingFinished('ledgerUserAction');
   }
+
   tx.id = calculateTxId(tx);
   return tx;
 };
-

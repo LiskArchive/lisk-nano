@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import { IconButton } from 'react-toolbox/lib/button';
 import { Table, TableHead, TableRow, TableCell } from 'react-toolbox/lib/table';
 import React from 'react';
@@ -9,7 +8,6 @@ import votingConst from '../../constants/voting';
 import loginTypes from '../../constants/loginTypes';
 import { getLedgerAccountInfo } from '../../utils/api/ledger';
 import { loadingStarted, loadingFinished } from '../../utils/loading';
-import { ledgerMessages } from '../../utils/ledger';
 
 import styles from './hwDiscovery.css';
 
@@ -45,9 +43,10 @@ class HwDiscovery extends React.Component {
           default:
             this.props.errorToastDisplayed({ text: this.props.t('Login Type not recognized.') });
         }
-      } catch (err) {
+      } catch (error) {
         loadingFinished('hwDiscovery');
-        this.props.errorToastDisplayed({ label: ledgerMessages.notConnected });
+        const text = error && error.message ? `${error.message}.` : this.props.t('Error while retrievieng addresses information.');
+        this.props.errorToastDisplayed({ label: text });
         this.props.closeDialog();
         return;
       }

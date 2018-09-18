@@ -53,7 +53,7 @@
     "is-electron": "2.1.0",
     "lisk-elements": "1.0.0",
     "moment": "2.20.1",
-    "node-hid": "0.7.3",
+    "node-hid": "0.7.2",
     "numeral": "=2.0.6",
     "postcss": "6.0.12",
     "postcss-cssnext": "2.11.0",

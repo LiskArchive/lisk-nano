@@ -7,10 +7,8 @@ import {
 } from '../rawTransactionWrapper';
 import {
   calculateSecondPassphraseIndex,
-  getLedgerAccount,
   signTransactionWithLedger,
-  getPublicKeyFromLedgerIndex,
-  getLiskDposLedger,
+  getAccountFromLedgerIndex,
 } from '../ledger';
 import to from '../to';
 import { getAccount, transactions as getTransactions } from './account';
@@ -87,15 +85,15 @@ export const setSecondPassphraseWithLedger = (activePeer, account, pin) =>
   new Promise(async (resolve, reject) => {
     let error;
     let signedTx;
-    let secondPublicKey;
-    [error, secondPublicKey] =
-      await to(getPublicKeyFromLedgerIndex(
+    let secondAccount;
+    [error, secondAccount] =
+      await to(getAccountFromLedgerIndex(
         calculateSecondPassphraseIndex(account.hwInfo.derivationIndex, pin)));
     if (error) {
       reject(error);
       return;
     }
-    const rawTx = createSecondPassphraseTX(account.publicKey, secondPublicKey);
+    const rawTx = createSecondPassphraseTX(account.publicKey, secondAccount.publicKey);
 
     // No PIN as second Signature
     [error, signedTx] = await to(signTransactionWithLedger(rawTx, account));
@@ -110,23 +108,25 @@ export const setSecondPassphraseWithLedger = (activePeer, account, pin) =>
 
 
 export const getLedgerAccountInfo = async (activePeer, accountIndex) => {
-  const liskLedger = await getLiskDposLedger();
-  const ledgerAccount = getLedgerAccount(accountIndex);
-
-  const accountInfo = await liskLedger.getPubKey(ledgerAccount);
-  let resAccount = await getAccount(activePeer, accountInfo.address);
+  let error;
+  let liskAccount;
+  [error, liskAccount] = await to(getAccountFromLedgerIndex(accountIndex));
+  if (error) {
+    throw error;
+  }
+  let resAccount = await getAccount(activePeer, liskAccount.address);
 
   const isInitialized = !!resAccount.unconfirmedBalance;
   Object.assign(resAccount, { isInitialized });
   // Set PublicKey from Ledger Info
   // so we can switch on this account even if publicKey is not revealed to the network
-  Object.assign(resAccount, { publicKey: accountInfo.publicKey });
+  Object.assign(resAccount, { publicKey: liskAccount.publicKey });
 
   if (isInitialized) {
-    const txAccount = await getTransactions(activePeer, accountInfo.address);
+    const txAccount = await getTransactions(activePeer, liskAccount.address);
     Object.assign(resAccount, { txCount: txAccount.meta.count });
 
-    const votesAccount = await getVotes(activePeer, accountInfo.address);
+    const votesAccount = await getVotes(activePeer, liskAccount.address);
     Object.assign(resAccount, { votesCount: votesAccount.data.votesUsed });
   }
 

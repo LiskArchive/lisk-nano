@@ -5,7 +5,7 @@ const baseConfig = require('./webpack.config');
 /* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = merge(baseConfig, {
-  entry: `${resolve(__dirname, '../app/src')}/main.js`,
+  entry: [`${resolve(__dirname, '../app/src')}/main.js`, 'babel-polyfill'],
   output: {
     path: resolve(__dirname, '../app/build'),
     filename: 'main.js',

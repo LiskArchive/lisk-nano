@@ -4,7 +4,7 @@ import Input from 'react-toolbox/lib/input';
 import Dropdown from 'react-toolbox/lib/dropdown';
 import Button from 'react-toolbox/lib/button';
 import i18next from 'i18next';
-import { getPublicKeyFromLedgerIndex } from '../../utils/ledger';
+import { getAccountFromLedgerIndex } from '../../utils/ledger';
 import PassphraseInput from '../passphraseInput';
 import styles from './login.css';
 import env from '../../constants/env';
@@ -161,9 +161,9 @@ class Login extends React.Component {
     loadingStarted('ledgerLogin');
 
     let error;
-    let ledgerPublicKey;
+    let ledgerAccount;
     // eslint-disable-next-line prefer-const
-    [error, ledgerPublicKey] = await to(getPublicKeyFromLedgerIndex()); // by default index 0
+    [error, ledgerAccount] = await to(getAccountFromLedgerIndex()); // by default index 0
     if (error) {
       const text = error && error.message ? `${error.message}.` : i18next.t('Error during login with Ledger.');
       this.props.errorToastDisplayed({ label: text });
@@ -174,11 +174,11 @@ class Login extends React.Component {
       }
       // set active peer
       this.props.activePeerSet({
-        publicKey: ledgerPublicKey,
+        publicKey: ledgerAccount.publicKey,
         loginType: loginTypes.ledgerNano,
         network,
-        hwInfo: {
-          deviceId: ledgerPublicKey.substring(0, 10), // Use pubKey[0] first 10 char as device id
+        hwInfo: { // Use pubKey[0] first 10 char as device id
+          deviceId: ledgerAccount.publicKey.substring(0, 10),
           derivationIndex: 0,
         },
       });

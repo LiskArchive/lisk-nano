@@ -3,10 +3,12 @@ import electronLocalshortcut from 'electron-localshortcut'; // eslint-disable-li
 import { autoUpdater } from 'electron-updater'; // eslint-disable-line import/no-extraneous-dependencies
 import path from 'path';
 import storage from 'electron-json-storage'; // eslint-disable-line import/no-extraneous-dependencies
-import './ledger';
 import win from './modules/win';
 import localeHandler from './modules/localeHandler';
 import updateChecker from './modules/autoUpdater';
+
+require('babel-polyfill'); // eslint-disable-line import/no-extraneous-dependencies
+require('./ledger');
 
 const checkForUpdates = updateChecker({ autoUpdater, dialog: electron.dialog, win, process });
 
