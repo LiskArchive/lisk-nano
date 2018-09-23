@@ -95,7 +95,7 @@
     "css-loader": "0.28.7",
     "cucumber": "2.2.0",
     "del-cli": "1.1.0",
-    "electron": "1.8.7",
+    "electron": "1.8.8",
     "electron-builder": "20.28.3",
     "electron-json-storage": "=3.2.0",
     "electron-rebuild": "1.8.2",
