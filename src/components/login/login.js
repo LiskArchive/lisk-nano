@@ -178,7 +178,6 @@ class Login extends React.Component {
               <PassphraseInput label={this.props.t('Enter your passphrase')}
                 className='passphrase'
                 theme={styles}
-                error={this.state.passphraseValidity}
                 value={this.state.passphrase}
                 onChange={this.changeHandler.bind(this, 'passphrase')} />
               <footer className={ `${grid.row} ${grid['center-xs']}` }>
@@ -190,8 +189,7 @@ class Login extends React.Component {
                   <Button label={this.props.t('Login')} primary raised
                     className='login-button'
                     type='submit'
-                    disabled={(this.state.network === networks.customNode.code && this.state.addressValidity !== '') ||
-                    this.state.passphraseValidity !== ''} />
+                    disabled={(this.state.network === networks.customNode.code && this.state.addressValidity !== '')} />
                 </div>
               </footer>
             </form>
